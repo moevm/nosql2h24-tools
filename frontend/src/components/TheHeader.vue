@@ -1,9 +1,17 @@
 <script>
+import LoginModal from "@/components/modals/LoginModal.vue";
+
 export default {
-    name: 'HeaderComp',
+    components: {LoginModal},
+    data() {
+        return {
+            showLoginModal: false,
+        }
+    },
+
     methods: {
-        openRegistrationModal() {
-            return 0
+        openProfile() {
+            this.showLoginModal = true
         }
     }
 }
@@ -20,15 +28,15 @@ export default {
             </div>
             <div class="profile-basket">
                 <button>
-                    <img src="../assets/svg/profile.svg" alt="profile"/>
+                    <img src="../assets/svg/profile.svg" alt="profile" @click="openProfile"/>
                 </button>
                 <button>
-                    <img src="../assets/svg/basket.svg" alt="basket" @click="openRegistrationModal"/>
+                    <img src="../assets/svg/basket.svg" alt="basket"/>
                 </button>
-
             </div>
         </div>
     </div>
+    <LoginModal :isVisible="showLoginModal" @update:isVisible="showLoginModal = $event"></LoginModal>
 </template>
 
 <style scoped>
