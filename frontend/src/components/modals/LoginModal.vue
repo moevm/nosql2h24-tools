@@ -33,18 +33,18 @@
                             <label for="password">Пароль</label>
                             <input id="password" placeholder="Пароль" @focus="onFocusPassword"
                                    :type="isPasswordVisible ? 'text' : 'password'" v-model="form.password" required />
-                            <button @click="isPasswordVisible = !isPasswordVisible"
+                            <button type="button" @click="isPasswordVisible = !isPasswordVisible" v-if="isPasswordInput"
                                     :class="isPasswordVisible ? 'opened-eye-button' : 'closed-eye-button'">
-                                <img v-if="isPasswordInput" :src="isPasswordVisible ? openedEye : closedEye" alt="eye"/>
+                                <img :src="isPasswordVisible ? openedEye : closedEye" alt="eye"/>
                             </button>
                         </div>
                         <div class="relative">
                             <label for="passwordConfirm">Повторите пароль</label>
                             <input id="passwordConfirm" placeholder="Повторите пароль" @focus="onFocusPasswordConfirm"
                                    :type="isPasswordConfirmVisible ? 'text' : 'password'" v-model="form.passwordConfirm" required />
-                            <button @click="isPasswordConfirmVisible = !isPasswordConfirmVisible"
+                            <button type="button" @click="isPasswordConfirmVisible = !isPasswordConfirmVisible" v-if="isPasswordConfirmInput"
                                     :class="isPasswordConfirmVisible ? 'opened-eye-button' : 'closed-eye-button'">
-                                <img v-if="isPasswordConfirmInput" :src="isPasswordConfirmVisible ? openedEye : closedEye" alt="eye"/>
+                                <img :src="isPasswordConfirmVisible ? openedEye : closedEye" alt="eye"/>
                             </button>
                         </div>
                         <div class="checkbox-div">
@@ -75,17 +75,19 @@
             </div>
         </div>
         <ErrorModal :errors="errors" :show="isErrorModalShown" @close="closeErrorModal"></ErrorModal>
+        <UploadProgress v-if="isLoading"></UploadProgress>
     </div>
 </template>
 
 <script>
-import {ref} from "vue";
 import closedEye from '../../assets/svg/eye/closedEye.svg'
 import openedEye from '../../assets/svg/eye/openedEye.svg'
 import ErrorModal from "@/components/modals/ErrorModal.vue";
+import {login, register} from "@/services/authService.js";
+import UploadProgress from "@/components/UploadProgress.vue";
 
 export default {
-    components: {ErrorModal},
+    components: {UploadProgress, ErrorModal},
     data() {
         return {
             form: {
@@ -104,6 +106,7 @@ export default {
             isPasswordConfirmVisible: false,
             isErrorModalShown: false,
             errors: [],
+            isLoading: false,
             closedEye,
             openedEye
         }
@@ -166,11 +169,42 @@ export default {
         },
         handleSubmit() {
             this.validate()
-            if (this.errors) {
-                this.isErrorModalShown = true
+            this.isLoading = true
+            if (this.isLogin) {
+                login({
+                        email: this.form.email,
+                        password: this.form.password
+                    }
+                ).then((res) => {
+                    this.isLoading = false
+                    if (res.error) {
+                        this.errors.push(res.error)
+                        this.isErrorModalShown = true
+                    } else {
+                        this.closeModal()
+                    }
+                })
+
+            }
+            if (this.isRegistration) {
+                register({
+                        name: this.form.name,
+                        surname: this.form.surname,
+                        email: this.form.email,
+                        password: this.form.password
+                    }
+                ).then((res) => {
+                    this.isLoading = false
+                    if (res.error) {
+                        this.errors.push(res.error)
+                        this.isErrorModalShown = true
+                    } else {
+                        this.closeModal()
+                    }
+                })
+
             }
 
-            // Логика отправки данных на сервер
         }
     }
 };
@@ -187,7 +221,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Обеспечиваем, что модалка выше всего остального */
+    z-index: 10000; /* Обеспечиваем, что модалка выше всего остального */
 }
 
 .modal-content {

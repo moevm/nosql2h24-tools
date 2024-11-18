@@ -43,6 +43,10 @@ export default {
 .header {
     width: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    background-color: #FFFFFF;
+    z-index: 1000;
 }
 
 .content {

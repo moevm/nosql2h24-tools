@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 const store = createStore({
   state: {
     isAuthenticated: false,
+    isAdmin: false,
   },
   mutations: {
     login(state) {
@@ -14,6 +15,7 @@ const store = createStore({
   },
   getters: {
     isAuthenticated: (state) => state.isAuthenticated,
+    isAdmin: (state) => state.isAdmin,
   },
 });
 
