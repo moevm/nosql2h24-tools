@@ -14,3 +14,6 @@ db.createUser({
 
 db.createCollection(process.env.CLIENT_COLLECTION);
 db.createCollection(process.env.WORKER_COLLECTION);
+db.createCollection(process.env.TOOL_COLLECTION);
+db.createCollection(process.env.CATEGORY_COLLECTION);
+db.createCollection(process.env.TYPE_COLLECTION);

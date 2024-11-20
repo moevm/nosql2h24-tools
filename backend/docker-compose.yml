@@ -6,12 +6,24 @@ services:
     container_name: mongodb
     hostname: mongodb
     ports:
-      - "${MONGO_PORT}:${MONGO_PORT}"
+      - "127.0.0.1:27017:27017" # для просмотра коллекций mongoDB compass
     env_file:
-      - .env
+      - src/.env
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
       - mongo_data:/data/db
+    networks:
+      - mongo_network
+
+  fast_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fast_api
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - mongodb
     networks:
       - mongo_network
 

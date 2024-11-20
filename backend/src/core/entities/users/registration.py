@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, field_validator, Field
 
-class ClientRegistrationRequest(BaseModel):
+class ClientRegistrationForm(BaseModel):
     name: str = Field(
         ...,
         title="User's first name",
@@ -29,22 +29,8 @@ class ClientRegistrationRequest(BaseModel):
         max_length=100,
         description="The password of the user, must be at least 8 characters long, required for registration"
     )
-    password_confirm: str = Field(
-        ...,
-        title="User's password confirmation",
-        min_length=8,
-        max_length=100,
-        description="The password confirmation of the user, must be at least 8 characters long, required for registration"
-    )
 
-    @field_validator('password_confirm')
-    def password_match(cls, v, values):
-        password = values.data.get('password', None)
-        if password and v != password:
-            raise ValueError('Passwords do not match')
-        return v
-
-class WorkerRegistrationRequest(ClientRegistrationRequest):
+class WorkerRegistrationForm(ClientRegistrationForm):
     jobTitle: str = Field(
         ...,
         title="Worker's job title",
@@ -55,4 +41,13 @@ class WorkerRegistrationRequest(ClientRegistrationRequest):
         title="Worker's phone number",
         pattern=r'^\+?[1-9]\d{1,14}$',
         description="The phone number of the worker, must be in international format"
+    )
+
+class RegisteredUser(BaseModel):
+    message: str = Field(
+        default="Registration successful"
+    )
+    user_id: str = Field(
+        ...,
+        title="User id of registered user"
     )

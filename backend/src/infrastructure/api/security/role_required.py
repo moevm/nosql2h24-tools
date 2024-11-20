@@ -4,6 +4,7 @@ from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from src.configs.config import config
+from src.core.exceptions.client_error import JWTTokenMissing, InsufficientPermissionsError
 from src.core.services.authentication.jwt.jwt_token_manager import JWTTokenManager
 
 
@@ -13,20 +14,15 @@ def role_required(role: str):
         @wraps(func)
         async def wrapper(*args, **kwargs):
             token = kwargs.get('token')
-            print(token)
+
             if token is None:
-                raise HTTPException(status_code=403, detail="Token is missing")
+                raise JWTTokenMissing()
 
             token_manager = JWTTokenManager(config.jwt)
-
-            try:
-                payload = token_manager.decode_access_token(token)
-                print(payload)
-            except ValueError as e:
-                raise HTTPException(status_code=403, detail=str(e))
+            payload = token_manager.decode_access_token(token)
 
             if payload["role"] != role:
-                raise HTTPException(status_code=403, detail="Forbidden: insufficient permissions")
+                raise InsufficientPermissionsError(details={"role_provided": payload["role"] ,"role_required": role})
 
             return await func(*args, **kwargs)
         return wrapper

@@ -16,9 +16,9 @@ class BaseUser(BaseModel):
     password: str = Field(
         ...,
         title="Worker's password",
-        min_length=8,
+        min_length=1,
         max_length=100,
-        description="The password of the worker, must be at least 8 characters long, required"
+        description="The password of the worker, must be at least 1 characters long, required"
     )
     created_at: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc),
@@ -31,10 +31,9 @@ class BaseUser(BaseModel):
     )
 
     class Config:
-        orm_mode = True
-
         json_encoders = {
-            ObjectId: str
+            ObjectId: str,
+            datetime: lambda v: v.isoformat()
         }
 
         allow_population_by_field_name = True

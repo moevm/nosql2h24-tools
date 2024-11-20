@@ -2,6 +2,7 @@ from pydantic import Field, MongoDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 from urllib.parse import urlencode
+
 class MongoConfig(BaseSettings):
     model_config = SettingsConfigDict(
         env_file="src/.env",

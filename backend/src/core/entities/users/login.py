@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 
 
-class LoginRequest(BaseModel):
+class LoginForm(BaseModel):
     email: EmailStr = Field(
         ...,
         title="User's email",
@@ -13,4 +13,28 @@ class LoginRequest(BaseModel):
         min_length=8,
         max_length=100,
         description="The password of the user, must be at least 8 characters long, required for login"
+    )
+
+class JWTTokens(BaseModel):
+    access_token: str = Field(
+        ...
+    )
+    refresh_token: str = Field(
+        ...
+    )
+    token_type: str = Field(
+        default="bearer"
+    )
+
+class JWTAccessToken(BaseModel):
+    access_token: str = Field(
+        ...
+    )
+    token_type: str = Field(
+        default="bearer"
+    )
+
+class JWTRefreshToken(BaseModel):
+    refresh_token: str = Field(
+        ...
     )

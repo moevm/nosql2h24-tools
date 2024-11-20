@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.order.order import Order
-from src.core.entities.users.BaseUser import BaseUser
+from src.core.entities.users.base_user import BaseUser
 
 
 class Worker(BaseUser):
@@ -41,10 +41,10 @@ class Worker(BaseUser):
         default_factory=list,
         description="The orders of the worker"
     )
-    image: Optional[bytes] = Field(
+    image: Optional[str] = Field(
         default=None,
-        title="Worker's image",
-        description="The image of the worker in binary format"
+        title="Worker's image url",
+        description="The image of the worker"
     )
 
 class WorkerInDB(Worker):

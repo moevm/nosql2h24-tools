@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.order.order import Order
-from src.core.entities.users.BaseUser import BaseUser
+from src.core.entities.users.base_user import BaseUser
 
 
 class Client(BaseUser):
@@ -31,10 +31,10 @@ class Client(BaseUser):
         pattern=r'^\+?[1-9]\d{1,14}$',
         description="The phone number of the client, must be in international format"
     )
-    image: Optional[bytes] = Field(
+    image: Optional[str] = Field(
         None,
-        title="Client's image",
-        description="The image of the client in binary format"
+        title="Client's image url",
+        description="The image of the client in"
     )
 
 class ClientInDB(Client):

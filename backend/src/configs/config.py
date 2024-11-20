@@ -3,6 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from src.configs.collection_config import CollectionConfig
 from src.configs.jwt_config import JWTConfig
 from src.configs.mongo_config import MongoConfig
+from src.configs.static_paths import StaticPaths
 
 
 class Config(BaseSettings):
@@ -15,7 +16,7 @@ class Config(BaseSettings):
     mongo: MongoConfig = MongoConfig()
     jwt: JWTConfig = JWTConfig()
     collections: CollectionConfig = CollectionConfig()
+    static_paths: StaticPaths = StaticPaths()
 
 config = Config()
-
 
