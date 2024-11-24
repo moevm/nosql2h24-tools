@@ -1,6 +1,5 @@
-from typing import Optional
-from bson import ObjectId
-from src.core.entities.users.client.client import Client, ClientInDB
+from typing import Optional, List
+from src.core.entities.users.client.client import Client, ClientInDB, ClientSummary
 from src.core.repositories.users_repos.client_repos.iclient_repository import IClientRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from src.infrastructure.repo_implementations.helpers.id_mapper import objectId_to_str
@@ -33,6 +32,19 @@ class MongoClientRepository(IClientRepository):
             client_dict = client.model_dump()
             result = await self.client_collection.insert_one(client_dict)
             return objectId_to_str(result.inserted_id)
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_all_clients_summary(self) -> List[ClientSummary]:
+        try:
+            clients_cursor =  self.client_collection.find(
+                {},
+                {
+                    "_id": 1, "email": 1, "name": 1, "surname": 1, "phone": 1, "image": 1
+                }
+            )
+            clients = await clients_cursor.to_list(length=None)
+            return [ClientSummary(**client) for client in clients]
         except PyMongoError:
             raise DatabaseError()
 

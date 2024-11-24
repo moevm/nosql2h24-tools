@@ -8,7 +8,7 @@ from src.core.entities.type.type import TypeName
 class CategoryName(BaseModel):
     name: str = Field(
         ...,
-        title="Category name"
+        description="Category name"
     ),
 
     class Config:
@@ -21,7 +21,7 @@ class CategoryName(BaseModel):
 class Category(CategoryName):
     types: List[ObjectIdStr] = Field(
         default_factory=list,
-        title="List of type ids associated with this category"
+        description="List of type ids associated with this category"
     )
 
 class CategoryInDB(Category):
@@ -38,7 +38,7 @@ class CategoryCreated(BaseModel):
     )
     id: str = Field(
         ...,
-        title="id of created category"
+        description="id of created category"
     )
 
 class CategoryWithTypes(BaseModel):

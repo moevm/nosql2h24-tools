@@ -28,7 +28,7 @@ async def create_tool(
 
 
 @tool_router.get(
-    path="/",
+    path="/paginated",
     status_code=200,
     response_model=List[ToolSummary]
 )

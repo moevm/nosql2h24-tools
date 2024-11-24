@@ -4,38 +4,30 @@ from typing import List, Optional
 
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.order.order import Order
-from src.core.entities.users.base_user import BaseUser
+from src.core.entities.users.base_user import BaseUser, BaseUserSummary
 
 
 class Worker(BaseUser):
     name: str = Field(
         ...,
-        title="Worker's first name",
-        min_length=1, max_length=100,
-        description="The first name of the worker, required"
+        description="Worker's first name"
     )
     surname: str = Field(
         ...,
-        title="Worker's last name",
-        min_length=1,
-        max_length=100,
-        description="The last name of the worker, required"
+        description="Worker's last name"
     )
     phone: str = Field(
         ...,
-        title="Worker's phone number",
-        pattern=r'^\+?[1-9]\d{1,14}$',
-        description="The phone number of the worker, must be in international format"
+        description="Worker's phone number",
+        pattern=r'^\+?[1-9]\d{1,14}$'
     )
     jobTitle: str = Field(
         ...,
-        title="Worker's job title",
-        description="The job title of the worker, required"
+        description="Worker's job title"
     )
     date: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        title="Employee start date",
-        description="The start date of the employee"
+        description="Employee start date"
     )
     orders: Optional[List[Order]] = Field(
         default_factory=list,
@@ -43,8 +35,7 @@ class Worker(BaseUser):
     )
     image: Optional[str] = Field(
         default=None,
-        title="Worker's image url",
-        description="The image of the worker"
+        description="Worker's image url",
     )
 
 class WorkerInDB(Worker):
@@ -53,4 +44,14 @@ class WorkerInDB(Worker):
         default_factory=ObjectIdStr,
         alias="_id",
         description="Unique identifier of the client in the db"
+    )
+
+class WorkerSummary(BaseUserSummary):
+    jobTitle: str = Field(
+        ...,
+        description="Worker's job title",
+    )
+    date: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="Employee start date",
     )

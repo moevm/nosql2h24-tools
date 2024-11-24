@@ -8,26 +8,19 @@ from src.core.entities.object_id_str import ObjectIdStr
 class BaseUser(BaseModel):
     email: EmailStr = Field(
         ...,
-        title="Client's email",
-        min_length=1,
-        max_length=100,
-        description="The email of the client, must be in a valid email format, required"
+        description="User's email",
     )
     password: str = Field(
         ...,
-        title="Worker's password",
-        min_length=1,
-        max_length=100,
-        description="The password of the worker, must be at least 1 characters long, required"
+        description="User's password",
     )
     created_at: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        title="Client Creation Date", description="The timestamp when the client record was created"
+        description="User Creation Date"
     )
     updated_at: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        title="Client Last Update Date",
-        description="The timestamp when the client record was last updated"
+        description="User Last Update Date",
     )
 
     class Config:
@@ -43,5 +36,43 @@ class BaseUserInDB(BaseUser):
         ...,
         default_factory=ObjectIdStr,
         alias="_id",
-        description="Unique identifier of the client in the db"
+        description="Unique identifier of the user in the db"
     )
+
+class BaseUserSummary(BaseModel):
+    id: Optional[ObjectIdStr] = Field(
+        ...,
+        default_factory=ObjectIdStr,
+        alias="_id",
+        description="Unique identifier of the user in the db"
+    )
+    email: EmailStr = Field(
+        ...,
+        description="User's email",
+        min_length=1,
+        max_length=100,
+    )
+    name: str = Field(
+        ...,
+        description="User's first name"
+    )
+    surname: str = Field(
+        ...,
+        description="User's last name",
+    )
+    phone: str = Field(
+        ...,
+        description="User's phone number",
+    )
+    image: Optional[str] = Field(
+        default=None,
+        description="User's image url",
+    )
+
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
+

@@ -23,3 +23,8 @@ http://127.0.0.1:8000/docs
 ### Client
 - **email**: `client@example.com`
 - **password**:  `client_123`
+
+## Connect to the MongoDB instance using MongoDB Compass
+```sh
+mongodb://testUser:123456@localhost:27017/tools_database?authSource=tools_database
+```

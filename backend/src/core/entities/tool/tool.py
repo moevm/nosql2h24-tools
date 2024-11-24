@@ -8,39 +8,39 @@ from src.core.entities.object_id_str import ObjectIdStr
 class Tool(BaseModel):
     name: str = Field(
         ...,
-        title="tool name"
+        description="tool name"
     )
     dailyPrice: float = Field(
         default=None,
-        title="Rental price per day"
+        description="Rental price per day"
     )
     totalPrice: float = Field(
         default=None,
-        title="Tool type"
+        description="Tool type"
     )
     images: List[str] = Field(
         default=None,
-        title="Tool image list"
+        description="Tool image list"
     )
     features: Dict[str, str] = Field(
         default=None,
-        title="Tool features dictionary"
+        description="Tool features dictionary"
     )
     reviews: List[ObjectIdStr] = Field(
         default=None,
-        title="List of review identifiers for this tool from the review collection"
+        description="List of review identifiers for this tool from the review collection"
     )
     rating: float = Field(
         default=0.0,
-        title="Average tool rating"
+        description="Average tool rating"
     )
     ordersNumber: int = Field(
         default=0,
-        title="Total number of orders"
+        description="Total number of orders"
     )
     category: str = Field(
         default=None,
-        title="Tool category"
+        description="Tool category"
     )
     type: str = Field(
         default=None,
@@ -52,12 +52,11 @@ class Tool(BaseModel):
     )
     created_at: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        title="Client Creation Date", description="The timestamp when the client record was created"
+        description="Client Creation Date"
     )
     updated_at: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        title="Client Last Update Date",
-        description="The timestamp when the client record was last updated"
+        description="Client Last Update Date"
     )
 
     class Config:
@@ -86,19 +85,19 @@ class ToolSummary(BaseModel):
     )
     name: str = Field(
         ...,
-        title="tool name"
+        description="tool name"
     )
     dailyPrice: float = Field(
         ...,
-        title="Rental price per day"
+        description="Rental price per day"
     )
     images: List[str] = Field(
         ...,
-        title="Tool image list"
+        description="Tool image list"
     )
     rating: float = Field(
         ...,
-        title="Average tool rating"
+        description="Average tool rating"
     )
 
     class Config:
@@ -112,53 +111,53 @@ class ToolSummary(BaseModel):
 class ToolDetails(ToolSummary):
     features: Dict[str, str] = Field(
         ...,
-        title="Tool features dictionary"
+        description="Tool features dictionary"
     )
     category: str = Field(
         ...,
-        title="Tool category"
+        description="Tool category"
     )
     type: str = Field(
         ...,
-        title="Tool type"
+        description="Tool type"
     )
     description: str = Field(
         ...,
-        title="Tool description"
+        description="Tool description"
     )
 
 class ToolCreate(BaseModel):
     name: str = Field(
         ...,
-        title="tool name"
+        description="tool name"
     )
     dailyPrice: float = Field(
         ...,
-        title="Rental price per day"
+        description="Rental price per day"
     )
     totalPrice: float = Field(
         ...,
-        title="Tool type"
+        description="Tool type"
     )
     images: List[str] = Field(
         default_factory=list,
-        title="Tool image list in base64 strings"
+        description="Tool image list in base64 strings"
     )
     features: Dict[str, str] = Field(
         ...,
-        title="Tool features dictionary"
+        description="Tool features dictionary"
     )
     category: str = Field(
         ...,
-        title="Tool category"
+        description="Tool category"
     )
     type: str = Field(
         ...,
-        title="Tool type"
+        description="Tool type"
     )
     description: str = Field(
         ...,
-        title="Tool description"
+        description="Tool description"
     )
 
 
@@ -175,13 +174,13 @@ class ToolCreated(BaseModel):
     )
     tool_id: str = Field(
         ...,
-        title="Created tool id"
+        description="Created tool id"
     )
 
 class ToolPages(BaseModel):
     pages: int = Field(
         ...,
-        title="count of pages"
+        description="count of pages"
     )
 
 

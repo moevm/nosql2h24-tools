@@ -1,5 +1,5 @@
-from typing import Optional
-from src.core.entities.users.worker.worker import Worker, WorkerInDB
+from typing import Optional, List
+from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerSummary
 from src.core.exceptions.server_error import DatabaseError
 from src.core.repositories.users_repos.worker_repos.iworker_repository import IWorkerRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -32,6 +32,19 @@ class MongoWorkerRepository(IWorkerRepository):
             worker_dict = worker.model_dump()
             result = await self.worker_collection.insert_one(worker_dict)
             return objectId_to_str(result.inserted_id)
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_all_workers_summary(self) -> List[WorkerSummary]:
+        try:
+            worker_cursor = self.worker_collection.find(
+                {},
+                {
+                    "_id": 1, "email": 1, "name": 1, "surname": 1, "phone": 1, "image": 1, "jobTitle": 1, "date": 1
+                }
+            )
+            workers = await worker_cursor.to_list(length=None)
+            return [WorkerSummary(**worker) for worker in workers]
         except PyMongoError:
             raise DatabaseError()
 

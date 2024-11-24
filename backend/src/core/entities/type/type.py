@@ -7,17 +7,17 @@ from bson import ObjectId
 class TypeSignature(BaseModel):
     name: str = Field(
         ...,
-        title="Type name",
+        description="Type name",
     ),
     category_name: str = Field(
         ...,
-        title="Category name associated with this type "
+        description="Category name associated with this type "
     )
 
 class Type(TypeSignature):
     tools: List[ObjectIdStr] = Field(
         default_factory=list,
-        title="List of tools ids associated with this type"
+        description="List of tools ids associated with this type"
     )
 
 class TypeInDB(Type):
@@ -41,11 +41,11 @@ class TypeCreated(BaseModel):
     )
     id: str = Field(
         ...,
-        title="id of created type"
+        description="id of created type"
     )
 
 class TypeName(BaseModel):
     name: str = Field(
         ...,
-        title="Type name",
+        description="Type name",
     )
