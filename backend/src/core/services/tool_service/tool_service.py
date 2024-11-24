@@ -1,4 +1,5 @@
-from src.configs.static_paths import StaticPaths
+from src.configs.paths import Paths
+from src.configs.urls import Urls
 from src.core.entities.category.category import Category, CategoryName, CategoryCreated, CategoryWithTypes
 from src.core.entities.tool.tool import ToolCreated, ToolCreate, Tool, ToolSummary, ToolDetails, ToolPages
 from src.core.entities.type.type import TypeSignature, Type, TypeCreated, TypeName
@@ -10,11 +11,11 @@ from src.core.utils.image_decoder.image_decoder import ImageDecoder
 from typing import List, Optional
 
 class ToolService:
-    def __init__(self, tool_repo: IToolRepository, category_repo: ICategoryRepository, type_repo: ITypeRepository, static_paths_config: StaticPaths):
+    def __init__(self, tool_repo: IToolRepository, category_repo: ICategoryRepository, type_repo: ITypeRepository, paths_config: Paths, urls_config: Urls):
         self.tool_repo = tool_repo
         self.category_repo = category_repo
         self.type_repo = type_repo
-        self.img_decoder = ImageDecoder(static_paths_config.api_uri_prefix, static_paths_config.tool_img_storage_prefix_path)
+        self.img_decoder = ImageDecoder(f"{urls_config.backend_base_url}{urls_config.api_prefix}", paths_config.tool_img_storage_prefix_path)
 
     async def create_tool(self, tool: ToolCreate) -> ToolCreated:
         if await self.tool_repo.exists(tool.name):

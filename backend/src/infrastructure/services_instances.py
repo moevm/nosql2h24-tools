@@ -43,5 +43,6 @@ def get_tool_service(
         mongo_tool_repo,
         mongo_category_repo,
         mongo_type_repo,
-        config.static_paths
+        config.paths,
+        config.urls
     )

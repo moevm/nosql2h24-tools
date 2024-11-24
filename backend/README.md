@@ -1,6 +1,11 @@
 # Backend
 
 ## Run via docker
+
+```sh
+cd deployment/dev/
+```
+
 ```sh
 docker-compose up -d
 ```

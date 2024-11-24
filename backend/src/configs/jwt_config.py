@@ -1,10 +1,12 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 
 class JWTConfig(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="src/.env",
+        env_file="env/.env.jwt",
         env_file_encoding='utf-8',
         extra="ignore"
     )

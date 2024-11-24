@@ -1,5 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from src.configs.config import config
+from src.configs.mongo_config import MongoConfig
 
 mongo_config = config.mongo
 
