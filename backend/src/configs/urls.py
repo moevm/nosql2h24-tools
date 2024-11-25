@@ -1,8 +1,12 @@
+import os.path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+config_dir = os.path.dirname(os.path.abspath(__file__))
 
 class Urls(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="env/.env.urls",
+        env_file=os.path.join(config_dir, "../../env/.env.urls"),
         env_file_encoding='utf-8',
         extra="ignore"
     )

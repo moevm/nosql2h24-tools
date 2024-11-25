@@ -6,10 +6,11 @@ from typing import Optional
 from urllib.parse import urlencode
 
 env = os.getenv('ENV', 'dev')
+config_dir = os.path.dirname(os.path.abspath(__file__))
 
 class MongoConfig(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=f"env/{env}/.env.{env}.db",
+        env_file=os.path.join(config_dir, f"../../env/{env}/.env.{env}.db"),
         env_file_encoding='utf-8',
         extra="ignore"
     )

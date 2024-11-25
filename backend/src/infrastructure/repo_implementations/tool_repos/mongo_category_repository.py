@@ -59,7 +59,7 @@ class MongoCategoryRepository(ICategoryRepository):
         try:
             category_doc = await self.category_collection.find_one({"name": category_name})
             if category_doc:
-                return len(category_doc.get("tools", [])) == 0
+                return len(category_doc.get("types", [])) == 0
             return True
         except PyMongoError:
             raise DatabaseError()

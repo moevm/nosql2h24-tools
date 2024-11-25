@@ -1,3 +1,5 @@
+from email.policy import default
+
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime, timezone
 from typing import List, Optional
@@ -26,7 +28,7 @@ class Worker(BaseUser):
         description="Worker's job title"
     )
     date: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+        default=None,
         description="Employee start date"
     )
     orders: Optional[List[Order]] = Field(
@@ -52,6 +54,6 @@ class WorkerSummary(BaseUserSummary):
         description="Worker's job title",
     )
     date: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+        default=None,
         description="Employee start date",
     )

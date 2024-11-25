@@ -6,11 +6,13 @@ from src.core.entities.type.type import TypeCreated, TypeSignature
 from src.core.services.tool_service.tool_service import ToolService
 from src.infrastructure.api.security.role_required import role_required
 from src.infrastructure.services_instances import get_tool_service
+from fastapi.security import OAuth2PasswordBearer
 
 tool_router = APIRouter()
 category_router = APIRouter()
 type_router = APIRouter()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 @tool_router.post(
@@ -21,7 +23,8 @@ type_router = APIRouter()
 @role_required('worker')
 async def create_tool(
         data: ToolCreate,
-        tool_service: ToolService = Depends(get_tool_service)
+        tool_service: ToolService = Depends(get_tool_service),
+        token: str = Depends(oauth2_scheme)
 ):
     return await tool_service.create_tool(data)
 
@@ -49,7 +52,6 @@ async def get_paginated_tools(
 async def get_pages_count(
         tool_service: ToolService = Depends(get_tool_service)
 ):
-    print("HERE")
     return await tool_service.get_count_of_pages()
 
 
@@ -87,7 +89,8 @@ async def get_categories_with_types(
 @role_required('worker')
 async def create_category(
         data: CategoryName,
-        tool_service: ToolService = Depends(get_tool_service)
+        tool_service: ToolService = Depends(get_tool_service),
+        token: str = Depends(oauth2_scheme)
 ):
     return await tool_service.create_category(data)
 
@@ -101,6 +104,7 @@ async def create_category(
 @role_required('worker')
 async def create_type(
         data: TypeSignature,
-        tool_service: ToolService = Depends(get_tool_service)
+        tool_service: ToolService = Depends(get_tool_service),
+        token: str = Depends(oauth2_scheme)
 ):
     return await tool_service.create_type(data)
