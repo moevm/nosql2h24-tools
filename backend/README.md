@@ -1,14 +1,25 @@
 # Backend
 
-## Run via docker
+## Run dev using docker
 
 ```sh
 cd deployment/dev/
 ```
-
 ```sh
 docker-compose up -d
 ```
+
+## Run tests using docker
+```sh
+cd deployment/test/
+```
+```sh
+docker-compose up -d
+```
+
+**Expected output** `======================= 110 passed, 44 warnings in 5.28s =======================`
+
+
 ## OpenAPI docs
 ```sh
 http://127.0.0.1:8000/docs
