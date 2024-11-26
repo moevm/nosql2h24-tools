@@ -2,18 +2,18 @@
 import { RouterLink, RouterView } from 'vue-router';
 import Header from "./components/TheHeader.vue";
 import Footer from "./components/TheFooter.vue"
-import { computed } from 'vue';
-import { useStore } from 'vuex';
+import {computed, onBeforeMount} from 'vue';
 import AdminSideBar from "@/components/AdminSideBar.vue";
+import store from "@/js/store.js";
+import {isUserAdmin} from "@/services/authService.js";
 
-const store = useStore();
-const isAdmin = computed(() => store.getters.isAdmin);
+
 </script>
 
 <template>
     <div class="app-container">
         <Header />
-        <AdminSideBar v-if="isAdmin" />
+        <AdminSideBar v-if="store.state.isAdmin" />
         <main class="content">
             <RouterView />
         </main>

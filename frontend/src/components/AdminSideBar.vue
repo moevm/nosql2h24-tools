@@ -1,17 +1,46 @@
 <template>
     <div>
         <button @click="toggleSidebar" class="toggle-button">
-            <img src="../assets/svg/sidebar/right.svg" alt="no" :class="isOpen ? 'close-sidebar' : 'open-sidebar'"/>
+            <img src="../assets/svg/sidebar/right.svg" alt="no" class="sidebar-button" :class="isOpen ? 'close-sidebar' : 'open-sidebar'"/>
         </button>
 
 
-        <div class="sidebar" v-if="isOpen" :style="{ transform: isOpen ? 'translateX(0)' : 'translateX(-100%)' }">
-            <router-link to="#">Информационная<br>панель</router-link> <br>
-            <router-link to="#">Каталог</router-link><br>
-            <router-link to="#">Сотрудники</router-link><br>
-            <router-link to="#">Заказы</router-link><br>
-            <router-link to="#">Отзывы</router-link><br>
-            <router-link to="#">Статистика</router-link><br>
+        <div class="sidebar" :style="{ transform: isOpen ? 'translateX(0)' : 'translateX(-100%)'}">
+            <div class="link" :class="{ active: isActive('/admin/dashboard') }">
+                <router-link to="/admin/dashboard">
+                    <p>Информационная<br>панель</p>
+                </router-link>
+            </div>
+            <div class="link" :class="{ active: isActive('/admin/tools') }">
+                <router-link to="/admin/tools">
+                    <p>Инструменты</p>
+                </router-link>
+            </div>
+            <div class="link" :class="{ active: isActive('/admin/categories') }">
+                <router-link to="/admin/categories">
+                    <p>Категории и типы</p>
+                </router-link>
+            </div>
+            <div class="link" :class="{ active: isActive('/admin/employees') }">
+                <router-link to="/admin/employees">
+                    <p>Сотрудники</p>
+                </router-link>
+            </div>
+            <div class="link" :class="{ active: isActive('/admin/orders') }">
+                <router-link to="/admin/orders">
+                    <p>Заказы</p>
+                </router-link>
+            </div>
+            <div class="link" :class="{ active: isActive('/admin/reviews') }">
+                <router-link to="/admin/reviews">
+                    <p>Отзывы</p>
+                </router-link>
+            </div>
+            <div class="link" :class="{ active: isActive('/admin/statistics') }">
+                <router-link to="/admin/statistics">
+                    <p>Статистика</p>
+                </router-link>
+            </div>
         </div>
     </div>
 </template>
@@ -29,9 +58,10 @@ export default {
         toggleSidebar() {
             this.isOpen = !this.isOpen;
         },
-        openCatalogue() {
-            this.isCatalogue = true
-        }
+        isActive(route) {
+            return this.$route.path === route;
+        },
+
     }
 };
 </script>
@@ -48,6 +78,7 @@ export default {
     color: white;
     padding: 10px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    transition: transform 0.5s;
 }
 .toggle-button {
     position: fixed;
@@ -63,7 +94,7 @@ export default {
 .open-sidebar {
     position: fixed;
     top: 50%;
-    left: 0;
+    transform: translateX(-25%);
     width: 64px;
     height: 64px;
 }
@@ -71,9 +102,26 @@ export default {
 .close-sidebar {
     position: fixed;
     top: 50%;
-    left: 218px;
+    transform: translateX(310%) rotate(180deg);
     width: 64px;
     height: 64px;
-    transform: rotate(180deg);
 }
+
+.sidebar-button {
+    transition: transform 0.5s;
+}
+
+.link {
+    border-left: 3px solid rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
+}
+
+.link p {
+    color: black;
+}
+
+.link.active {
+    border-left: 3px solid #6A983C;
+}
+
 </style>

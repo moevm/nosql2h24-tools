@@ -1,5 +1,8 @@
 <script>
 import LoginModal from "@/components/modals/LoginModal.vue";
+import store from "@/js/store.js";
+import {mapGetters} from "vuex";
+import {logoutUser} from "@/services/authService.js";
 
 export default {
     components: {LoginModal},
@@ -8,10 +11,17 @@ export default {
             showLoginModal: false,
         }
     },
+    computed: {
+        ...mapGetters(['isAuthenticated', 'isAdmin']), // Подключаем геттеры
+    },
 
     methods: {
         openProfile() {
             this.showLoginModal = true
+        },
+        logout() {
+            store.dispatch('logout')
+            logoutUser()
         }
     }
 }
@@ -27,8 +37,11 @@ export default {
                 Поиск
             </div>
             <div class="profile-basket">
-                <button>
+                <button v-if="!isAuthenticated">
                     <img src="../assets/svg/profile.svg" alt="profile" @click="openProfile"/>
+                </button>
+                <button v-if="isAuthenticated" @click="logout">
+                    Выйти
                 </button>
                 <button>
                     <img src="../assets/svg/basket.svg" alt="basket"/>
@@ -42,7 +55,6 @@ export default {
 <style scoped>
 .header {
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     position: sticky;
     top: 0;
     background-color: #FFFFFF;

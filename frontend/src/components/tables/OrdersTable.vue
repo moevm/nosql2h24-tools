@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <h1>Инструменты</h1>
+        <h1>Заказы</h1>
         <table>
             <thead>
             <tr>
@@ -52,17 +52,6 @@ export default {
         // },
         fetchTools() {
             this.tools = [
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
-                {'_id': '1111', 'dailyPrice': '2222', 'rating': '10', 'category': 'Ромашка', 'type': 'Gfgggfg', 'condition': 'Rsfdesf', 'data': '11.20.2024'},
             ]
         }
     },
@@ -86,6 +75,5 @@ th {
 
 .content {
     width: 100%;
-    padding: 64px;
 }
 </style>

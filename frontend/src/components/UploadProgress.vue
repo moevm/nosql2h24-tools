@@ -52,7 +52,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 2500;
     width: 100%;
     height: 100%;
 }
@@ -77,7 +77,7 @@ export default {
 .app-spinner__overlay {
     width: 100%;
     height: 100%;
-    background-color: #A1DA00;
+    background-color: #D1D1D1;
 }
 
 .app-spinner--fullscreen {

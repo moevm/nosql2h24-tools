@@ -19,7 +19,7 @@
                     <form @submit.prevent="handleSubmit" novalidate>
                         <div>
                             <label for="username">Имя</label>
-                            <input type="text" id="username" placeholder="Имя" v-model="form.username" required />
+                            <input type="text" id="username" placeholder="Имя" v-model="form.name" required />
                         </div>
                         <div>
                             <label for="surname">Фамилия</label>
@@ -64,7 +64,7 @@
                             <label for="password">Пароль</label>
                             <input id="password" placeholder="Пароль" @focus="onFocusPassword"
                                    :type="isPasswordVisible ? 'text' : 'password'" v-model="form.password" required />
-                            <button @click="isPasswordVisible = !isPasswordVisible"
+                            <button type="button" @click="isPasswordVisible = !isPasswordVisible"
                                     :class="isPasswordVisible ? 'opened-eye-button' : 'closed-eye-button'">
                                 <img v-if="isPasswordInput" :src="isPasswordVisible ? openedEye : closedEye" alt="eye"/>
                             </button>
@@ -74,20 +74,24 @@
                 </div>
             </div>
         </div>
-        <ErrorModal :errors="errors" :show="isErrorModalShown" @close="closeErrorModal"></ErrorModal>
         <UploadProgress v-if="isLoading"></UploadProgress>
     </div>
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
+
 import closedEye from '../../assets/svg/eye/closedEye.svg'
 import openedEye from '../../assets/svg/eye/openedEye.svg'
-import ErrorModal from "@/components/modals/ErrorModal.vue";
 import {login, register} from "@/services/authService.js";
 import UploadProgress from "@/components/UploadProgress.vue";
 
 export default {
-    components: {UploadProgress, ErrorModal},
+    components: {UploadProgress},
+    setup() {
+        const toast = useToast();
+        return {toast}
+    },
     data() {
         return {
             form: {
@@ -104,8 +108,7 @@ export default {
             isPasswordConfirmInput: false,
             isPasswordVisible: false,
             isPasswordConfirmVisible: false,
-            isErrorModalShown: false,
-            errors: [],
+            errors: '',
             isLoading: false,
             closedEye,
             openedEye
@@ -135,40 +138,41 @@ export default {
         onFocusPasswordConfirm() {
             this.isPasswordConfirmInput = true
         },
-        closeErrorModal() {
-            this.isErrorModalShown = false;
-            this.errors = []
-        },
         validate() {
             const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
             if (!this.form.email) {
-                this.errors.push('Email обязателен');
+                this.errors += 'Email обязателен\n';
             } else if (!emailPattern.test(this.form.email)) {
-                this.errors.push('Некорректный email');
+                this.errors += 'Некорректный email\n';
             }
             if (!this.form.password) {
-                this.errors.push('Пароль обязателен');
+                this.errors += 'Пароль обязателен\n';
             } else if (this.form.password.length < 8) {
-                this.errors.push('Пароль должен быть не менее 8 символов');
+                this.errors += 'Пароль должен быть не менее 8 символов\n';
             }
 
             if (this.isRegistration) {
                 if (!this.form.name) {
-                    this.errors.push('Имя обязательно');
+                    this.errors += 'Имя обязательно\n';
                 }
                 if (!this.form.surname) {
-                    this.errors.push('Фамилия обязательна');
+                    this.errors += 'Фамилия обязательна\n';
                 }
                 if (this.form.password !== this.form.passwordConfirm) {
-                    this.errors.push('Пароли не совпадают');
+                    this.errors += 'Пароли не совпадают\n';
                 }
                 if(!this.form.agreed) {
-                    this.errors.push('Поставьте галочку, пожалуйста');
+                    this.errors += 'Поставьте галочку, пожалуйста\n';
                 }
             }
         },
         handleSubmit() {
             this.validate()
+            if(this.errors){
+                this.toast.error(this.errors)
+                this.errors = ''
+                return
+            }
             this.isLoading = true
             if (this.isLogin) {
                 login({
@@ -177,14 +181,8 @@ export default {
                     }
                 ).then((res) => {
                     this.isLoading = false
-                    if (res.error) {
-                        this.errors.push(res.error)
-                        this.isErrorModalShown = true
-                    } else {
-                        this.closeModal()
-                    }
+                    if (res === "SUCCESS") this.closeModal()
                 })
-
             }
             if (this.isRegistration) {
                 register({
@@ -195,14 +193,8 @@ export default {
                     }
                 ).then((res) => {
                     this.isLoading = false
-                    if (res.error) {
-                        this.errors.push(res.error)
-                        this.isErrorModalShown = true
-                    } else {
-                        this.closeModal()
-                    }
+                    if (res === "SUCCESS") this.closeModal()
                 })
-
             }
 
         }
@@ -221,7 +213,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10000; /* Обеспечиваем, что модалка выше всего остального */
+    z-index: 2000; /* Обеспечиваем, что модалка выше всего остального */
 }
 
 .modal-content {
