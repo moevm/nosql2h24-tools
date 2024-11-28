@@ -44,28 +44,28 @@ def tool_service(tool_repo, category_repo, type_repo, paths_config, urls_config,
 @pytest.fixture
 def tool_create():
     return ToolCreate(
-        name="test_name",
+        name="test-name",
         dailyPrice=100.0,
         totalPrice=5000,
         images=["base64img1", "base64img2"],
         features={"param1": "key1", "param2": "key2"},
-        category="test_category",
-        type="test_type",
-        description="test_description"
+        category="test-category",
+        type="test-type",
+        description="test-description"
     )
 
 @pytest.fixture
 def tool_details():
     return ToolDetails(
-        id="test_id",
-        name="test_name",
+        id="test-id",
+        name="test-name",
         dailyPrice = 100.0,
         images=["image1.png", "image2.png"],
         rating=4.6,
         features={"param1": "key1", "param2": "key2"},
-        category="test_category",
-        type="test_type",
-        description="test_description"
+        category="test-category",
+        type="test-type",
+        description="test-description"
     )
 
 @pytest.fixture

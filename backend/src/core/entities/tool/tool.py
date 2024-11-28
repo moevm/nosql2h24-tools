@@ -172,12 +172,6 @@ class ToolCreate(BaseModel):
         if images:
             if len(images) > 10:
                 raise ValueError("No more than 10 images are allowed.")
-            import base64
-            for image in images:
-                try:
-                    base64.b64decode(image)
-                except Exception:
-                    raise ValueError("Each image must be a valid Base64 string.")
         return values
 
     class Config:

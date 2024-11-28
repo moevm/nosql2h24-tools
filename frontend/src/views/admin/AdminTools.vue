@@ -72,7 +72,7 @@ export default {
             <div class="flex">
                 <div v-for="tool in tools[currentPage]">
                     <ToolCard
-                        :image="tool.image"
+                        :image="tool.images[0]"
                         :title="tool.name"
                         :description="tool.description"
                         :rating="tool.rating"

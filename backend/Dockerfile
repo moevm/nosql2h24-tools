@@ -2,7 +2,7 @@ FROM python:3.11
 
 WORKDIR /app
 
-COPY ../.. .
+COPY . .
 
 RUN python -m venv /.venv
 
@@ -10,6 +10,5 @@ RUN /.venv/bin/pip install --no-cache-dir -r requirements.txt
 
 ENV PATH="/.venv/bin:$PATH"
 ENV ENV="dev"
-EXPOSE 8000
 
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
