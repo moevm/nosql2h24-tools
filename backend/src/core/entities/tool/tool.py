@@ -99,6 +99,10 @@ class ToolSummary(BaseModel):
         ...,
         description="Average tool rating"
     )
+    description: str = Field(
+        ...,
+        description="Tool description"
+    )
 
     class Config:
         json_encoders = {
@@ -121,10 +125,7 @@ class ToolDetails(ToolSummary):
         ...,
         description="Tool type"
     )
-    description: str = Field(
-        ...,
-        description="Tool description"
-    )
+
 
 class ToolCreate(BaseModel):
     name: str = Field(

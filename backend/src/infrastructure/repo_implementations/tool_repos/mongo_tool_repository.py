@@ -25,7 +25,7 @@ class MongoToolRepository(IToolRepository):
             tools = await self.tool_collection.find(
                 {},
                 {
-                    "_id": 1, "name": 1,"dailyPrice": 1, "images": 1, "rating": 1
+                    "_id": 1, "name": 1,"dailyPrice": 1, "images": 1, "rating": 1, "description": 1
                 }
             ).skip(skip).limit(page_size).to_list(length=page_size)
 

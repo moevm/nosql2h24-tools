@@ -21,15 +21,19 @@ services:
       context: ../../
       dockerfile: ./deployment/dev/Dockerfile
     container_name: fast_api
+    image: fast_api_app:1.0
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
       - mongodb
+    volumes:
+      - resources_data:/app/resources
     networks:
       - mongo_network
 
 volumes:
   mongo_data:
+  resources_data:
 
 networks:
   mongo_network:

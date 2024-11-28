@@ -1,9 +1,13 @@
 import os
 import base64
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from io import BytesIO
 from typing import List
 from uuid import uuid4
+from binascii import Error as BinAsciiError
+from src.core.exceptions.client_error import InvalidBase64Error
+from src.core.exceptions.server_error import DirectoryCreationError, ImageProcessingError
+
 
 class ImageDecoder:
     def __init__(self, api_uri_prefix: str, storage_prefix_path):
@@ -11,18 +15,27 @@ class ImageDecoder:
         self.storage_prefix_path = storage_prefix_path
 
     def decode_base64(self, base64_string: str) -> bytes:
-        if base64_string.startswith('data:image'):
-            base64_string = base64_string.split(',')[1]
+        try:
+            if base64_string.startswith('data:image'):
+                base64_string = base64_string.split(',')[1]
 
-        return base64.b64decode(base64_string)
+            return base64.b64decode(base64_string)
+        except (BinAsciiError, ValueError, Exception):
+            raise InvalidBase64Error(message="Failed to decode Base64 string", details={"base64_string": base64_string})
 
     def save_image(self, image_bytes: bytes, path: str) -> str:
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+        except OSError:
+            raise DirectoryCreationError("Failed to process image")
 
-        image = Image.open(BytesIO(image_bytes))
+        try:
+            image = Image.open(BytesIO(image_bytes))
+            image.save(path)
 
-        image.save(path)
-
-        return os.path.join(self.api_uri_prefix, path)
+            return os.path.join(self.api_uri_prefix, path)
+        except (UnidentifiedImageError, OSError, IOError):
+            raise ImageProcessingError("Failed to process image")
 
     def decode_and_save_image(self, base64_string: str, img_id: int = 1) -> str:
         image_bytes = self.decode_base64(base64_string)

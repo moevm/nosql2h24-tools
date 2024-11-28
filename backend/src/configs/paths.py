@@ -13,3 +13,4 @@ class Paths(BaseSettings):
     tool_img_storage_prefix_path: str
     client_img_storage_prefix_path: str
     worker_img_storage_prefix_path: str
+    image_dir: str

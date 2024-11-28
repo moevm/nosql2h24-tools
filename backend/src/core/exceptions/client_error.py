@@ -32,3 +32,8 @@ class JWTTokenMissing(ClientError):
 class InsufficientPermissionsError(ClientError):
     def __init__(self, message: str = "Forbidden: insufficient permissions", details: Any = None):
         super().__init__(message, status_code=403, details=details)
+
+
+class InvalidBase64Error(ClientError):
+    def __init__(self, message: str = "Invalid Base64 string", details: Any = None):
+        super().__init__(message, status_code=400, details=details)

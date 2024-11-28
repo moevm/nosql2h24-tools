@@ -12,3 +12,11 @@ class DatabaseError(ServerError):
 class MappingError(ServerError):
     def __init__(self, message: str = "Internal server error", details: Any = None):
         super().__init__(message, status_code=500, details=details)
+
+class ImageProcessingError(ServerError):
+    def __init__(self, message: str = "Error processing image", details: Any = None):
+        super().__init__(message, status_code=500, details=details)
+
+class DirectoryCreationError(ServerError):
+    def __init__(self, message: str = "Error creating directory", details: Any = None):
+        super().__init__(message, status_code=500, details=details)

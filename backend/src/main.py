@@ -1,6 +1,9 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from src.configs.config import config
 from src.core.exceptions.custom_error import CustomError
 from src.infrastructure.api.auth_controller import auth_router
 from src.infrastructure.api.client_controller import client_router
@@ -8,6 +11,7 @@ from src.infrastructure.api.tool_controller import tool_router, category_router,
 from src.infrastructure.api.worker_contoller import worker_router
 from src.infrastructure.db.mongo import MongoDB
 from src.infrastructure.api.exceptions.exception_handlers import custom_error_handler, unexpected_error_handler
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,6 +21,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+img_dir = os.path.join(current_dir, f"../{config.paths.image_dir}")
+
+app.mount("/api/resources/images", StaticFiles(directory=img_dir, html=True), name="images")
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 app.include_router(tool_router, prefix="/api/tools", tags=["tool"])
