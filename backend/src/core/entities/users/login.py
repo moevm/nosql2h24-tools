@@ -8,7 +8,9 @@ class LoginForm(BaseModel):
     )
     password: str = Field(
         ...,
-        description="User's password"
+        min_length=5,
+        max_length=128,
+        description="User's password. Must be at least 8 characters long."
     )
 
 class JWTTokens(BaseModel):

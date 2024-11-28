@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from typing import List, Dict, Optional
 from bson import ObjectId
 from src.core.entities.object_id_str import ObjectIdStr
@@ -130,37 +130,55 @@ class ToolDetails(ToolSummary):
 class ToolCreate(BaseModel):
     name: str = Field(
         ...,
-        description="tool name"
+        min_length=3,
+        max_length=100,
+        pattern=r"^[a-zA-Zа-яА-ЯёЁ0-9\s\-]+$",
+        description="Tool name. Must be between 3 and 100 characters, and contain only letters (Latin or Cyrillic), numbers, spaces, and hyphens."
     )
     dailyPrice: float = Field(
         ...,
-        description="Rental price per day"
+        gt=0,
+        description="Rental price per day. Must be greater than 0."
     )
     totalPrice: float = Field(
         ...,
-        description="Tool type"
+        gt=0,
+        description="Total price. Must be greater than 0."
     )
     images: List[str] = Field(
         default_factory=list,
-        description="Tool image list in base64 strings"
+        description="Tool image list in base64 strings. Maximum of 10 images."
     )
     features: Dict[str, str] = Field(
         ...,
-        description="Tool features dictionary"
+        description="Tool features dictionary. Keys and values must be non-empty strings."
     )
     category: str = Field(
         ...,
-        description="Tool category"
+        description="Tool category. Must be one of the predefined categories."
     )
     type: str = Field(
         ...,
-        description="Tool type"
+        description="Tool type. Must be one of the predefined types."
     )
     description: str = Field(
         ...,
         description="Tool description"
     )
 
+    @model_validator(mode="before")
+    def validate_images(cls, values):
+        images = values.get('images')
+        if images:
+            if len(images) > 10:
+                raise ValueError("No more than 10 images are allowed.")
+            import base64
+            for image in images:
+                try:
+                    base64.b64decode(image)
+                except Exception:
+                    raise ValueError("Each image must be a valid Base64 string.")
+        return values
 
     class Config:
         json_encoders = {

@@ -7,7 +7,10 @@ from bson import ObjectId
 class TypeSignature(BaseModel):
     name: str = Field(
         ...,
-        description="Type name",
+        min_length=3,
+        max_length=50,
+        pattern=r"^[a-zA-Zа-яА-Я0-9\s\-]+$",
+        description="Type name. Must be between 3 and 50 characters, and contain only letters (Latin or Cyrillic), numbers, spaces, and hyphens."
     ),
     category_name: str = Field(
         ...,
