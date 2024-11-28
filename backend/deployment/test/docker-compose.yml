@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  test_mongodb:
+    image: mongo:7.0
+    container_name: test_mongodb
+    hostname: test_mongodb
+    env_file:
+      - ../../env/test/.env.test.db
+      - ../../env/.env.collections
+    volumes:
+      - ../init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - mongo_network
+
+  test_fast_api:
+    build:
+      context: ../../
+      dockerfile: ./deployment/test/Dockerfile
+    container_name: test_fast_api
+    depends_on:
+      - test_mongodb
+    networks:
+      - mongo_network
+
+
+
+networks:
+  mongo_network:
+    driver: bridge

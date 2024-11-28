@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    hostname: mongodb
+    ports:
+      - "127.0.0.1:27017:27017" # для просмотра коллекций в mongoDB compass
+    env_file:
+      - ../../env/dev/.env.dev.db
+      - ../../env/.env.collections
+    volumes:
+      - ../init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - mongo_data:/data/db
+    networks:
+      - mongo_network
+
+  fast_api:
+    build:
+      context: ../../
+      dockerfile: ./deployment/dev/Dockerfile
+    container_name: fast_api
+    image: fast_api_app:1.0
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - mongodb
+    volumes:
+      - resources_data:/app/resources
+    networks:
+      - mongo_network
+
+volumes:
+  mongo_data:
+  resources_data:
+
+networks:
+  mongo_network:
+    driver: bridge
