@@ -90,7 +90,7 @@ async def test_create_tool_success(tool_service, tool_repo, category_repo, type_
     tool_repo.exists.assert_called_once_with(tool_create.name)
     category_repo.exists.assert_called_once_with(category_name=tool_create.category)
     type_repo.exists.assert_called_once_with(TypeSignature(name=tool_create.type, category_name=tool_create.category))
-    img_decoder.decode_and_save_images.assert_called_once_with(tool_create.images)
+    img_decoder.decode_and_save_images.assert_called_once_with(tool_create.images, tool_create.name)
     tool_repo.create.assert_called_once()
     type_repo.add_to_associated_tools.assert_called_once()
 
