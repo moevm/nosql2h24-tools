@@ -47,4 +47,13 @@ class MongoWorkerRepository(IWorkerRepository):
             return [WorkerSummary(**worker) for worker in workers]
         except PyMongoError:
             raise DatabaseError()
-
+        
+    async def get_random_worker(self) -> Optional[WorkerInDB]:
+        try:
+            pipeline = [{"$sample": {"size": 1}}]
+            worker_data = await self.worker_collection.aggregate(pipeline).to_list(length=1)
+            if worker_data:
+                return WorkerInDB(**worker_data[0])
+            return None
+        except PyMongoError:
+            raise DatabaseError()

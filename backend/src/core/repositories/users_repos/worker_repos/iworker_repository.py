@@ -19,3 +19,7 @@ class IWorkerRepository(ABC):
     @abstractmethod
     async def get_all_workers_summary(self) -> List[WorkerSummary]:
         pass
+    
+    @abstractmethod
+    async def get_random_worker(self) -> Optional[WorkerInDB]:
+        pass

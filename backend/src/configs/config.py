@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 from src.configs.collection_config import CollectionConfig
 from src.configs.jwt_config import JWTConfig
 from src.configs.mongo_config import MongoConfig
@@ -10,6 +10,6 @@ class Config(BaseSettings):
     jwt: JWTConfig = JWTConfig()
     collections: CollectionConfig = CollectionConfig()
     paths: Paths = Paths()
-    urls: Urls =  Urls()
+    urls: Urls = Urls()
 
 config = Config()

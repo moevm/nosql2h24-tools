@@ -3,6 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 config_dir = os.path.dirname(os.path.abspath(__file__))
 
+
 class CollectionConfig(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=os.path.join(config_dir, "../../env/.env.collections"),
@@ -15,3 +16,4 @@ class CollectionConfig(BaseSettings):
     tool_collection: str
     category_collection: str
     type_collection: str
+    order_collection: str

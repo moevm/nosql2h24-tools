@@ -1,8 +1,8 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 
-from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.order.order import Order
+from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.base_user import BaseUser, BaseUserSummary
 
 

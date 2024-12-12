@@ -1,0 +1,82 @@
+# ДЛЯ ТЕСТОВ
+
+
+
+# Для примера
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTEiLCJyb2xlIjoid29ya2VyIiwiZXhwIjoxNzM0MDM3NTk1fQ.F_ef_brNrd3z4GesHZZa_HuR3r6JXYIFn5J1nFF6yDI
+
+### Получение токена доступа
+POST http://localhost:8000/api/auth/token/
+Content-Type: application/json
+
+{
+    "email": "worker@example.com",
+    "password": "worker_123"
+}
+
+
+###
+GET http://localhost:8000/api/clients/
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/tools/paginated
+Authorization: Bearer {{authToken}}
+
+###
+POST http://localhost:8000/api/order
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+"tools": [
+    "675b49bf61ac4d715c070d16"
+],
+"start_leasing": "2024-12-12T20:39:38.800Z",
+  "end_leasing": "2024-12-12T20:39:38.800Z",
+  "client": "675b1525c5327d91fbfe6912",
+  "delivery_type": "string",
+  "delivery_state": "string",
+  "payment_type": "string",
+  "payment_state": "string"
+}
+
+###
+POST http://localhost:8000/api/categories/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "name": "123"
+}
+
+###
+POST http://localhost:8000/api/types/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+
+{
+"name": "321",
+"category_name": "123"
+}
+
+
+###
+POST http://localhost:8000/api/tools/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+"name": "Бензопила",
+"dailyPrice": 100,
+"totalPrice": 100000,
+"images": [],
+"features": {
+    "cool": "крутой",
+    "nice": "пиздатый"
+},
+"category": "123",
+"type": "321",
+"description": "вау круто бензопила"
+}

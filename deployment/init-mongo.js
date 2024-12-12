@@ -17,6 +17,7 @@ db.createCollection(process.env.WORKER_COLLECTION);
 db.createCollection(process.env.TOOL_COLLECTION);
 db.createCollection(process.env.CATEGORY_COLLECTION);
 db.createCollection(process.env.TYPE_COLLECTION);
+db.createCollection(process.env.ORDER_COLLECTION);
 
 db.getCollection(process.env.WORKER_COLLECTION).insertOne({
     email: "worker@example.com",
