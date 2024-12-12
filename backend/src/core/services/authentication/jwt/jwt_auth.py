@@ -36,13 +36,14 @@ class JWTAuthentication:
         )
 
     async def authenticate(self, login_request: LoginForm) -> Union[ClientInDB, WorkerInDB, None]:
-        client = await self.client_repository.get_by_email(login_request.email)
-        if client and self.password_hasher.verify_password(login_request.password, client.password):
-            return client
-
-        worker = await self.worker_repository.get_by_email(login_request.email)
-        if worker and self.password_hasher.verify_password(login_request.password, worker.password):
-            return worker
+        if await self.client_repository.exists_by_email(login_request.email):
+            client = await self.client_repository.get_by_email(login_request.email)
+            if self.password_hasher.verify_password(login_request.password, client.password):
+                return client
+        elif await self.worker_repository.exists_by_email(login_request.email):
+            worker = await self.worker_repository.get_by_email(login_request.email)
+            if self.password_hasher.verify_password(login_request.password, worker.password):
+                return worker
 
         return None
 

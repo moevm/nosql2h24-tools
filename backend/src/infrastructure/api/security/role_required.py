@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from src.configs.config import config
 from src.core.exceptions.client_error import JWTTokenMissing, InsufficientPermissionsError
+from src.core.exceptions.server_error import ServerError
 from src.core.services.authentication.jwt.jwt_token_manager import JWTTokenManager
 
 
@@ -21,8 +22,15 @@ def role_required(role: str):
             token_manager = JWTTokenManager(config.jwt)
             payload = token_manager.decode_access_token(token)
 
-            if payload["role"] != role:
-                raise InsufficientPermissionsError(details={"role_provided": payload["role"] ,"role_required": role})
+            if role == 'self':
+                client_id = kwargs.get('client_id')
+                if client_id != payload["sub"]:
+                    raise InsufficientPermissionsError(details={"role_required": 'self'})
+            elif role == 'worker':
+                if payload["role"] != role:
+                    raise InsufficientPermissionsError(details={"role_provided": payload["role"] ,"role_required": role})
+            else:
+                raise ServerError("Internal server error")
 
             return await func(*args, **kwargs)
         return wrapper

@@ -1,28 +1,35 @@
+from datetime import datetime, timezone
 from typing import Optional, List
-from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerSummary
+from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdatedUserPassword
+from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerPrivateSummary
 from src.core.exceptions.server_error import DatabaseError
 from src.core.repositories.users_repos.worker_repos.iworker_repository import IWorkerRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pymongo.errors import PyMongoError
-from src.infrastructure.repo_implementations.helpers.id_mapper import objectId_to_str
+from src.infrastructure.repo_implementations.helpers.id_mapper import objectId_to_str, str_to_objectId
 
 
 class MongoWorkerRepository(IWorkerRepository):
     def __init__(self, db: AsyncIOMotorDatabase, worker_collection: str):
         self.worker_collection = db[worker_collection]
 
-    async def get_by_email(self, email: str) -> Optional[WorkerInDB]:
+    async def get_by_email(self, email: str) -> WorkerInDB:
         try:
             worker_data = await self.worker_collection.find_one({'email': email})
-            if worker_data:
-                return WorkerInDB(**worker_data)
-            return None
+            return WorkerInDB(**worker_data)
         except PyMongoError:
             raise DatabaseError()
 
-    async def exists(self, email: str) -> bool:
+    async def exists_by_email(self, email: str) -> bool:
         try:
             worker_data = await self.worker_collection.find_one({'email': email})
+            return worker_data is not None
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def exists_by_id(self, worker_id: str) -> bool:
+        try:
+            worker_data = await self.worker_collection.find_one({'_id': str_to_objectId(worker_id)})
             return worker_data is not None
         except PyMongoError:
             raise DatabaseError()
@@ -35,7 +42,7 @@ class MongoWorkerRepository(IWorkerRepository):
         except PyMongoError:
             raise DatabaseError()
 
-    async def get_all_workers_summary(self) -> List[WorkerSummary]:
+    async def get_all_workers_summary(self) -> List[WorkerPrivateSummary]:
         try:
             worker_cursor = self.worker_collection.find(
                 {},
@@ -44,7 +51,60 @@ class MongoWorkerRepository(IWorkerRepository):
                 }
             )
             workers = await worker_cursor.to_list(length=None)
-            return [WorkerSummary(**worker) for worker in workers]
+            return [WorkerPrivateSummary(**worker) for worker in workers]
         except PyMongoError:
             raise DatabaseError()
 
+    async def update_worker(self, worker_id: str, update_client: UpdateUser) -> UpdatedUser:
+        try:
+            update_data = {key: value for key, value in update_client.model_dump(exclude_unset=True).items()}
+
+            update_data["updated_at"] = datetime.now(timezone.utc)
+
+            result = await self.worker_collection.update_one(
+                {"_id": str_to_objectId(worker_id)},
+                {"$set": update_data}
+            )
+
+            return UpdatedUser(
+                user_id=worker_id
+            )
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def update_password(self, worker_id: str, new_password: str) -> UpdatedUserPassword:
+        try:
+
+            update_data = {
+                "password": new_password,
+                "updated_at": datetime.now(timezone.utc)
+            }
+
+            await self.worker_collection.update_one(
+                {"_id": str_to_objectId(worker_id)},
+                {"$set": update_data}
+            )
+
+            return UpdatedUserPassword(
+                user_id=worker_id
+            )
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_password_by_id(self, worker_id: str) -> str:
+        try:
+            worker_data = await self.worker_collection.find_one(
+                {"_id": str_to_objectId(worker_id)},
+                {"password": 1}
+            )
+
+            return worker_data["password"]
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_private_summary_by_id(self, worker_id: str) -> WorkerPrivateSummary:
+        try:
+            worker_data = await self.worker_collection.find_one({"_id": str_to_objectId(worker_id)})
+            return WorkerPrivateSummary(**worker_data)
+        except:
+            raise DatabaseError()
