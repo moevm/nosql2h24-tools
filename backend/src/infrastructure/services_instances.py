@@ -55,7 +55,9 @@ def get_client_service(
         mongo_client_repo: MongoClientRepository = Depends(get_mongo_client_repo)
 ) -> ClientService:
     return ClientService(
-        mongo_client_repo
+        mongo_client_repo,
+        config.paths,
+        config.urls
     )
 
 def get_worker_service(
@@ -71,3 +73,7 @@ def get_order_service(
     mongo_worker_repo: MongoWorkerRepository = Depends(get_mongo_worker_repo)
 )-> OrderService:
     return OrderService(mongo_order_repo, mongo_tool_repo, mongo_worker_repo)
+        mongo_worker_repo,
+        config.paths,
+        config.urls
+    )

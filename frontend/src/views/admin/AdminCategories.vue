@@ -4,10 +4,11 @@ import AddNewTool from "@/components/admin/AddNewTool.vue";
 import {getAllCategories} from "@/services/adminServices.js";
 import CategoriesTable from "@/components/tables/CategoriesTable.vue";
 import AddNewType from "@/components/admin/AddNewType.vue";
+import UploadProgress from "@/components/UploadProgress.vue";
 
 export default {
     name: "AdminCategories",
-    components: {AddNewType, CategoriesTable, AddNewTool, AddNewCategory},
+    components: {UploadProgress, AddNewType, CategoriesTable, AddNewTool, AddNewCategory},
     data() {
         return {
             isLoading: false,
@@ -45,6 +46,7 @@ export default {
 </script>
 
 <template>
+    <UploadProgress v-if="isLoading"></UploadProgress>
     <div class="main">
         <AddNewCategory :isOpen="isNewCategoryPanelOpen" @close=closeNewCategoryPanel />
         <AddNewType :isOpen="isNewTypePanelOpen" @close=closeNewTypePanel :categories="categories"/>

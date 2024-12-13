@@ -4,6 +4,7 @@ from typing import List, Optional
 from src.core.entities.order.order import Order
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.base_user import BaseUser, BaseUserSummary
+from src.core.entities.users.base_user import BaseUser, BaseUserPrivateSummary
 
 
 class Client(BaseUser):
@@ -36,5 +37,5 @@ class ClientInDB(Client):
         description="Unique identifier of the client in the db"
     )
 
-class ClientSummary(BaseUserSummary):
+class ClientPrivateSummary(BaseUserPrivateSummary):
     pass

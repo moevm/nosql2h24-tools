@@ -5,15 +5,15 @@ class ClientRegistrationForm(BaseModel):
         ...,
         min_length=2,
         max_length=50,
-        pattern=r"^[a-zA-Zа-яА-Я\- ]+$",
-        description="User's first name. Must be between 2 and 50 characters and contain only letters, spaces, or hyphens."
+        pattern=r"^[a-zA-Zа-яА-ЯёЁ]+$",
+        description="User's first name. Must be between 2 and 50 characters and contain only letters"
     )
     surname: str = Field(
         ...,
         min_length=2,
         max_length=50,
-        pattern=r"^[a-zA-Zа-яА-Я\- ]+$",
-        description="User's last name. Must be between 2 and 50 characters and contain only letters, spaces, or hyphens."
+        pattern=r"^[a-zA-Zа-яА-ЯёЁ]+$",
+        description="User's last name. Must be between 2 and 50 characters and contain only letters"
     )
     email: EmailStr = Field(
         ...,

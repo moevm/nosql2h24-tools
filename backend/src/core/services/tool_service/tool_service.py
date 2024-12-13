@@ -28,7 +28,7 @@ class ToolService:
         images = []
 
         if tool.images:
-            images = self.img_decoder.decode_and_save_images(tool.images)
+            images = self.img_decoder.decode_and_save_images(tool.images, tool.name)
 
 
         new_tool = Tool(
