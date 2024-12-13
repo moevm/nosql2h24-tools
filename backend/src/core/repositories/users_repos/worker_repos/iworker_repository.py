@@ -1,11 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List
 
-from bson import ObjectId
-
 from src.core.entities.object_id_str import ObjectIdStr
-from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerSummary
-from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdateUserPassword, UpdatedUserPassword
+from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdatedUserPassword
 from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerPrivateSummary
 
 

@@ -1,7 +1,6 @@
 from fastapi import Depends
 from src.core.services.order_service.order_service import OrderService
 from src.infrastructure.repo_implementations.order_repos.mongo_order_repository import MongoOrderRepository
-from src.infrastructure.repo_implementations.tool_repos import mongo_tool_repository
 from src.configs.config import config
 from src.core.services.authentication.jwt.jwt_auth import JWTAuthentication
 from src.core.services.registration.registration import RegistrationService
@@ -64,7 +63,9 @@ def get_worker_service(
         mongo_worker_repo: MongoWorkerRepository = Depends(get_mongo_worker_repo)
 ) -> WorkerService:
     return WorkerService(
-        mongo_worker_repo
+        mongo_worker_repo,
+        config.paths,
+        config.urls
     )
 
 def get_order_service(
@@ -73,7 +74,4 @@ def get_order_service(
     mongo_worker_repo: MongoWorkerRepository = Depends(get_mongo_worker_repo)
 )-> OrderService:
     return OrderService(mongo_order_repo, mongo_tool_repo, mongo_worker_repo)
-        mongo_worker_repo,
-        config.paths,
-        config.urls
-    )
+
