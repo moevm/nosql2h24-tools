@@ -1,4 +1,6 @@
 from typing import Optional, List
+
+from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerSummary
 from src.core.exceptions.server_error import DatabaseError
 from src.core.repositories.users_repos.worker_repos.iworker_repository import IWorkerRepository
@@ -48,12 +50,12 @@ class MongoWorkerRepository(IWorkerRepository):
         except PyMongoError:
             raise DatabaseError()
         
-    async def get_random_worker(self) -> Optional[WorkerInDB]:
+    async def get_random_worker(self) -> Optional[ObjectIdStr]:
         try:
             pipeline = [{"$sample": {"size": 1}}]
             worker_data = await self.worker_collection.aggregate(pipeline).to_list(length=1)
             if worker_data:
-                return WorkerInDB(**worker_data[0])
+                return WorkerInDB(**worker_data[0]).id
             return None
         except PyMongoError:
             raise DatabaseError()

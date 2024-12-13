@@ -22,3 +22,7 @@ class IToolRepository(ABC):
     @abstractmethod
     async def exists(self, tool_name: str) -> bool:
         pass
+
+    @abstractmethod
+    async def get_tool_by_id(self, tool_id: str) -> Tool:
+        pass

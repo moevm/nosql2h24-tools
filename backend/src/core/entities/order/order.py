@@ -62,7 +62,7 @@ class Order(BaseModel):
         allow_population_by_field_name = True
 
 class OrderCreate(BaseModel):
-    tools: List[ObjectIdStr] = Field(
+    tools: List[str] = Field(
         ...,
         max_length=50,
         min_length=1,
@@ -76,7 +76,7 @@ class OrderCreate(BaseModel):
         default_factory=lambda: datetime.now(timezone.utc),
         description="end of leasing"
     )
-    client: ObjectIdStr = Field(
+    client: str = Field(
         ...,
         description="client who ordered"
     )
