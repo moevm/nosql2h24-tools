@@ -13,7 +13,7 @@ class RegistrationService:
         self.password_hasher = BcryptPasswordHasher()
 
     async def register_client(self, registration_form: ClientRegistrationForm) -> RegisteredUser:
-        if await self.client_repo.exists(registration_form.email):
+        if await self.client_repo.exists_by_email(registration_form.email):
             raise ResourceAlreadyExistsError("A client with this email already exists", details={"email": registration_form.email})
 
         hashed_password = self.password_hasher.hash_password(password=registration_form.password)
@@ -32,7 +32,7 @@ class RegistrationService:
         )
 
     async def register_worker(self, registration_form: WorkerRegistrationForm) -> RegisteredUser:
-        if await self.worker_repo.exists(registration_form.email):
+        if await self.worker_repo.exists_by_email(registration_form.email):
             raise ResourceAlreadyExistsError("A worker with this email already exists", details={"email": registration_form.email})
 
         hashed_password = self.password_hasher.hash_password(password=registration_form.password)

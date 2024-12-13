@@ -6,7 +6,7 @@ from typing import List, Optional
 
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.order.order import Order
-from src.core.entities.users.base_user import BaseUser, BaseUserSummary
+from src.core.entities.users.base_user import BaseUser, BaseUserPrivateSummary
 
 
 class Worker(BaseUser):
@@ -48,7 +48,7 @@ class WorkerInDB(Worker):
         description="Unique identifier of the client in the db"
     )
 
-class WorkerSummary(BaseUserSummary):
+class WorkerPrivateSummary(BaseUserPrivateSummary):
     jobTitle: str = Field(
         ...,
         description="Worker's job title",

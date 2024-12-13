@@ -52,7 +52,7 @@ def mock_password_hasher():
 
 @pytest.mark.asyncio
 async def test_login_success_client(mock_client_repo, mock_worker_repo, mock_jwt_manager, mock_password_hasher):
-    mock_worker_repo.get_by_email.return_value = None
+    mock_client_repo.exists_by_email.return_value = True
     mock_password_hasher.verify_password.return_value = True
 
     jwt_auth = JWTAuthentication(mock_client_repo, mock_worker_repo, MagicMock())
@@ -67,12 +67,15 @@ async def test_login_success_client(mock_client_repo, mock_worker_repo, mock_jwt
     assert tokens.refresh_token == "mock_refresh_token"
     assert tokens.token_type == "bearer"
 
+    mock_client_repo.exists_by_email.assert_called_once_with("client@test.com")
     mock_client_repo.get_by_email.assert_called_once_with("client@test.com")
+    mock_worker_repo.exists_by_email.assert_not_called()
     mock_worker_repo.get_by_email.assert_not_called()
 
 @pytest.mark.asyncio
 async def test_login_success_worker(mock_client_repo, mock_worker_repo, mock_jwt_manager, mock_password_hasher):
-    mock_client_repo.get_by_email.return_value = None
+    mock_client_repo.exists_by_email.return_value = False
+    mock_worker_repo.exists_by_email.return_value = True
     mock_password_hasher.verify_password.return_value = True
 
     jwt_auth = JWTAuthentication(mock_client_repo, mock_worker_repo, MagicMock())
@@ -87,13 +90,14 @@ async def test_login_success_worker(mock_client_repo, mock_worker_repo, mock_jwt
     assert tokens.refresh_token == "mock_refresh_token"
     assert tokens.token_type == "bearer"
 
-    mock_client_repo.get_by_email.assert_called_once_with("worker@test.com")
+    mock_client_repo.exists_by_email.assert_called_once_with("worker@test.com")
+    mock_client_repo.get_by_email.asser_not_called()
+    mock_worker_repo.exists_by_email.assert_called_once_with("worker@test.com")
     mock_worker_repo.get_by_email.assert_called_once_with("worker@test.com")
 
 @pytest.mark.asyncio
 async def test_login_invalid_password_client(mock_client_repo, mock_worker_repo, mock_jwt_manager, mock_password_hasher):
-
-    mock_worker_repo.get_by_email.return_value = None
+    mock_client_repo.exists_by_email.return_value = True
     mock_password_hasher.verify_password.return_value = False
 
     jwt_auth = JWTAuthentication(mock_client_repo, mock_worker_repo, MagicMock())
@@ -105,12 +109,14 @@ async def test_login_invalid_password_client(mock_client_repo, mock_worker_repo,
     with pytest.raises(ResourceNotFoundError):
         await jwt_auth.login(login_form)
 
+    mock_client_repo.exists_by_email.assert_called_once_with("client@test.com")
     mock_client_repo.get_by_email.assert_called_once_with("client@test.com")
-    mock_worker_repo.get_by_email.assert_called_once_with("client@test.com")
+    mock_worker_repo.exists_by_email.assert_not_called()
 
 @pytest.mark.asyncio
 async def test_login_invalid_password_worker(mock_client_repo, mock_worker_repo, mock_jwt_manager, mock_password_hasher):
-    mock_client_repo.get_by_email.return_value = None
+    mock_client_repo.exists_by_email.return_value = False
+    mock_worker_repo.exists_by_email.return_value = True
     mock_password_hasher.verify_password.return_value = False
 
     jwt_auth = JWTAuthentication(mock_client_repo, mock_worker_repo, MagicMock())
@@ -122,15 +128,17 @@ async def test_login_invalid_password_worker(mock_client_repo, mock_worker_repo,
     with pytest.raises(ResourceNotFoundError):
         await jwt_auth.login(login_form)
 
-    mock_client_repo.get_by_email.assert_called_once_with("worker@test.com")
+    mock_client_repo.exists_by_email.assert_called_once_with("worker@test.com")
+    mock_client_repo.get_by_email.assert_not_called()
+    mock_worker_repo.exists_by_email.assert_called_once_with("worker@test.com")
     mock_worker_repo.get_by_email.assert_called_once_with("worker@test.com")
+
 
 
 @pytest.mark.asyncio
 async def test_login_non_existent_credentials(mock_client_repo, mock_worker_repo):
-
-    mock_client_repo.get_by_email.return_value = None
-    mock_worker_repo.get_by_email.return_value = None
+    mock_client_repo.exists_by_email.return_value = False
+    mock_worker_repo.exists_by_email.return_value = False
 
     jwt_auth = JWTAuthentication(mock_client_repo, mock_worker_repo, MagicMock())
     login_form = LoginForm(email="invalid@test.com", password="wrong_password")
@@ -138,5 +146,7 @@ async def test_login_non_existent_credentials(mock_client_repo, mock_worker_repo
     with pytest.raises(ResourceNotFoundError):
         await jwt_auth.login(login_form)
 
-    mock_client_repo.get_by_email.assert_called_once_with("invalid@test.com")
-    mock_worker_repo.get_by_email.assert_called_once_with("invalid@test.com")
+    mock_client_repo.exists_by_email.assert_called_once_with("invalid@test.com")
+    mock_worker_repo.exists_by_email.assert_called_once_with("invalid@test.com")
+    mock_client_repo.get_by_email.assert_not_called()
+    mock_worker_repo.get_by_email.assert_not_called()

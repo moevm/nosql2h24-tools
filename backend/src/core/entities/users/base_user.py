@@ -39,7 +39,7 @@ class BaseUserInDB(BaseUser):
         description="Unique identifier of the user in the db"
     )
 
-class BaseUserSummary(BaseModel):
+class BaseUserPrivateSummary(BaseModel):
     id: Optional[ObjectIdStr] = Field(
         ...,
         default_factory=ObjectIdStr,
@@ -76,3 +76,61 @@ class BaseUserSummary(BaseModel):
 
         allow_population_by_field_name = True
 
+
+
+class UpdateUser(BaseModel):
+    name: str = Field(
+        None,
+        description="User's first name. Must be between 2 and 20 characters and contain only letters",
+        pattern=r"^[a-zA-Zа-яА-ЯёЁ]+$",
+        min_length=2,
+        max_length=20
+
+    )
+    surname: str = Field(
+        None,
+        description="User's last name. Must be between 2 and 20 characters and contain only letters",
+        pattern=r"^[a-zA-Zа-яА-ЯёЁ]+$",
+        min_length=2,
+        max_length=20
+    )
+    phone: Optional[str] = Field(
+        None,
+        pattern=r"^\+?[1-9]\d{1,14}$",
+        description="User's phone number in international format (e.g., +123456789)."
+    )
+    image: str = Field(
+        None,
+        description="User's image, base64 string."
+    )
+
+
+class UpdatedUser(BaseModel):
+    message: str = Field(
+        default="Update successful"
+    )
+    user_id: str = Field(
+        ...,
+        description="id of updated user"
+    )
+
+
+class UpdateUserPassword(BaseModel):
+    current_password: str = Field(
+        ...,
+        description="Current user's password"
+    )
+    new_password: str = Field(
+        ...,
+        description="New user's password"
+    )
+
+
+class UpdatedUserPassword(BaseModel):
+    message: str = Field(
+        default="Password updated successfully"
+    )
+    user_id: str = Field(
+        ...,
+        description="id of updated user"
+    )

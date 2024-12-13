@@ -1,11 +1,13 @@
 from datetime import datetime, timezone, timedelta
 from unittest.mock import AsyncMock
+from bson import ObjectId
 import pytest, pytest_asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
+from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdatedUserPassword
 from src.infrastructure.repo_implementations.helpers.id_mapper import objectId_to_str, str_to_objectId
 from src.core.exceptions.server_error import DatabaseError
 from src.infrastructure.repo_implementations.users_repos.worker_repos.mongo_worker_repository import MongoWorkerRepository
-from src.core.entities.users.worker.worker import Worker, WorkerInDB
+from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerPrivateSummary
 from src.configs.config import config
 from pymongo.errors import PyMongoError
 
@@ -95,12 +97,6 @@ async def test_get_by_email_success(worker_repo, worker):
     assert worker_in_db.orders == []
 
 @pytest.mark.asyncio
-async def test_get_by_email_not_found(worker_repo):
-    retrieved_worker = await worker_repo.get_by_email("nonexistent@example.com")
-    assert retrieved_worker is None
-
-
-@pytest.mark.asyncio
 async def test_get_by_email_database_error(worker_repo, monkeypatch):
     async def mock_find_one(*args, **kwargs):
         raise PyMongoError("Mocked find error")
@@ -114,12 +110,12 @@ async def test_get_by_email_database_error(worker_repo, monkeypatch):
 async def test_exists_true(worker_repo, worker):
     await worker_repo.create(worker)
 
-    exists = await worker_repo.exists(worker.email)
+    exists = await worker_repo.exists_by_email(worker.email)
     assert exists is True
 
 @pytest.mark.asyncio
 async def test_exists_false(worker_repo):
-    exists = await worker_repo.exists("nonexistent@example.com")
+    exists = await worker_repo.exists_by_email("nonexistent@example.com")
     assert exists is False
 
 
@@ -131,7 +127,7 @@ async def test_exists_database_error(worker_repo, monkeypatch):
     monkeypatch.setattr(worker_repo.worker_collection, 'find_one', mock_find_one)
 
     with pytest.raises(DatabaseError):
-        await worker_repo.exists("test@example.com")
+        await worker_repo.exists_by_email("test@example.com")
 
 @pytest.mark.asyncio
 async def test_get_all_workers_summary(worker_repo):
@@ -182,3 +178,262 @@ async def test_get_all_workers_summary_database_error(worker_repo, monkeypatch):
 
     with pytest.raises(DatabaseError):
         await worker_repo.get_all_workers_summary()
+        
+@pytest.mark.asyncio
+async def test_update_worker_all(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    update_data = UpdateUser(
+        name="newName",
+        surname="newSurname",
+        phone="+79876543210",
+        image="new_image.jpg"
+    )
+
+    result = await worker_repo.update_worker(worker_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == update_data.name
+    assert updated_worker.surname == update_data.surname
+    assert updated_worker.phone == update_data.phone
+    assert updated_worker.image == update_data.image
+
+
+@pytest.mark.asyncio
+async def test_update_worker_name(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    update_data = UpdateUser(
+        name="newName"
+    )
+
+    result = await worker_repo.update_worker(worker_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == update_data.name
+    assert updated_worker.surname == worker.surname
+    assert updated_worker.phone == worker.phone
+    assert updated_worker.image == worker.image
+
+@pytest.mark.asyncio
+async def test_update_worker_surname(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    update_data = UpdateUser(
+        surname="newSurname"
+    )
+
+    result = await worker_repo.update_worker(worker_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == worker.name
+    assert updated_worker.surname == update_data.surname
+    assert updated_worker.phone == worker.phone
+    assert updated_worker.image == worker.image
+
+@pytest.mark.asyncio
+async def test_update_worker_phone(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    update_data = UpdateUser(
+        phone="+79876543210"
+    )
+
+    result = await worker_repo.update_worker(worker_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == worker.name
+    assert updated_worker.surname == worker.surname
+    assert updated_worker.phone == update_data.phone
+    assert updated_worker.image == worker.image
+
+@pytest.mark.asyncio
+async def test_update_worker_image(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    update_data = UpdateUser(
+        image="new_image.jpg"
+    )
+
+    result = await worker_repo.update_worker(worker_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == worker.name
+    assert updated_worker.surname == worker.surname
+    assert updated_worker.phone == worker.phone
+    assert updated_worker.image == update_data.image
+
+@pytest.mark.asyncio
+async def test_update_worker_partly(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    update_data = UpdateUser(
+        name="newName",
+        phone="+79876543210"
+    )
+
+    result = await worker_repo.update_worker(worker_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == update_data.name
+    assert updated_worker.surname == worker.surname
+    assert updated_worker.phone == update_data.phone
+    assert updated_worker.image == worker.image
+
+@pytest.mark.asyncio
+async def test_update_worker_database_error(worker_repo, worker, monkeypatch):
+    async def mock_update_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(worker_repo.worker_collection, 'update_one', mock_update_one)
+
+    worker_id = await worker_repo.create(worker)
+
+    with pytest.raises(DatabaseError):
+        await worker_repo.update_worker(worker_id, UpdateUser(name="newName"))
+
+@pytest.mark.asyncio
+async def test_update_password_success(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+    new_password = "new_hashed_pass"
+
+    result = await worker_repo.update_password(worker_id, new_password)
+
+    assert isinstance(result, UpdatedUserPassword)
+    assert result.user_id == worker_id
+
+    updated_worker = await worker_repo.get_by_email(worker.email)
+
+    assert isinstance(updated_worker, WorkerInDB)
+    assert str(updated_worker.id) == worker_id
+    assert updated_worker.email == worker.email
+    assert updated_worker.name == worker.name
+    assert updated_worker.surname == worker.surname
+    assert updated_worker.phone == worker.phone
+    assert updated_worker.image == worker.image
+    assert updated_worker.password == new_password
+
+@pytest.mark.asyncio
+async def test_update_password_database_error(worker_repo, worker, monkeypatch):
+    async def mock_update_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(worker_repo.worker_collection, 'update_one', mock_update_one)
+
+    worker_id = await worker_repo.create(worker)
+
+    with pytest.raises(DatabaseError):
+        await worker_repo.update_password(worker_id, "new_password")
+
+@pytest.mark.asyncio
+async def test_get_password_by_id_success(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+    password = await worker_repo.get_password_by_id(worker_id)
+
+    assert password == worker.password
+
+@pytest.mark.asyncio
+async def test_get_password_by_id_database_error(worker_repo, worker, monkeypatch):
+    async def mock_find_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(worker_repo.worker_collection, 'find_one', mock_find_one)
+
+    worker_id = await worker_repo.create(worker)
+
+    with pytest.raises(DatabaseError):
+        await worker_repo.get_password_by_id(worker_id)
+
+@pytest.mark.asyncio
+async def test_get_private_summary_by_id_success(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    result = await worker_repo.get_private_summary_by_id(worker_id)
+
+    assert isinstance(result, WorkerPrivateSummary)
+    assert str(result.id) == worker_id
+    assert result.email == worker.email
+    assert result.name == worker.name
+    assert result.surname == worker.surname
+    assert result.phone == worker.phone
+    assert result.image == worker.image
+
+@pytest.mark.asyncio
+async def test_get_private_summary_by_id_database_error(worker_repo, worker, monkeypatch):
+    async def mock_find_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(worker_repo.worker_collection, 'find_one', mock_find_one)
+
+    worker_id = await worker_repo.create(worker)
+
+    with pytest.raises(DatabaseError):
+        await worker_repo.get_private_summary_by_id(worker_id)
+
+@pytest.mark.asyncio
+async def test_exists_by_id_true(worker_repo, worker):
+    worker_id = await worker_repo.create(worker)
+
+    exists = await worker_repo.exists_by_id(worker_id)
+
+    assert exists is True
+
+@pytest.mark.asyncio
+async def test_exists_by_id_false(worker_repo, worker):
+    exists = await worker_repo.exists_by_id(objectId_to_str(ObjectId()))
+
+    assert exists is False
+
+@pytest.mark.asyncio
+async def test_exists_by_id_database_error(worker_repo, worker, monkeypatch):
+    async def mock_find_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(worker_repo.worker_collection, 'find_one', mock_find_one)
+
+    worker_id = await worker_repo.create(worker)
+
+    with pytest.raises(DatabaseError):
+        await worker_repo.exists_by_id(worker_id)

@@ -43,7 +43,7 @@ def worker_registration_form():
 
 @pytest.mark.asyncio
 async def test_register_client_success(registration_service, client_repo, client_registration_form):
-    client_repo.exists.return_value = False
+    client_repo.exists_by_email.return_value = False
     client_repo.create.return_value = "new_client_id"
     registration_service.password_hasher.hash_password.return_value = "hashed_password"
 
@@ -51,13 +51,13 @@ async def test_register_client_success(registration_service, client_repo, client
 
     assert isinstance(registered_user, RegisteredUser)
     assert registered_user.user_id == "new_client_id"
-    client_repo.exists.assert_called_once_with(client_registration_form.email)
+    client_repo.exists_by_email.assert_called_once_with(client_registration_form.email)
     client_repo.create.assert_called_once()
     registration_service.password_hasher.hash_password.assert_called_once_with(password=client_registration_form.password)
 
 @pytest.mark.asyncio
 async def test_register_worker_success(registration_service, worker_repo, worker_registration_form):
-    worker_repo.exists.return_value = False
+    worker_repo.exists_by_email.return_value = False
     worker_repo.create.return_value = "new_worker_id"
     registration_service.password_hasher.hash_password.return_value = "hashed_password"
 
@@ -65,26 +65,26 @@ async def test_register_worker_success(registration_service, worker_repo, worker
 
     assert isinstance(registered_user, RegisteredUser)
     assert registered_user.user_id == "new_worker_id"
-    worker_repo.exists.assert_called_once_with(worker_registration_form.email)
+    worker_repo.exists_by_email.assert_called_once_with(worker_registration_form.email)
     worker_repo.create.assert_called_once()
     registration_service.password_hasher.hash_password.assert_called_once_with(password=worker_registration_form.password)
 
 @pytest.mark.asyncio
 async def test_register_client_email_already_exists(registration_service, client_repo, client_registration_form):
-    client_repo.exists.return_value = True
+    client_repo.exists_by_email.return_value = True
 
     with pytest.raises(ResourceAlreadyExistsError):
         await registration_service.register_client(client_registration_form)
 
-    client_repo.exists.assert_called_once_with(client_registration_form.email)
+    client_repo.exists_by_email.assert_called_once_with(client_registration_form.email)
     client_repo.create.assert_not_called()
 
 @pytest.mark.asyncio
 async def test_register_worker_email_already_exists(registration_service, worker_repo, worker_registration_form):
-    worker_repo.exists.return_value = True
+    worker_repo.exists_by_email.return_value = True
 
     with pytest.raises(ResourceAlreadyExistsError):
         await registration_service.register_worker(worker_registration_form)
 
-    worker_repo.exists.assert_called_once_with(worker_registration_form.email)
+    worker_repo.exists_by_email.assert_called_once_with(worker_registration_form.email)
     worker_repo.create.assert_not_called()

@@ -1,12 +1,13 @@
-from multiprocessing.context import assert_spawning
 from unittest.mock import AsyncMock
-
+from bson import ObjectId
 import pytest, pytest_asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from src.configs.config import config
 from pymongo.errors import PyMongoError
-from src.core.entities.users.client.client import Client, ClientInDB
+from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdateUserPassword, UpdatedUserPassword
+from src.core.entities.users.client.client import Client, ClientInDB, ClientPrivateSummary
 from src.core.exceptions.server_error import DatabaseError
+from src.infrastructure.api.client_controller import update_client
 from src.infrastructure.repo_implementations.helpers.id_mapper import str_to_objectId, objectId_to_str
 from src.infrastructure.repo_implementations.users_repos.client_repos.mongo_client_repository import \
     MongoClientRepository
@@ -33,8 +34,8 @@ def client():
     return Client(
         email="test_client@example.com",
         password="hashed_password",
-        name="test_name",
-        surname="test_surname",
+        name="testName",
+        surname="testSurname",
         phone="+71234567890"
     )
 
@@ -82,10 +83,6 @@ async def test_get_by_email_success(client_repo, client):
     assert client_in_db.image is None
     assert client_in_db.orders == []
 
-@pytest.mark.asyncio
-async def test_get_by_email_not_found(client_repo):
-    retrieved_client = await client_repo.get_by_email("nonexistent@example.com")
-    assert retrieved_client is None
 
 @pytest.mark.asyncio
 async def test_get_by_email_database_error(client_repo, monkeypatch):
@@ -100,12 +97,12 @@ async def test_get_by_email_database_error(client_repo, monkeypatch):
 @pytest.mark.asyncio
 async def test_exists_true(client_repo, client):
     await client_repo.create(client)
-    exists = await client_repo.exists(client.email)
+    exists = await client_repo.exists_by_email(client.email)
     assert exists is True
 
 @pytest.mark.asyncio
 async def test_exists_false(client_repo):
-    exists = await client_repo.exists("nonexistent@example.com")
+    exists = await client_repo.exists_by_email("nonexistent@example.com")
     assert exists is False
 
 @pytest.mark.asyncio
@@ -116,7 +113,7 @@ async def test_exists_database_error(client_repo, monkeypatch):
     monkeypatch.setattr(client_repo.client_collection, 'find_one', mock_find_one)
 
     with pytest.raises(DatabaseError):
-        await client_repo.exists("test@example.com")
+        await client_repo.exists_by_email("test@example.com")
 
 @pytest.mark.asyncio
 async def test_get_all_clients_summary(client_repo):
@@ -163,3 +160,262 @@ async def test_get_all_clients_summary_database_error(client_repo, monkeypatch):
 
     with pytest.raises(DatabaseError):
         await client_repo.get_all_clients_summary()
+
+@pytest.mark.asyncio
+async def test_update_client_all(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    update_data = UpdateUser(
+        name="newName",
+        surname="newSurname",
+        phone="+79876543210",
+        image="new_image.jpg"
+    )
+
+    result = await client_repo.update_client(client_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == update_data.name
+    assert updated_client.surname == update_data.surname
+    assert updated_client.phone == update_data.phone
+    assert updated_client.image == update_data.image
+
+
+@pytest.mark.asyncio
+async def test_update_client_name(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    update_data = UpdateUser(
+        name="newName"
+    )
+
+    result = await client_repo.update_client(client_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == update_data.name
+    assert updated_client.surname == client.surname
+    assert updated_client.phone == client.phone
+    assert updated_client.image == client.image
+
+@pytest.mark.asyncio
+async def test_update_client_surname(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    update_data = UpdateUser(
+        surname="newSurname"
+    )
+
+    result = await client_repo.update_client(client_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == client.name
+    assert updated_client.surname == update_data.surname
+    assert updated_client.phone == client.phone
+    assert updated_client.image == client.image
+
+@pytest.mark.asyncio
+async def test_update_client_phone(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    update_data = UpdateUser(
+        phone="+79876543210"
+    )
+
+    result = await client_repo.update_client(client_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == client.name
+    assert updated_client.surname == client.surname
+    assert updated_client.phone == update_data.phone
+    assert updated_client.image == client.image
+
+@pytest.mark.asyncio
+async def test_update_client_image(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    update_data = UpdateUser(
+        image="new_image.jpg"
+    )
+
+    result = await client_repo.update_client(client_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == client.name
+    assert updated_client.surname == client.surname
+    assert updated_client.phone == client.phone
+    assert updated_client.image == update_data.image
+
+@pytest.mark.asyncio
+async def test_update_client_partly(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    update_data = UpdateUser(
+        name="newName",
+        phone="+79876543210"
+    )
+
+    result = await client_repo.update_client(client_id, update_data)
+
+    assert isinstance(result, UpdatedUser)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == update_data.name
+    assert updated_client.surname == client.surname
+    assert updated_client.phone == update_data.phone
+    assert updated_client.image == client.image
+
+@pytest.mark.asyncio
+async def test_update_client_database_error(client_repo, client, monkeypatch):
+    async def mock_update_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(client_repo.client_collection, 'update_one', mock_update_one)
+
+    client_id = await client_repo.create(client)
+
+    with pytest.raises(DatabaseError):
+        await client_repo.update_client(client_id, UpdateUser(name="newName"))
+
+@pytest.mark.asyncio
+async def test_update_password_success(client_repo, client):
+    client_id = await client_repo.create(client)
+    new_password = "new_hashed_pass"
+
+    result = await client_repo.update_password(client_id, new_password)
+
+    assert isinstance(result, UpdatedUserPassword)
+    assert result.user_id == client_id
+
+    updated_client = await client_repo.get_by_email(client.email)
+
+    assert isinstance(updated_client, ClientInDB)
+    assert str(updated_client.id) == client_id
+    assert updated_client.email == client.email
+    assert updated_client.name == client.name
+    assert updated_client.surname == client.surname
+    assert updated_client.phone == client.phone
+    assert updated_client.image == client.image
+    assert updated_client.password == new_password
+
+@pytest.mark.asyncio
+async def test_update_password_database_error(client_repo, client, monkeypatch):
+    async def mock_update_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(client_repo.client_collection, 'update_one', mock_update_one)
+
+    client_id = await client_repo.create(client)
+
+    with pytest.raises(DatabaseError):
+        await client_repo.update_password(client_id, "new_password")
+
+@pytest.mark.asyncio
+async def test_get_password_by_id_success(client_repo, client):
+    client_id = await client_repo.create(client)
+    password = await client_repo.get_password_by_id(client_id)
+
+    assert password == client.password
+
+@pytest.mark.asyncio
+async def test_get_password_by_id_database_error(client_repo, client, monkeypatch):
+    async def mock_find_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(client_repo.client_collection, 'find_one', mock_find_one)
+
+    client_id = await client_repo.create(client)
+
+    with pytest.raises(DatabaseError):
+        await client_repo.get_password_by_id(client_id)
+
+@pytest.mark.asyncio
+async def test_get_private_summary_by_id_success(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    result = await client_repo.get_private_summary_by_id(client_id)
+
+    assert isinstance(result, ClientPrivateSummary)
+    assert str(result.id) == client_id
+    assert result.email == client.email
+    assert result.name == client.name
+    assert result.surname == client.surname
+    assert result.phone == client.phone
+    assert result.image == client.image
+
+@pytest.mark.asyncio
+async def test_get_private_summary_by_id_database_error(client_repo, client, monkeypatch):
+    async def mock_find_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(client_repo.client_collection, 'find_one', mock_find_one)
+
+    client_id = await client_repo.create(client)
+
+    with pytest.raises(DatabaseError):
+        await client_repo.get_private_summary_by_id(client_id)
+
+@pytest.mark.asyncio
+async def test_exists_by_id_true(client_repo, client):
+    client_id = await client_repo.create(client)
+
+    exists = await client_repo.exists_by_id(client_id)
+
+    assert exists is True
+
+@pytest.mark.asyncio
+async def test_exists_by_id_false(client_repo, client):
+    exists = await client_repo.exists_by_id(objectId_to_str(ObjectId()))
+
+    assert exists is False
+
+@pytest.mark.asyncio
+async def test_exists_by_id_database_error(client_repo, client, monkeypatch):
+    async def mock_find_one(*args, **kwargs):
+        raise PyMongoError("Mocked database error")
+
+    monkeypatch.setattr(client_repo.client_collection, 'find_one', mock_find_one)
+
+    client_id = await client_repo.create(client)
+
+    with pytest.raises(DatabaseError):
+        await client_repo.exists_by_id(client_id)

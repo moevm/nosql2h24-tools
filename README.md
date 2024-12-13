@@ -55,4 +55,4 @@ cd deployment/test/
 ```
 docker-compose up -d
 ```
-**Expected output** `======================= 110 passed, 44 warnings in 5.28s =======================`
+**Expected output** `======================= 154 passed, 45 warnings in 6.46s =======================`
