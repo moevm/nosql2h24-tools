@@ -29,7 +29,7 @@ Content-Type: application/json
     "675b49bf61ac4d715c070d16"
 ],
 "start_leasing": "2024-12-10T20:39:38.800Z",
-  "end_leasing": "2024-12-12T20:39:38.800Z",
+  "end_leasing": "2024-12-30T20:39:38.800Z",
   "client": "675b1525c5327d91fbfe6912",
   "delivery_type": "string",
   "delivery_state": "string",
