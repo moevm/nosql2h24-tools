@@ -9,6 +9,9 @@ export default {
     data() {
         return {
             showLoginModal: false,
+            searchForm: {
+                text: "",
+            },
         }
     },
     computed: {
@@ -22,6 +25,9 @@ export default {
         logout() {
             store.dispatch('logout')
             logoutUser()
+        },
+        handleSubmit() {
+
         }
     }
 }
@@ -34,7 +40,10 @@ export default {
                 <img src="../assets/svg/logo.svg" alt="logo"/>
             </router-link>
             <div class="search">
-                Поиск
+                <form @submit.prevent="handleSubmit" novalidate>
+                    <input type="search" v-model="searchForm.text" placeholder="Поиск инструмента..."/>
+                    <button><img src="../assets/svg/search.svg" alt="search"/></button>
+                </form>
             </div>
             <div class="profile-basket">
                 <button v-if="!isAuthenticated">
@@ -69,10 +78,15 @@ export default {
     align-items: center;
 }
 
-.search {
+.search form {
     width: 500px;
     height: 42px;
     background-color: #F9F9F9;
+    border-radius: 12px;
+    border: 1px solid #D1D1D1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .profile-basket {
@@ -81,5 +95,23 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+select {
+    margin-left: 16px;
+    font-size: 15px;
+    font-weight: bold;
+    width: 130px;
+}
+
+input[type="search"]{
+    margin-left: 24px;
+    width: 262px;
+}
+
+form button {
+    width: 16px;
+    height: 16px;
+    margin-right: 24px;
 }
 </style>
