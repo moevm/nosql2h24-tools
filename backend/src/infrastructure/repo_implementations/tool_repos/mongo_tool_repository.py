@@ -28,7 +28,6 @@ class MongoToolRepository(IToolRepository):
                     "_id": 1, "name": 1,"dailyPrice": 1, "images": 1, "rating": 1, "description": 1
                 }
             ).skip(skip).limit(page_size).to_list(length=page_size)
-
             tool_models = [ToolSummary(**tool) for tool in tools]
             return tool_models
         except PyMongoError:

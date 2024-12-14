@@ -5,9 +5,17 @@ from bson import ObjectId
 from pydantic import BaseModel, Field
 
 from src.core.entities.object_id_str import ObjectIdStr
+from src.core.entities.tool.tool import ToolSummary
 
 
 class Order(BaseModel):
+    id: Optional[ObjectIdStr] = Field(
+        ...,
+        default_factory=ObjectIdStr,
+        alias="_id",
+        description="Unique identifier of order"
+    )
+
     tools: List[ObjectIdStr] = Field(
         default=None,
         description="list of ids of tools"
@@ -106,3 +114,49 @@ class OrderCreated(BaseModel):
         ...,
         description="ID of created order"
     )
+
+class OrderSummary(BaseModel):
+    id: Optional[ObjectIdStr] = Field(
+        ...,
+        default_factory=ObjectIdStr,
+        alias="_id",
+        description="Unique identifier of order"
+    )
+    tools: List[ToolSummary] = Field(
+        ...,
+        description="Order tools, must contain at least 1 tool"
+    )
+    start_leasing: Optional[datetime] = Field(
+        ...,
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="start of leasing tools"
+    )
+    end_leasing: Optional[datetime] = Field(
+        ...,
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="end of leasing"
+    )
+    delivery_type: str = Field(
+        ...,
+        description="delivery type (to door, at pickup point)"
+    )
+    delivery_state: str = Field(
+        ...,
+        description="delivery state (accepted, on the way, delivered)"
+    )
+    payment_type: str = Field(
+        ...,
+        description="payment type (cash, card)"
+    )
+    payment_state: str = Field(
+        ...,
+        description="payment state (paid, not paid)"
+    )
+
+    class Config:
+        json_encoders = {
+            ObjectId: str,
+            datetime: lambda v: v.isoformat()
+        }
+
+        allow_population_by_field_name = True

@@ -29,4 +29,4 @@ def get_mongo_category_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
     return MongoCategoryRepository(db, collections_config.category_collection)
 
 def get_mongo_order_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
-    return MongoOrderRepository(db, collections_config.order_collection)
+    return MongoOrderRepository(db, collections_config.order_collection, collections_config.tool_collection)

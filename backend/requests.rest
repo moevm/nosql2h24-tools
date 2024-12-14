@@ -1,13 +1,13 @@
 # Для примера
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTEiLCJyb2xlIjoid29ya2VyIiwiZXhwIjoxNzM0MTAxMDkzfQ.6SLwTkZUMinn3leJBcoTM0fi0DG4Z3szCOWfWx3gIaI
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTIiLCJyb2xlIjoiY2xpZW50IiwiZXhwIjoxNzM0MTk1NTcwfQ.NcTZsiUQdF2_eXs4B5q2STGxg5twA3YRbYymlgbJWBQ
 
 ###
 POST http://localhost:8000/api/auth/token/
 Content-Type: application/json
 
 {
-    "email": "worker@example.com",
-    "password": "worker_123"
+    "email": "client@example.com",
+    "password": "client_123"
 }
 
 
@@ -20,12 +20,14 @@ GET http://localhost:8000/api/tools/paginated
 Authorization: Bearer {{authToken}}
 
 ###
-POST http://localhost:8000/api/order
+POST http://localhost:8000/api/order/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
 "tools": [
+    "675b49bf61ac4d715c070d16",
+    "675b49bf61ac4d715c070d16",
     "675b49bf61ac4d715c070d16"
 ],
 "start_leasing": "2024-12-10T20:39:38.800Z",
@@ -36,6 +38,15 @@ Content-Type: application/json
   "payment_type": "string",
   "payment_state": "string"
 }
+
+###
+GET http://localhost:8000/api/order/675b1525c5327d91fbfe6912
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/tools/paginated?page=1
+Authorization: Bearer {{authToken}}
+
 
 ###
 POST http://localhost:8000/api/categories/
@@ -75,4 +86,13 @@ Content-Type: application/json
 "category": "123",
 "type": "321",
 "description": "вау круто бензопила"
+}
+
+###
+PATCH http://localhost:8000/api/clients/675b1525c5327d91fbfe6912
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Вася"
 }
