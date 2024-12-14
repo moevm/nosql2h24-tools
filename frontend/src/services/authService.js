@@ -47,8 +47,10 @@ export const storeUserInfo = (token) => {
   const decodedToken = jwtDecode(token);
   const isAdmin = (decodedToken.role === "worker") || false;
   const isAuthenticated = true;
+  const id = decodedToken.sub
 
   localStorage.setItem('isAdmin', isAdmin.toString());
+  localStorage.setItem('id', id);
   localStorage.setItem('isAuthenticated', isAuthenticated.toString());
   store.commit('login')
 }
@@ -73,6 +75,10 @@ export const logoutUser = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('isAdmin');
   localStorage.removeItem('isAuthenticated');
+  localStorage.removeItem('id')
+  store.dispatch('logout').then(() => {
+    window.location.href = '/'
+  })
 };
 
 export const refreshToken = async () => {
