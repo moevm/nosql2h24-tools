@@ -19,7 +19,7 @@ export default {
     },
 
     methods: {
-        openProfile() {
+        openLogin() {
             this.showLoginModal = true
         },
         logout() {
@@ -47,11 +47,11 @@ export default {
             </div>
             <div class="profile-basket">
                 <button v-if="!isAuthenticated">
-                    <img src="../assets/svg/profile.svg" alt="profile" @click="openProfile"/>
+                    <img src="../assets/svg/profile.svg" alt="profile" @click="openLogin"/>
                 </button>
-                <button v-if="isAuthenticated" @click="logout">
-                    Выйти
-                </button>
+                <router-link v-if="isAuthenticated" to="/profile/dashboard">
+                    <img src="../assets/svg/profile.svg" alt="profile"/>
+                </router-link>
                 <button>
                     <img src="../assets/svg/basket.svg" alt="basket"/>
                 </button>

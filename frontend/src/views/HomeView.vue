@@ -14,7 +14,9 @@ export default{
     },
     beforeMount() {
         getAllCategories().then((res) => {
-            if (res === "ERROR") window.location.href = '/'
+            if (res === "ERROR") {
+                this.isLoading = false
+            }
             else {
                 this.isLoading = false
                 this.categories = res

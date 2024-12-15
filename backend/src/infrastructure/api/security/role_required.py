@@ -23,7 +23,7 @@ def role_required(role: str):
             payload = token_manager.decode_access_token(token)
 
             if role == 'self':
-                client_id = kwargs.get('client_id')
+                client_id = kwargs.get('user_id')
                 if client_id != payload["sub"]:
                     raise InsufficientPermissionsError(details={"role_required": 'self'})
             elif role == 'worker':
