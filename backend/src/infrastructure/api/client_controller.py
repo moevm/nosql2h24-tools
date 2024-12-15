@@ -26,44 +26,44 @@ async def get_all_clients(
 
 
 @client_router.get(
-    path="/{client_id}/private",
+    path="/{user_id}/private",
     status_code=200,
     response_model=ClientPrivateSummary
 )
 @role_required('self')
 async def get_private_client_summary(
-        client_id: str,
+        user_id: str,
         client_service: ClientService = Depends(get_client_service),
         token: str = Depends(oauth2_scheme)
 ):
-    return await client_service.get_private_client_summary(client_id)
+    return await client_service.get_private_client_summary(user_id)
 
 
 @client_router.patch(
-    path="/{client_id}",
+    path="/{user_id}",
     status_code=200,
     response_model=UpdatedUser
 )
 @role_required('self')
 async def update_client(
-        client_id: str,
+        user_id: str,
         data: UpdateUser,
         client_service: ClientService = Depends(get_client_service),
         token: str = Depends(oauth2_scheme)
 ):
-    return await client_service.update_client(client_id, data)
+    return await client_service.update_client(user_id, data)
 
 
 @client_router.patch(
-    path="/{client_id}/password",
+    path="/{user_id}/password",
     status_code=200,
     response_model=UpdatedUserPassword
 )
 @role_required('self')
 async def update_client_password(
-        client_id: str,
+        user_id: str,
         data: UpdateUserPassword,
         client_service: ClientService = Depends(get_client_service),
         token: str = Depends(oauth2_scheme)
 ):
-    return await client_service.update_password(client_id, data)
+    return await client_service.update_password(user_id, data)

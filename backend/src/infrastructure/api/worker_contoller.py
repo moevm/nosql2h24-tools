@@ -26,44 +26,44 @@ async def get_all_workers(
 
 
 @worker_router.get(
-    path="/{worker_id}/private",
+    path="/{user_id}/private",
     status_code=200,
     response_model=WorkerPrivateSummary
 )
 @role_required('self')
 async def get_private_worker_summary(
-        worker_id: str,
+        user_id: str,
         worker_service: WorkerService = Depends(get_worker_service),
         token: str = Depends(oauth2_scheme)
 ):
-    return worker_service.get_private_worker_summary(worker_id)
+    return await worker_service.get_private_worker_summary(user_id)
 
 
 @worker_router.patch(
-    path="/{worker_id}",
+    path="/{user_id}",
     status_code=200,
     response_model=UpdatedUser
 )
 @role_required('self')
 async def update_worker(
-        worker_id: str,
+        user_id: str,
         data: UpdateUser,
         worker_service: WorkerService = Depends(get_worker_service),
         token: str = Depends(oauth2_scheme)
 ):
-    return worker_service.update_worker(worker_id, data)
+    return await worker_service.update_worker(user_id, data)
 
 
 @worker_router.patch(
-    path="/{worker_id}/password",
+    path="/{user_id}/password",
     status_code=200,
     response_model=UpdatedUserPassword
 )
 @role_required('self')
 async def update_worker_password(
-        worker_id: str,
+        user_id: str,
         data: UpdateUserPassword,
         worker_service: WorkerService = Depends(get_worker_service),
         token: str = Depends(oauth2_scheme)
 ):
-    return await worker_service.update_password(worker_id, data)
+    return await worker_service.update_password(user_id, data)
