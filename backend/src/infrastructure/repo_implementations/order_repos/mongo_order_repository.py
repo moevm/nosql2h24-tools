@@ -78,7 +78,6 @@ class MongoOrderRepository(IOrderRepository):
                 order["client"] = client_model
             if not orders:
                 return None
-            print(orders[0])
             return [OrderForWorker(**order) for order in orders]
         except PyMongoError:
             raise DatabaseError()

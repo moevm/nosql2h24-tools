@@ -1,5 +1,5 @@
 # Для примера
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTEiLCJyb2xlIjoid29ya2VyIiwiZXhwIjoxNzM0Mjg1MTEzfQ.2LA9pxl5XOzUhTgdPjCPnis84tk7xkcAY-7ecN6Y62Q
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTEiLCJyb2xlIjoid29ya2VyIiwiZXhwIjoxNzM0Mjg3NjQ4fQ.G-7vRI9Gc8o5g2XHbPE0d-zLIxmzf9d0PyTrm9F59AU
 
 @order = 675c48d23bcf7c9f7bfca1e9
 @client_id = 675b1525c5327d91fbfe6912

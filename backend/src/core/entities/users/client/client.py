@@ -1,8 +1,7 @@
 from bson import ObjectId
-from pydantic import Field
+from pydantic import Field, BaseModel
 from typing import List, Optional
 
-from pydantic.v1 import BaseModel
 
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.base_user import BaseUser, BaseUserPrivateSummary
