@@ -1,5 +1,9 @@
 # Для примера
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTIiLCJyb2xlIjoiY2xpZW50IiwiZXhwIjoxNzM0MTk1NTcwfQ.NcTZsiUQdF2_eXs4B5q2STGxg5twA3YRbYymlgbJWBQ
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTEiLCJyb2xlIjoid29ya2VyIiwiZXhwIjoxNzM0Mjg1MTEzfQ.2LA9pxl5XOzUhTgdPjCPnis84tk7xkcAY-7ecN6Y62Q
+
+@order = 675c48d23bcf7c9f7bfca1e9
+@client_id = 675b1525c5327d91fbfe6912
+@worker_id = 675b1525c5327d91fbfe6911
 
 ###
 POST http://localhost:8000/api/auth/token/
@@ -10,6 +14,26 @@ Content-Type: application/json
     "password": "client_123"
 }
 
+###
+POST http://localhost:8000/api/auth/token/
+Content-Type: application/json
+
+{
+    "email": "worker@example.com",
+    "password": "worker_123"
+}
+
+### все заказы клиента
+GET http://localhost:8000/api/order/client/{{client_id}}
+Authorization: Bearer {{authToken}}
+
+### все заказы, относящиеся к работнику
+GET http://localhost:8000/api/order/worker/{{worker_id}}
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/order/{{order}}
+Authorization: Bearer {{authToken}}
 
 ###
 GET http://localhost:8000/api/clients/
@@ -20,7 +44,7 @@ GET http://localhost:8000/api/tools/paginated
 Authorization: Bearer {{authToken}}
 
 ###
-POST http://localhost:8000/api/order/
+POST http://localhost:8000/api/order/{{client_id}}
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -40,7 +64,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8000/api/order/675b1525c5327d91fbfe6912
+GET http://localhost:8000/api/order/{{client_id}}
 Authorization: Bearer {{authToken}}
 
 ###
@@ -94,5 +118,5 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Вася"
+  "name": "Иван"
 }

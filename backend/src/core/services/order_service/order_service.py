@@ -1,7 +1,7 @@
 import datetime
 from typing import List
 
-from src.core.entities.order.order import Order, OrderCreate, OrderCreated, OrderSummary
+from src.core.entities.order.order import Order, OrderCreate, OrderCreated, OrderSummary, OrderForWorker
 from src.core.entities.users.client.client import Client, ClientInDB
 from src.core.exceptions.client_error import ResourceNotFoundError
 from src.core.repositories.order_repos.iorder_repository import IOrderRepository
@@ -39,8 +39,11 @@ class OrderService:
         created_order_id = await self.order_repo.create(new_order)
         return OrderCreated(order_id=created_order_id)
 
-    async def get_all_orders(self, client_id: str) -> List[OrderSummary]:
-        return await self.order_repo.get_orders_by_client_id(client_id)
+    async def get_all_client_orders(self, user_id: str) -> List[OrderSummary]:
+        return await self.order_repo.get_orders_by_client_id(user_id)
+
+    async def get_all_worker_orders(self, user_id: str) -> List[OrderForWorker]:
+        return await self.order_repo.get_orders_by_worker_id(user_id)
 
     async def get_order_by_id(self, order_id: str) -> Order:
         return await self.order_repo.get_order_by_id(order_id)

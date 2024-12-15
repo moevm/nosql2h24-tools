@@ -25,7 +25,7 @@ class IToolRepository(ABC):
 
     @abstractmethod
     async def get_tool_by_id(self, tool_id: str) -> Tool:
-    pass
+        pass
   
     @abstractmethod
     async def search(
