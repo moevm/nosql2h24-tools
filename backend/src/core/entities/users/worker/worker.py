@@ -30,10 +30,6 @@ class Worker(BaseUser):
         default=None,
         description="Employee start date"
     )
-    orders: Optional[List[Order]] = Field(
-        default_factory=list,
-        description="The orders of the worker"
-    )
     image: Optional[str] = Field(
         default=None,
         description="Worker's image url",

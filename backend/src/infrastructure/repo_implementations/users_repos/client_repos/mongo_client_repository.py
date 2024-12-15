@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Optional, List
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdateUserPassword, UpdatedUserPassword
-from src.core.entities.users.client.client import Client, ClientInDB, ClientPrivateSummary
+from src.core.entities.users.client.client import Client, ClientInDB, ClientPrivateSummary, ClientFullName
 from src.core.repositories.users_repos.client_repos.iclient_repository import IClientRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from src.infrastructure.repo_implementations.helpers.id_mapper import objectId_to_str, str_to_objectId
@@ -25,6 +25,17 @@ class MongoClientRepository(IClientRepository):
         try:
             client_data = await self.client_collection.find_one({'email': email})
             return client_data is not None
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_full_name(self, client_id: str) -> ClientFullName:
+        try:
+            client = await self.client_collection.find_one({"_id": str_to_objectId(client_id)}, {"name": 1, "surname": 1})
+
+            return ClientFullName(
+                name=client["name"],
+                surname=client["surname"]
+            )
         except PyMongoError:
             raise DatabaseError()
 

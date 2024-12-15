@@ -24,7 +24,7 @@ class IToolRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_tool_by_id(self, tool_id: str) -> Tool:
+    async def get_tool_by_id(self, tool_id: str) -> Optional[Tool]:
         pass
   
     @abstractmethod
@@ -38,4 +38,8 @@ class IToolRepository(ABC):
             min_price: Optional[float] = None,
             max_price: Optional[float] = None
     ) -> List[ToolSummary]:
+        pass
+
+    @abstractmethod
+    async def exists_by_id(self, tool_id: str) -> bool:
         pass

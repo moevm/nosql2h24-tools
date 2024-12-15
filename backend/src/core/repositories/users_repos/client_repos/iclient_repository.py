@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, List
 
 from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdateUserPassword, UpdatedUserPassword
-from src.core.entities.users.client.client import Client, ClientInDB, ClientPrivateSummary
+from src.core.entities.users.client.client import Client, ClientInDB, ClientPrivateSummary, ClientFullName
 
 
 class IClientRepository(ABC):
@@ -40,4 +40,8 @@ class IClientRepository(ABC):
 
     @abstractmethod
     async def get_password_by_id(self, client_id: str) -> str:
+        pass
+
+    @abstractmethod
+    async def get_full_name(self, client_id: str) -> ClientFullName:
         pass

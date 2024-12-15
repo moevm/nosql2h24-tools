@@ -20,3 +20,15 @@ class IOrderRepository(ABC):
     @abstractmethod
     async def get_order_by_id(self, order_id: str) -> Order:
         pass
+
+    @abstractmethod
+    async def has_order_with_tool(self, client_id: str, tool_id: str) -> bool:
+        pass
+
+    @abstractmethod
+    async def paid(self, order_id: str) -> bool:
+        pass
+
+    @abstractmethod
+    async def exists_by_id(self, order_id: str) -> bool:
+        pass

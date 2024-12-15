@@ -92,3 +92,42 @@ class MongoOrderRepository(IOrderRepository):
             return Order(**order)
         except PyMongoError:
             raise DatabaseError()
+
+    async def has_order_with_tool(self, client_id: str, tool_id: str) -> bool:
+        try:
+            result = await self.order_collection.find_one(
+                {
+                    "client": str_to_objectId(client_id),
+                    "tools": str_to_objectId(tool_id)
+                },
+                {
+                    "_id": 1
+                }
+            )
+
+            return result is not None
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def paid(self, order_id: str) -> bool:
+        try:
+            result = await self.order_collection.find_one(
+                {
+                    "_id": str_to_objectId(order_id),
+                    "payment_state": "paid"
+                },
+                {
+                    "_id": 1
+                }
+            )
+
+            return result is not None
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def exists_by_id(self, order_id: str) -> bool:
+        try:
+            order = await self.order_collection.find_one({'_id': str_to_objectId(order_id)})
+            return order is not None
+        except PyMongoError:
+            raise DatabaseError()

@@ -55,7 +55,6 @@ async def test_create_client_success(client_repo, client):
     assert saved_client["surname"] == client.surname
     assert saved_client["phone"] == client.phone
     assert saved_client["image"] is None
-    assert saved_client["orders"] == []
 
 @pytest.mark.asyncio
 async def test_create_client_database_error(client_repo, client, monkeypatch):

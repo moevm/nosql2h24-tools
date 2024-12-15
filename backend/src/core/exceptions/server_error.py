@@ -9,7 +9,7 @@ class DatabaseError(ServerError):
     def __init__(self, message: str = "A database error occurred", details: Any = None):
         super().__init__(message, status_code=500, details=details)
 
-class MappingError(ServerError):
+class MappingToStrError(ServerError):
     def __init__(self, message: str = "Internal server error", details: Any = None):
         super().__init__(message, status_code=500, details=details)
 

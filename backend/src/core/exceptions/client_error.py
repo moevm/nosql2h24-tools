@@ -40,3 +40,11 @@ class InvalidBase64Error(ClientError):
 class InvalidPasswordProvided(ClientError):
     def __init__(self, message: str = "Invalid password provided", details: Any = None):
         super().__init__(message, status_code=400, details=details)
+
+class PaymentStateError(ClientError):
+    def __init__(self, message: str = "You can't leave a review, the order hasn't been paid for", details: Any = None):
+        super().__init__(message, status_code=400, details=details)
+
+class MappingToObjectIDError(ClientError):
+    def __init__(self, message: str = "Invalid objectID provided", details: Any = None):
+        super().__init__(message, status_code=400, details=details)

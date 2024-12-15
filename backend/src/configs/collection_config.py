@@ -17,3 +17,4 @@ class CollectionConfig(BaseSettings):
     category_collection: str
     type_collection: str
     order_collection: str
+    review_collection: str

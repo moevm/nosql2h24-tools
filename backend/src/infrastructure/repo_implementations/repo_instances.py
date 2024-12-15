@@ -2,6 +2,7 @@ from fastapi.params import Depends
 from src.infrastructure.repo_implementations.order_repos.mongo_order_repository import MongoOrderRepository
 from src.configs.config import config
 from src.infrastructure.db.mongo import MongoDB, get_db
+from src.infrastructure.repo_implementations.review_repos.mongo_review_repository import MongoReviewRepository
 from src.infrastructure.repo_implementations.tool_repos.mongo_category_repository import MongoCategoryRepository
 from src.infrastructure.repo_implementations.tool_repos.mongo_tool_repository import MongoToolRepository
 from src.infrastructure.repo_implementations.tool_repos.mongo_type_repository import MongoTypeRepository
@@ -37,3 +38,6 @@ def get_mongo_category_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
 def get_mongo_order_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
     return MongoOrderRepository(db, collections_config.order_collection, collections_config.tool_collection,
                                 collections_config.client_collection)
+
+def get_mongo_review_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
+    return MongoReviewRepository(db, collections_config.review_collection)

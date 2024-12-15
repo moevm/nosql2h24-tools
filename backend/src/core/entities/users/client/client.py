@@ -32,6 +32,7 @@ class ClientInDB(Client):
         alias="_id",
         description="Unique identifier of the client in the db"
     )
+
 class ClientForWorker(BaseModel):
     id: Optional[ObjectIdStr] = Field(
         ...,
@@ -57,3 +58,13 @@ class ClientForWorker(BaseModel):
 
 class ClientPrivateSummary(BaseUserPrivateSummary):
     pass
+
+class ClientFullName(BaseModel):
+    name: str = Field(
+        ...,
+        description="Client's first name"
+    )
+    surname: str = Field(
+        ...,
+        description="Client's last name",
+    )

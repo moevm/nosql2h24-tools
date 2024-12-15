@@ -64,7 +64,6 @@ async def test_create_worker_success(worker_repo, worker):
     assert saved_worker["date"] is not None
     assert isinstance(saved_worker["date"], datetime)
     assert saved_worker["image"] is None
-    assert saved_worker["orders"] == []
 
 @pytest.mark.asyncio
 async def test_create_worker_database_error(worker_repo, worker, monkeypatch):

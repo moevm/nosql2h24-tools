@@ -83,6 +83,7 @@ class MongoToolRepository(IToolRepository):
             return Tool(**tool)
         except PyMongoError:
             raise DatabaseError()
+
     async def search(
             self,
             query: str,
@@ -131,5 +132,12 @@ class MongoToolRepository(IToolRepository):
                 results.append(ToolSummary(**doc))
 
             return results
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def exists_by_id(self, tool_id: str) -> bool:
+        try:
+            tool = await self.tool_collection.find_one({'_id': str_to_objectId(tool_id)})
+            return tool is not None
         except PyMongoError:
             raise DatabaseError()

@@ -10,13 +10,6 @@ from src.core.entities.users.client.client import ClientForWorker
 
 
 class Order(BaseModel):
-    id: Optional[ObjectIdStr] = Field(
-        ...,
-        default_factory=ObjectIdStr,
-        alias="_id",
-        description="Unique identifier of order"
-    )
-
     tools: List[ObjectIdStr] = Field(
         default=None,
         description="list of ids of tools"
