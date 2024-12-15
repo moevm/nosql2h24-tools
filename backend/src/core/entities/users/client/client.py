@@ -1,8 +1,9 @@
-from pydantic import BaseModel, EmailStr, Field
+from bson import ObjectId
+from pydantic import Field, BaseModel
 from typing import List, Optional
 
+
 from src.core.entities.object_id_str import ObjectIdStr
-from src.core.entities.order.order import Order
 from src.core.entities.users.base_user import BaseUser, BaseUserPrivateSummary
 
 
@@ -14,10 +15,6 @@ class Client(BaseUser):
     surname: str = Field(
         ...,
         description="Client's last name",
-    )
-    orders: Optional[List[Order]] = Field(
-        default_factory=list,
-        description="A list of orders made by the client"
     )
     phone: Optional[str] = Field(
         None,
@@ -35,6 +32,28 @@ class ClientInDB(Client):
         alias="_id",
         description="Unique identifier of the client in the db"
     )
+class ClientForWorker(BaseModel):
+    id: Optional[ObjectIdStr] = Field(
+        ...,
+        default_factory=ObjectIdStr,
+        alias="_id",
+        description="Unique identifier of the client in the db"
+    )
+    name: str = Field(
+        ...,
+        description="Client's first name"
+    )
+    surname: str = Field(
+        ...,
+        description="Client's last name",
+    )
+
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
 
 class ClientPrivateSummary(BaseUserPrivateSummary):
     pass

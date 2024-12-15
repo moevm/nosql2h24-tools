@@ -81,7 +81,6 @@ async def test_get_by_email_success(client_repo, client):
     assert client_in_db.surname == client.surname
     assert client_in_db.phone == client.phone
     assert client_in_db.image is None
-    assert client_in_db.orders == []
 
 
 @pytest.mark.asyncio

@@ -1,0 +1,122 @@
+# Для примера
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzViMTUyNWM1MzI3ZDkxZmJmZTY5MTEiLCJyb2xlIjoid29ya2VyIiwiZXhwIjoxNzM0Mjg3NjQ4fQ.G-7vRI9Gc8o5g2XHbPE0d-zLIxmzf9d0PyTrm9F59AU
+
+@order = 675c48d23bcf7c9f7bfca1e9
+@client_id = 675b1525c5327d91fbfe6912
+@worker_id = 675b1525c5327d91fbfe6911
+
+###
+POST http://localhost:8000/api/auth/token/
+Content-Type: application/json
+
+{
+    "email": "client@example.com",
+    "password": "client_123"
+}
+
+###
+POST http://localhost:8000/api/auth/token/
+Content-Type: application/json
+
+{
+    "email": "worker@example.com",
+    "password": "worker_123"
+}
+
+### все заказы клиента
+GET http://localhost:8000/api/order/client/{{client_id}}
+Authorization: Bearer {{authToken}}
+
+### все заказы, относящиеся к работнику
+GET http://localhost:8000/api/order/worker/{{worker_id}}
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/order/{{order}}
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/clients/
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/tools/paginated
+Authorization: Bearer {{authToken}}
+
+###
+POST http://localhost:8000/api/order/{{client_id}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+"tools": [
+    "675b49bf61ac4d715c070d16",
+    "675b49bf61ac4d715c070d16",
+    "675b49bf61ac4d715c070d16"
+],
+"start_leasing": "2024-12-10T20:39:38.800Z",
+  "end_leasing": "2024-12-30T20:39:38.800Z",
+  "client": "675b1525c5327d91fbfe6912",
+  "delivery_type": "string",
+  "delivery_state": "string",
+  "payment_type": "string",
+  "payment_state": "string"
+}
+
+###
+GET http://localhost:8000/api/order/{{client_id}}
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:8000/api/tools/paginated?page=1
+Authorization: Bearer {{authToken}}
+
+
+###
+POST http://localhost:8000/api/categories/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "name": "123"
+}
+
+###
+POST http://localhost:8000/api/types/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+
+{
+"name": "321",
+"category_name": "123"
+}
+
+
+###
+POST http://localhost:8000/api/tools/
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+"name": "Бензопила",
+"dailyPrice": 100,
+"totalPrice": 100000,
+"images": [],
+"features": {
+    "cool": "крутой",
+    "nice": "пиздатый"
+},
+"category": "123",
+"type": "321",
+"description": "вау круто бензопила"
+}
+
+###
+PATCH http://localhost:8000/api/clients/675b1525c5327d91fbfe6912
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Иван"
+}

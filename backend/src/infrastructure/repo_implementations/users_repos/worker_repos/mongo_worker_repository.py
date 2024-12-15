@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from typing import Optional, List
+from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdatedUserPassword
 from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerPrivateSummary
 from src.core.exceptions.server_error import DatabaseError
@@ -69,6 +70,16 @@ class MongoWorkerRepository(IWorkerRepository):
             return UpdatedUser(
                 user_id=worker_id
             )
+        except PyMongoError:
+            raise DatabaseError()
+            
+    async def get_random_worker(self) -> Optional[ObjectIdStr]:
+        try:
+            pipeline = [{"$sample": {"size": 1}}]
+            worker_data = await self.worker_collection.aggregate(pipeline).to_list(length=1)
+            if worker_data:
+                return WorkerInDB(**worker_data[0]).id
+            return None
         except PyMongoError:
             raise DatabaseError()
 

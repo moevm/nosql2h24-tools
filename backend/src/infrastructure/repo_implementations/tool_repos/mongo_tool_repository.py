@@ -29,7 +29,6 @@ class MongoToolRepository(IToolRepository):
                     "_id": 1, "name": 1,"dailyPrice": 1, "images": 1, "rating": 1, "description": 1
                 }
             ).skip(skip).limit(page_size).to_list(length=page_size)
-
             tool_models = [ToolSummary(**tool) for tool in tools]
             return tool_models
         except PyMongoError:
@@ -69,6 +68,21 @@ class MongoToolRepository(IToolRepository):
         except PyMongoError:
             raise DatabaseError()
 
+    async def get_tool_by_id(self, tool_id: str) -> Optional[Tool]:
+        try:
+            obj_tool_id = str_to_objectId(tool_id)
+            tool = await self.tool_collection.find_one(
+                {"_id": obj_tool_id},
+                {
+                    "_id": 1, "name": 1, "dailyPrice": 1, "images": 1, "features": 1, "rating": 1, "category": 1,
+                    "type": 1, "description": 1
+                }
+            )
+            if not tool:
+                return None
+            return Tool(**tool)
+        except PyMongoError:
+            raise DatabaseError()
     async def search(
             self,
             query: str,

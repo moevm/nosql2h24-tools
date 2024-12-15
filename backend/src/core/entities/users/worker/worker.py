@@ -1,7 +1,6 @@
-from email.policy import default
 
-from pydantic import BaseModel, EmailStr, Field
-from datetime import datetime, timezone
+from pydantic import Field
+from datetime import datetime
 from typing import List, Optional
 
 from src.core.entities.object_id_str import ObjectIdStr
