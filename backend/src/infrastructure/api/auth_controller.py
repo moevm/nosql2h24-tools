@@ -6,7 +6,7 @@ from src.core.services.authentication.jwt.jwt_auth import JWTAuthentication
 from src.core.services.registration.registration import RegistrationService
 from src.core.entities.users.login import JWTAccessToken
 from src.core.entities.users.registration import ClientRegistrationForm, WorkerRegistrationForm, RegisteredUser
-from src.infrastructure.api.security.role_required import role_required
+from src.infrastructure.api.security.role_required import is_worker
 from src.infrastructure.services_instances import get_jwt_authenticator, get_registration_service
 
 auth_router = APIRouter()
@@ -67,10 +67,10 @@ async def registrate_client(
     status_code=201,
     response_model=RegisteredUser
 )
-@role_required('worker')
 async def registrate_worker(
         registration_data: WorkerRegistrationForm,
         registration_service: RegistrationService = Depends(get_registration_service),
         token: str = Depends(oauth2_scheme)
 ):
+        is_worker(token)
         return await registration_service.register_worker(registration_data)

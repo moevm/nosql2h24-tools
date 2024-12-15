@@ -12,7 +12,7 @@ class CategoryName(BaseModel):
         max_length=100,
         pattern=r"^[a-zA-Zа-яА-ЯёЁ0-9\s\-]+$",
         description="Category name. Must be between 3 and 50 characters, and contain only letters (Latin or Cyrillic), numbers, and spaces."
-    ),
+    )
 
     class Config:
         json_encoders = {

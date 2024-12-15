@@ -4,7 +4,7 @@ from src.core.entities.category.category import CategoryName, CategoryCreated, C
 from src.core.entities.tool.tool import ToolCreated, ToolCreate, ToolSummary, ToolDetails, ToolPages
 from src.core.entities.type.type import TypeCreated, TypeSignature
 from src.core.services.tool_service.tool_service import ToolService
-from src.infrastructure.api.security.role_required import role_required
+from src.infrastructure.api.security.role_required import is_worker
 from src.infrastructure.services_instances import get_tool_service
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import PositiveInt
@@ -46,12 +46,13 @@ async def search_tools(
     status_code=201,
     response_model=ToolCreated
 )
-@role_required('worker')
+
 async def create_tool(
         data: ToolCreate,
         tool_service: ToolService = Depends(get_tool_service),
         token: str = Depends(oauth2_scheme)
 ):
+    is_worker(token)
     return await tool_service.create_tool(data)
 
 
@@ -111,12 +112,12 @@ async def get_categories_with_types(
     status_code=201,
     response_model=CategoryCreated
 )
-@role_required('worker')
 async def create_category(
         data: CategoryName,
         tool_service: ToolService = Depends(get_tool_service),
         token: str = Depends(oauth2_scheme)
 ):
+    is_worker(token)
     return await tool_service.create_category(data)
 
 
@@ -126,10 +127,10 @@ async def create_category(
     status_code=201,
     response_model=TypeCreated
 )
-@role_required('worker')
 async def create_type(
         data: TypeSignature,
         tool_service: ToolService = Depends(get_tool_service),
         token: str = Depends(oauth2_scheme)
 ):
+    is_worker(token)
     return await tool_service.create_type(data)

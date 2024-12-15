@@ -3,7 +3,7 @@ from typing import List
 from fastapi.security import OAuth2PasswordBearer
 from src.core.entities.review.review import ReviewSummary, ReviewCreated, ReviewCreate
 from src.core.services.review_service.review_service import ReviewService
-from src.infrastructure.api.security.role_required import role_required, is_self
+from src.infrastructure.api.security.role_required import is_self
 from src.infrastructure.services_instances import get_review_service
 
 review_router = APIRouter()
