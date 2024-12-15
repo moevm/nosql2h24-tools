@@ -109,3 +109,23 @@ class ToolService:
             result.append(category_with_types)
 
         return result
+
+    async def search_tools(
+            self,
+            query: str,
+            page: int,
+            page_size: int,
+            category: Optional[List[str]] = None,
+            type: Optional[List[str]] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> List[ToolSummary]:
+        return await self.tool_repo.search(
+            query=query,
+            page=page,
+            page_size=page_size,
+            category=category,
+            type=type,
+            min_price=min_price,
+            max_price=max_price
+        )

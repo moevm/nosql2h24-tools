@@ -3,6 +3,7 @@ from src.configs.config import config
 from src.configs.mongo_config import MongoConfig
 
 mongo_config = config.mongo
+collections_config = config.collections
 
 class MongoDB:
     client: AsyncIOMotorClient | None = None
@@ -23,6 +24,23 @@ class MongoDB:
         else:
             raise ConnectionError("Client not connected")
 
+    @staticmethod
+    async def create_indexes()  -> None:
+        await MongoDB.db[collections_config.tool_collection].create_index(
+            [
+                ("name", "text"),
+                ("description", "text"),
+                ("category", "text"),
+                ("type", "text")
+            ],
+            weights={
+                "name": 10,
+                "description": 5,
+                "category": 2,
+                "type": 2
+            },
+            default_language="russian"
+        )
 
     @staticmethod
     def get_db_instance() -> AsyncIOMotorDatabase:

@@ -22,3 +22,16 @@ class IToolRepository(ABC):
     @abstractmethod
     async def exists(self, tool_name: str) -> bool:
         pass
+
+    @abstractmethod
+    async def search(
+            self,
+            query: str,
+            page: int,
+            page_size: int,
+            category: Optional[List[str]] = None,
+            type: Optional[List[str]] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> List[ToolSummary]:
+        pass

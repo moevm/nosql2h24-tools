@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 from src.core.entities.category.category import CategoryName, CategoryCreated, CategoryWithTypes
 from src.core.entities.tool.tool import ToolCreated, ToolCreate, ToolSummary, ToolDetails, ToolPages
@@ -7,12 +7,38 @@ from src.core.services.tool_service.tool_service import ToolService
 from src.infrastructure.api.security.role_required import role_required
 from src.infrastructure.services_instances import get_tool_service
 from fastapi.security import OAuth2PasswordBearer
+from pydantic import PositiveInt
 
 tool_router = APIRouter()
 category_router = APIRouter()
 type_router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+@tool_router.get(
+    path="/search",
+    status_code=200,
+    response_model=List[ToolSummary]
+)
+async def search_tools(
+        query: str = Query(..., min_length=3),
+        page: PositiveInt = Query(1),
+        page_size: PositiveInt = Query(12),
+        category: Optional[List[str]] = Query(None),
+        type: Optional[List[str]] = Query(None),
+        min_price: Optional[float] = Query(None),
+        max_price: Optional[float] = Query(None),
+        tool_service: ToolService = Depends(get_tool_service)
+):
+    return await tool_service.search_tools(
+        query=query,
+        page=page,
+        page_size=page_size,
+        category=category,
+        type=type,
+        min_price=min_price,
+        max_price=max_price
+    )
 
 
 @tool_router.post(
@@ -40,7 +66,6 @@ async def get_paginated_tools(
         tool_service: ToolService = Depends(get_tool_service)
 ):
     return await tool_service.get_paginated_summary(page)
-
 
 
 

@@ -10,6 +10,7 @@ from typing import List, Optional
 class MongoToolRepository(IToolRepository):
     def __init__(self, db: AsyncIOMotorDatabase, tool_collection: str):
         self.tool_collection = db[tool_collection]
+        self.tool_collection_name = tool_collection
 
     async def create(self, tool: Tool) -> str:
         try:
@@ -65,5 +66,56 @@ class MongoToolRepository(IToolRepository):
         try:
             count = await self.tool_collection.count_documents({"name": tool_name})
             return count > 0
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def search(
+            self,
+            query: str,
+            page: int,
+            page_size: int,
+            category: Optional[List[str]] = None,
+            type: Optional[List[str]] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> List[ToolSummary]:
+        try:
+            skip = (page - 1) * page_size
+
+            match_stage = {"$match": {"$text": {"$search": query}}}
+
+            if category:
+                match_stage["$match"]["category"] = {"$in": category}
+            if type:
+                match_stage["$match"]["type"] = {"$in": type}
+            if min_price is not None:
+                match_stage["$match"]["dailyPrice"] = {"$gte": min_price}
+            if max_price is not None:
+                match_stage["$match"].setdefault("dailyPrice", {})["$lte"] = max_price
+
+
+            pipeline = [
+                match_stage,
+                {"$addFields": {"score": {"$meta": "textScore"}}},
+                {"$sort": {"score": -1}},
+                {"$skip": skip},
+                {"$limit": page_size},
+                {"$project": {
+                    "_id": 1,
+                    "name": 1,
+                    "dailyPrice": 1,
+                    "images": 1,
+                    "rating": 1,
+                    "description": 1,
+                }}
+            ]
+            cursor = self.tool_collection.aggregate(pipeline)
+
+            results = []
+
+            async for doc in cursor:
+                results.append(ToolSummary(**doc))
+
+            return results
         except PyMongoError:
             raise DatabaseError()

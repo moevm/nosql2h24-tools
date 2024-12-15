@@ -16,6 +16,7 @@ from src.infrastructure.api.exceptions.exception_handlers import custom_error_ha
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await MongoDB.connect()
+    await MongoDB.create_indexes()
     yield
     await MongoDB.close()
 
