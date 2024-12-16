@@ -1,5 +1,5 @@
 
-from pydantic import Field
+from pydantic import Field, BaseModel, EmailStr
 from datetime import datetime
 from typing import List, Optional
 
@@ -47,6 +47,35 @@ class WorkerPrivateSummary(BaseUserPrivateSummary):
     jobTitle: str = Field(
         ...,
         description="Worker's job title",
+    )
+    date: datetime = Field(
+        default=None,
+        description="Employee start date",
+    )
+
+class WorkerPaginated(BaseModel):
+    name: str = Field(
+        ...,
+        description="Worker's first name"
+    )
+    surname: str = Field(
+        ...,
+        description="Worker's last name"
+    )
+    phone: str = Field(
+        ...,
+        description="Worker's phone number",
+        pattern=r'^\+?[1-9]\d{1,14}$'
+    )
+    email: EmailStr = Field(
+        ...,
+        description="User's email",
+        min_length=1,
+        max_length=100,
+    )
+    jobTitle: str = Field(
+        ...,
+        description="Worker's job title"
     )
     date: datetime = Field(
         default=None,

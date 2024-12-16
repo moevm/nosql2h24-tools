@@ -2,13 +2,13 @@ from datetime import datetime, timezone
 from typing import Optional, List
 from src.core.entities.object_id_str import ObjectIdStr
 from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdatedUserPassword
-from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerPrivateSummary
+from src.core.entities.users.worker.worker import Worker, WorkerInDB, WorkerPrivateSummary, WorkerPaginated
 from src.core.exceptions.server_error import DatabaseError
 from src.core.repositories.users_repos.worker_repos.iworker_repository import IWorkerRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pymongo.errors import PyMongoError
 from src.infrastructure.repo_implementations.helpers.id_mapper import objectId_to_str, str_to_objectId
-
+from pymongo import ASCENDING
 
 class MongoWorkerRepository(IWorkerRepository):
     def __init__(self, db: AsyncIOMotorDatabase, worker_collection: str):
@@ -117,5 +117,42 @@ class MongoWorkerRepository(IWorkerRepository):
         try:
             worker_data = await self.worker_collection.find_one({"_id": str_to_objectId(worker_id)})
             return WorkerPrivateSummary(**worker_data)
-        except:
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_paginated_workers(
+            self,
+            page: int,
+            page_size: int,
+            email: Optional[str] = None,
+            name: Optional[str] = None,
+            surname: Optional[str] = None,
+            phone: Optional[str] = None,
+            jobTitle: Optional[str] = None
+    ) -> List[WorkerPaginated]:
+        try:
+            skip = (page - 1) * page_size
+            filters = {}
+
+            if email:
+                filters['email'] = {"$regex": email, "$options": "i"}
+            if name:
+                filters['name'] = {"$regex": name, "$options": "i"}
+            if surname:
+                filters['surname'] = {"$regex": surname, "$options": "i"}
+            if phone:
+                filters['phone'] = {"$regex": phone, "$options": "i"}
+            if jobTitle:
+                filters['jobTitle'] = {"$regex": jobTitle, "$options": "i"}
+
+            cursor = self.worker_collection.find(
+                filters,
+                {
+                    "_id": 1, "email": 1, "name": 1, "surname": 1, "phone": 1, "jobTitle": 1,  "date": 1
+                }
+            ).sort("created_at", ASCENDING).skip(skip).limit(page_size)
+
+            workers = await cursor.to_list(length=page_size)
+            return [WorkerPaginated(**worker) for worker in workers]
+        except PyMongoError:
             raise DatabaseError()

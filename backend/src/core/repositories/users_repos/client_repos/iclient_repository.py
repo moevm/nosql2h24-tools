@@ -45,3 +45,7 @@ class IClientRepository(ABC):
     @abstractmethod
     async def get_full_name(self, client_id: str) -> ClientFullName:
         pass
+
+    @abstractmethod
+    async def get_ids_by_fullname(self, name: Optional[str], surname: Optional[str]) -> List[str]:
+        pass

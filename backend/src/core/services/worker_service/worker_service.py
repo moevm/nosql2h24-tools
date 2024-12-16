@@ -1,8 +1,8 @@
 from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdateUserPassword, UpdatedUserPassword
-from src.core.entities.users.worker.worker import WorkerInDB, WorkerPrivateSummary
+from src.core.entities.users.worker.worker import WorkerInDB, WorkerPrivateSummary, WorkerPaginated
 from src.core.exceptions.client_error import ResourceNotFoundError, InvalidPasswordProvided
 from src.core.repositories.users_repos.worker_repos.iworker_repository import IWorkerRepository
-from typing import List
+from typing import List, Optional
 from src.configs.paths import Paths
 from src.configs.urls import Urls
 from src.core.utils.image_decoder.image_decoder import ImageDecoder
@@ -42,3 +42,23 @@ class WorkerService:
             raise ResourceNotFoundError("The client with provided id does not exist", details={"id": worker_id})
 
         return await self.worker_repo.get_private_summary_by_id(worker_id)
+
+    async def get_paginated_workers(
+            self,
+            page: int,
+            page_size: int,
+            email: Optional[str] = None,
+            name: Optional[str] = None,
+            surname: Optional[str] = None,
+            phone: Optional[str] = None,
+            jobTitle: Optional[str] = None,
+    ) -> List[WorkerPaginated]:
+        return await self.worker_repo.get_paginated_workers(
+            page=page,
+            page_size=page_size,
+            email=email,
+            name=name,
+            surname=surname,
+            phone=phone,
+            jobTitle=jobTitle
+        )

@@ -102,3 +102,9 @@ class ReviewSummary(BaseModel):
         min_length=4,
         max_length=300
     )
+
+class ReviewPaginated(ReviewSummary):
+    tool_name: str = Field(
+        ...,
+        description="Tool name"
+    )

@@ -120,3 +120,21 @@ class MongoClientRepository(IClientRepository):
             return ClientPrivateSummary(**client_data)
         except:
             raise DatabaseError()
+
+    async def get_ids_by_fullname(self, name: Optional[str], surname: Optional[str]) -> List[str]:
+        try:
+            filters = {}
+            if name:
+                filters["name"] = {"$regex": name, "$options": "i"}
+            if surname:
+                filters["surname"] = {"$regex": surname, "$options": "i"}
+
+            cursor = self.client_collection.find(
+                filters,
+                {"_id": 1}
+            )
+            clients = await cursor.to_list(length=None)
+
+            return [objectId_to_str(client["_id"]) for client in clients]
+        except PyMongoError:
+            raise DatabaseError()

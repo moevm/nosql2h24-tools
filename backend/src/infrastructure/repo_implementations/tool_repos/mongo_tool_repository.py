@@ -3,7 +3,7 @@ from src.core.repositories.tool_repos.itool_repository import IToolRepository
 from src.core.entities.tool.tool import Tool, ToolSummary, ToolDetails, ToolPages
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pymongo.errors import PyMongoError
-from src.infrastructure.repo_implementations.helpers.id_mapper import str_to_objectId
+from src.infrastructure.repo_implementations.helpers.id_mapper import str_to_objectId, objectId_to_str
 from typing import List, Optional
 
 
@@ -139,5 +139,31 @@ class MongoToolRepository(IToolRepository):
         try:
             tool = await self.tool_collection.find_one({'_id': str_to_objectId(tool_id)})
             return tool is not None
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_name_by_id(self, tool_id: str) -> Optional[str]:
+        try:
+            tool_data = await self.tool_collection.find_one(
+                {"_id": str_to_objectId(tool_id)},
+                {"_id": 0, "name": 1}
+            )
+
+            if tool_data:
+                return tool_data["name"]
+            return None
+        except PyMongoError as e:
+            raise DatabaseError()
+
+    async def get_ids_by_name(self, name: str) -> List[str]:
+        try:
+            cursor = self.tool_collection.find(
+                {"name": {"$regex": name, "$options": "i"}},
+                {"_id": 1}
+            )
+
+            tools = await cursor.to_list(length=None)
+            return [objectId_to_str(tool["_id"]) for tool in tools]
+
         except PyMongoError:
             raise DatabaseError()

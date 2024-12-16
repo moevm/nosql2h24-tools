@@ -43,3 +43,11 @@ class IToolRepository(ABC):
     @abstractmethod
     async def exists_by_id(self, tool_id: str) -> bool:
         pass
+
+    @abstractmethod
+    async def get_name_by_id(self, tool_id: str) -> Optional[str]:
+        pass
+
+    @abstractmethod
+    async def get_ids_by_name(self, name: str) -> List[str]:
+        pass
