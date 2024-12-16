@@ -28,8 +28,8 @@ async def type_repo(db):
 @pytest.fixture
 def type_signature():
     return TypeSignature(
-        name="test_type",
-        category_name="test_category"
+        name="test-type",
+        category_name="test-category"
     )
 
 @pytest.fixture

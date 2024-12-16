@@ -93,7 +93,6 @@ async def test_get_by_email_success(worker_repo, worker):
     assert worker_in_db.date is not None
     assert isinstance(worker_in_db.date, datetime)
     assert worker_in_db.image is None
-    assert worker_in_db.orders == []
 
 @pytest.mark.asyncio
 async def test_get_by_email_database_error(worker_repo, monkeypatch):

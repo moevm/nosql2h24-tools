@@ -30,7 +30,7 @@ async def category_repo(db):
 def category():
     type_ids = [ObjectIdStr(), ObjectIdStr()]
     return Category(
-        name="test_category",
+        name="test-category",
         types=type_ids
     )
 
@@ -197,7 +197,7 @@ async def test_get_all_categories_multiple(category_repo):
 
     categories = [
         Category(
-            name=f"category_{i}",
+            name=f"category-{i}",
             types=[ObjectIdStr(), ObjectIdStr()]
         ) for i in range(category_count)
     ]

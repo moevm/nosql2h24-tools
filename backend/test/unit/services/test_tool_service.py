@@ -70,7 +70,7 @@ def tool_details():
 
 @pytest.fixture
 def type_signature():
-    return TypeSignature(name="test_type", category_name="test_category")
+    return TypeSignature(name="test-type", category_name="test-category")
 
 
 @pytest.mark.asyncio
@@ -132,7 +132,7 @@ async def test_create_tool_type_not_found(tool_service, tool_repo, category_repo
 
 @pytest.mark.asyncio
 async def test_create_category_success(tool_service, category_repo):
-    category_name = CategoryName(name="test_category")
+    category_name = CategoryName(name="test-category")
     category_repo.exists.return_value = False
     category_repo.create.return_value = "new_category_id"
 
