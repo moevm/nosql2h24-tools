@@ -1,7 +1,7 @@
 <template>
     <UploadProgress v-if="isLoading"  />
     <main>
-        <ProfileSideBar />
+        <ProfileSideBar :role="role"/>
         <div class="content">
             <div class="img-container" :style="backgroundImageStyle"></div>
             <div class="name-email">
@@ -10,6 +10,14 @@
                 </p>
                 <p class="email">
                     {{profile.email}}
+                </p>
+            </div>
+            <div class="ml-32">
+                <p v-if="profile.jobTitle" class="phone">
+                    Должность: {{profile.jobTitle}}
+                </p>
+                <p v-if="profile.phone" class="phone">
+                    Контакты: {{profile.phone}}
                 </p>
             </div>
         </div>
@@ -21,6 +29,7 @@
 import ProfileSideBar from "@/components/ProfileSideBar.vue";
 import {getProfileData} from "@/services/profileServices.js";
 import UploadProgress from "@/components/UploadProgress.vue";
+import {getAdminProfileData} from "@/services/adminProfileServices.js";
 
 export default {
     name: "ProfileView",
@@ -31,11 +40,21 @@ export default {
             profile: {}
         }
     },
+    props: ['role'],
     beforeMount() {
-        getProfileData().then((data) => {
-            this.profile = data
-            this.isLoading = false
-        })
+        if(this.role === 'client'){
+            getProfileData().then((data) => {
+                this.profile = data
+                this.isLoading = false
+            })
+        }
+        else {
+            getAdminProfileData().then((data) => {
+                this.profile = data
+                this.isLoading = false
+            })
+        }
+
     },
     computed: {
         backgroundImageStyle() {
@@ -85,5 +104,14 @@ main {
 .email {
     font-size: 20px;
     font-weight: 600;
+}
+
+.ml-32 {
+    margin-left: 64px;
+}
+
+.phone {
+    font-weight: 500;
+    font-size: 18px;
 }
 </style>

@@ -1,28 +1,28 @@
 <template>
     <div class="sidebar">
         <div :class="{ active: isActive('/profile/dashboard') }">
-            <router-link to="/profile/dashboard">
+            <router-link :to="{name: 'profile-dashboard', props: {role: role}}">
                 <p>
                     Мой профиль
                 </p>
             </router-link>
         </div>
-        <div :class="{ active: isActive('/profile/rents') }">
-            <router-link to="/profile/rents">
+        <div v-if="role === 'client'" :class="{ active: isActive('/profile/rents') }">
+            <router-link :to="{name: 'profile-rents', props: {role: role}}">
                 <p>
                     Мои аренды
                 </p>
             </router-link>
         </div>
         <div :class="{ active: isActive('/profile/edit') }">
-            <router-link to="/profile/edit">
+            <router-link :to="{name: 'profile-edit', props: {role: role}}">
                 <p>
                     Редактировать профиль
                 </p>
             </router-link>
         </div>
         <div :class="{ active: isActive('/profile/change-password') }">
-            <router-link to="/profile/change-password">
+            <router-link :to="{name: 'profile-change-password', props: {role: role}}">
                 <p>
                     Изменить пароль
                 </p>
@@ -41,10 +41,16 @@ import {logoutUser} from "@/services/authService.js";
 
 export default {
     name: "ProfileSideBar",
+    props: {
+      role: {
+          type: String,
+          default: "client"
+      }
+    },
     methods: {
         logoutUser,
         isActive(route) {
-            return this.$route.path === route;
+            return this.$route.path.startsWith(route);
         }
     }
 }

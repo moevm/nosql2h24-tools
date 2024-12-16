@@ -1,7 +1,7 @@
 <template>
     <UploadProgress v-if="isLoading"  />
     <main>
-        <ProfileSideBar />
+        <ProfileSideBar :role="role"/>
         <div class="content">
             <h2>Изменить пароль</h2>
             <form @submit.prevent="handleSubmit" novalidate>
@@ -34,10 +34,12 @@ import ProfileSideBar from "@/components/ProfileSideBar.vue";
 import UploadProgress from "@/components/UploadProgress.vue";
 import {changePassword} from "@/services/profileServices.js";
 import {useToast} from "vue-toastification";
+import {changeAdminPassword} from "@/services/adminProfileServices.js";
 
 export default {
     name: "ChangePassword",
     components: {UploadProgress, ProfileSideBar},
+    props: ['role'],
     setup() {
         const toast = useToast();
         return {toast}
@@ -65,9 +67,16 @@ export default {
                 return
             }
             this.isLoading = true
-            changePassword(this.form).then((res) => {
-                this.isLoading = false
-            })
+            if(this.role === 'client'){
+                changePassword(this.form).then((res) => {
+                    this.isLoading = false
+                })
+            } else {
+                changeAdminPassword(this.form).then((res) => {
+                    this.isLoading = false
+                })
+            }
+
         }
     },
 }

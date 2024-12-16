@@ -49,7 +49,7 @@ export default {
                 <button v-if="!isAuthenticated">
                     <img src="../assets/svg/profile.svg" alt="profile" @click="openLogin"/>
                 </button>
-                <router-link v-if="isAuthenticated" to="/profile/dashboard">
+                <router-link v-if="isAuthenticated" :to="{ name: 'profile-dashboard', params: {role: (isAdmin ? 'admin' : 'client')}}">
                     <img src="../assets/svg/profile.svg" alt="profile"/>
                 </router-link>
                 <button>

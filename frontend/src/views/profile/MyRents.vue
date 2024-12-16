@@ -1,6 +1,6 @@
 <template>
     <main>
-        <ProfileSideBar />
+        <ProfileSideBar :role="role"/>
     </main>
 </template>
 
@@ -9,6 +9,7 @@ import ProfileSideBar from "@/components/ProfileSideBar.vue";
 
 export default {
     name: "MyRents",
+    props: ['role'],
     components: {ProfileSideBar}
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <UploadProgress v-if="isLoading"  />
     <main>
-        <ProfileSideBar />
+        <ProfileSideBar :role="role" />
         <div class="content">
             <h2>Редактировать профиль</h2>
             <form @submit.prevent="handleSubmit" novalidate>
@@ -54,10 +54,12 @@
 import ProfileSideBar from "@/components/ProfileSideBar.vue";
 import UploadProgress from "@/components/UploadProgress.vue";
 import {getProfileData, updateProfileData} from "@/services/profileServices.js";
+import {getAdminProfileData, updateAdminProfileData} from "@/services/adminProfileServices.js";
 
 export default {
     name: "EditProfile",
     components: {UploadProgress, ProfileSideBar},
+    props: ['role'],
     data(){
         return {
             isLoading: true,
@@ -72,14 +74,26 @@ export default {
         }
     },
     beforeMount() {
-        getProfileData().then((data) => {
-            this.profile = data
-            this.form.newName = data.name
-            this.form.newSurname = data.surname
-            this.form.newImage = data.image
-            this.form.newPhone = data.phone
-            this.isLoading = false
-        })
+        if(this.role === 'client') {
+            getProfileData().then((data) => {
+                this.profile = data
+                this.form.newName = data.name
+                this.form.newSurname = data.surname
+                this.form.newImage = data.image
+                this.form.newPhone = data.phone
+                this.isLoading = false
+            })
+        }
+        else {
+            getAdminProfileData().then((data) => {
+                this.profile = data
+                this.form.newName = data.name
+                this.form.newSurname = data.surname
+                this.form.newImage = data.image
+                this.form.newPhone = data.phone
+                this.isLoading = false
+            })
+        }
     },
     computed: {
         isButtonDisabled() {
@@ -115,9 +129,16 @@ export default {
             if(this.form.newPhone !== this.profile.phone){
                 data.phone = this.form.newPhone
             }
-            updateProfileData(data).then((res) => {
-                this.isLoading = false
-            })
+            if(this.role === 'client'){
+                updateProfileData(data).then((res) => {
+                    this.isLoading = false
+                })
+            } else {
+                updateAdminProfileData(data).then((res) => {
+                    this.isLoading = false
+                })
+            }
+
         }
     },
 }

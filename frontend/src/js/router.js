@@ -79,33 +79,37 @@ const router = createRouter({
       },
     },
     {
-      path: '/profile/dashboard',
+      path: '/profile/dashboard/:role',
       name: 'profile-dashboard',
       component: ProfileView,
+      props: true,
       meta: {
         requiresLogin: true
       }
     },
     {
-      path: '/profile/rents',
+      path: '/profile/rents/:role',
       name: 'profile-rents',
       component: MyRents,
+      props: true,
       meta: {
         requiresLogin: true
       }
     },
     {
-      path: '/profile/edit',
+      path: '/profile/edit/:role',
       name: 'profile-edit',
       component: EditProfile,
+      props: true,
       meta: {
         requiresLogin: true
       }
     },
     {
-      path: '/profile/change-password',
+      path: '/profile/change-password/:role',
       name: 'profile-change-password',
       component: ChangePassword,
+      props: true,
       meta: {
         requiresLogin: true
       }
