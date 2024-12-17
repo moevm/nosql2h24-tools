@@ -1,7 +1,8 @@
 from src.configs.paths import Paths
 from src.configs.urls import Urls
 from src.core.entities.category.category import Category, CategoryName, CategoryCreated, CategoryWithTypes
-from src.core.entities.tool.tool import ToolCreated, ToolCreate, Tool, ToolSummary, ToolDetails, ToolPages
+from src.core.entities.tool.tool import ToolCreated, ToolCreate, Tool, ToolSummary, ToolDetails, ToolPages, \
+    PaginatedToolsResponse
 from src.core.entities.type.type import TypeSignature, Type, TypeCreated, TypeName
 from src.core.exceptions.client_error import ResourceNotFoundError, ResourceAlreadyExistsError
 from src.core.repositories.tool_repos.icategory_repository import ICategoryRepository
@@ -119,8 +120,16 @@ class ToolService:
             type: Optional[List[str]] = None,
             min_price: Optional[float] = None,
             max_price: Optional[float] = None
-    ) -> List[ToolSummary]:
-        return await self.tool_repo.search(
+    ) -> PaginatedToolsResponse:
+        total_count = await self.tool_repo.count_tools(
+            query=query,
+            category=category,
+            type=type,
+            min_price=min_price,
+            max_price=max_price
+        )
+
+        tools =  await self.tool_repo.search(
             query=query,
             page=page,
             page_size=page_size,
@@ -128,4 +137,9 @@ class ToolService:
             type=type,
             min_price=min_price,
             max_price=max_price
+        )
+
+        return PaginatedToolsResponse(
+            tools=tools,
+            totalNumber=total_count
         )

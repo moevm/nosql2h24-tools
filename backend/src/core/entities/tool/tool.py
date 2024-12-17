@@ -196,5 +196,11 @@ class ToolPages(BaseModel):
         description="count of pages"
     )
 
-
+class PaginatedToolsResponse(BaseModel):
+    tools: List[ToolSummary] = Field(
+        ...
+    )
+    totalNumber: int = Field(
+        ...
+    )
 

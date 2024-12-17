@@ -51,3 +51,14 @@ class IToolRepository(ABC):
     @abstractmethod
     async def get_ids_by_name(self, name: str) -> List[str]:
         pass
+
+    @abstractmethod
+    async def count_tools(
+            self,
+            query: str,
+            category: Optional[List[str]] = None,
+            type: Optional[List[str]] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> int:
+        pass

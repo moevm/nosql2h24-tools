@@ -1,7 +1,8 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 from src.core.entities.category.category import CategoryName, CategoryCreated, CategoryWithTypes
-from src.core.entities.tool.tool import ToolCreated, ToolCreate, ToolSummary, ToolDetails, ToolPages
+from src.core.entities.tool.tool import ToolCreated, ToolCreate, ToolSummary, ToolDetails, ToolPages, \
+    PaginatedToolsResponse
 from src.core.entities.type.type import TypeCreated, TypeSignature
 from src.core.services.tool_service.tool_service import ToolService
 from src.infrastructure.api.security.role_required import is_worker
@@ -18,7 +19,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 @tool_router.get(
     path="/search",
     status_code=200,
-    response_model=List[ToolSummary]
+    response_model=PaginatedToolsResponse
 )
 async def search_tools(
         query: str = Query(..., min_length=3),

@@ -167,3 +167,28 @@ class MongoToolRepository(IToolRepository):
 
         except PyMongoError:
             raise DatabaseError()
+
+    async def count_tools(
+            self,
+            query: str,
+            category: Optional[List[str]] = None,
+            type: Optional[List[str]] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> int:
+        try:
+            filters = {"$text": {"$search": query}}
+
+            if category:
+                filters["category"] = {"$in": category}
+            if type:
+                filters["type"] = {"$in": type}
+            if min_price is not None:
+                filters["dailyPrice"] = {"$gte": min_price}
+            if max_price is not None:
+                filters.setdefault("dailyPrice", {})["$lte"] = max_price
+
+            return await self.tool_collection.count_documents(filters)
+
+        except PyMongoError:
+            raise DatabaseError()
