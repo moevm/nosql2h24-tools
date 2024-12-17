@@ -1,5 +1,5 @@
 from src.core.entities.users.base_user import UpdateUser, UpdatedUser, UpdateUserPassword, UpdatedUserPassword
-from src.core.entities.users.worker.worker import WorkerInDB, WorkerPrivateSummary, WorkerPaginated
+from src.core.entities.users.worker.worker import WorkerInDB, WorkerPrivateSummary, WorkerPaginated, PaginatedWorkersResponse
 from src.core.exceptions.client_error import ResourceNotFoundError, InvalidPasswordProvided
 from src.core.repositories.users_repos.worker_repos.iworker_repository import IWorkerRepository
 from typing import List, Optional
@@ -52,8 +52,16 @@ class WorkerService:
             surname: Optional[str] = None,
             phone: Optional[str] = None,
             jobTitle: Optional[str] = None,
-    ) -> List[WorkerPaginated]:
-        return await self.worker_repo.get_paginated_workers(
+    ) -> PaginatedWorkersResponse:
+        total_count = await self.worker_repo.count_workers(
+            email=email,
+            name=name,
+            surname=surname,
+            phone=phone,
+            jobTitle=jobTitle
+        )
+
+        workers = await self.worker_repo.get_paginated_workers(
             page=page,
             page_size=page_size,
             email=email,
@@ -61,4 +69,9 @@ class WorkerService:
             surname=surname,
             phone=phone,
             jobTitle=jobTitle
+        )
+
+        return PaginatedWorkersResponse(
+            workers=workers,
+            totalNumber=total_count
         )

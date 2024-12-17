@@ -59,3 +59,14 @@ class IWorkerRepository(ABC):
             jobTitle: Optional[str] = None
     ) -> List[WorkerPaginated]:
         pass
+
+    @abstractmethod
+    async def count_workers(
+            self,
+            email: Optional[str] = None,
+            name: Optional[str] = None,
+            surname: Optional[str] = None,
+            phone: Optional[str] = None,
+            jobTitle: Optional[str] = None
+    ) -> int:
+        pass

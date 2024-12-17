@@ -81,3 +81,11 @@ class WorkerPaginated(BaseModel):
         default=None,
         description="Employee start date",
     )
+
+class PaginatedWorkersResponse(BaseModel):
+    workers: List[WorkerPaginated] = Field(
+        ...
+    )
+    totalNumber: int = Field(
+        ...
+    )

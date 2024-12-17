@@ -3,7 +3,7 @@ from typing import List, Optional
 from pydantic import PositiveInt
 
 from src.core.entities.users.base_user import UpdatedUser, UpdateUser, UpdatedUserPassword, UpdateUserPassword
-from src.core.entities.users.worker.worker import WorkerPrivateSummary, WorkerPaginated
+from src.core.entities.users.worker.worker import WorkerPrivateSummary, WorkerPaginated, PaginatedWorkersResponse
 from src.core.services.worker_service.worker_service import WorkerService
 from src.infrastructure.api.security.role_required import is_worker, is_self
 from src.infrastructure.services_instances import get_worker_service
@@ -17,7 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 @worker_router.get(
     path="/paginated",
     status_code=200,
-    response_model=List[WorkerPaginated]
+    response_model=PaginatedWorkersResponse
 )
 async def get_workers_paginated(
         page: PositiveInt = Query(1),
@@ -28,9 +28,9 @@ async def get_workers_paginated(
         phone: Optional[str] = Query(None),
         jobTitle: Optional[str] = Query(None),
         worker_service: WorkerService = Depends(get_worker_service),
-        #token: str = Depends(oauth2_scheme)
+        token: str = Depends(oauth2_scheme)
 ):
-    #is_worker(token)
+    is_worker(token)
     return await worker_service.get_paginated_workers(
         page=page,
         page_size=page_size,

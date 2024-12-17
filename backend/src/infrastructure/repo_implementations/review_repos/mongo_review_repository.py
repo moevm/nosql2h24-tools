@@ -89,3 +89,34 @@ class MongoReviewRepository(IReviewRepository):
             return [Review(**review) for review in reviews]
         except PyMongoError:
             raise DatabaseError()
+
+
+    async def count_reviews(
+            self,
+            tool_ids: Optional[List[str]] = None,
+            reviewer_ids: Optional[List[str]] = None,
+            rating: Optional[int] = None,
+            start_date: Optional[datetime] = None,
+            end_date: Optional[datetime] = None
+    ) -> int:
+        try:
+            filters = {}
+
+            if tool_ids is not None:
+                filters["toolId"] = {"$in": [str_to_objectId(tool_id) for tool_id in tool_ids]}
+            if reviewer_ids is not None:
+                filters["reviewerId"] = {"$in": [str_to_objectId(reviewer_id) for reviewer_id in reviewer_ids]}
+            if rating is not None:
+                filters["rating"] = rating
+            if start_date or end_date:
+                filters["date"] = {}
+                if start_date:
+                    filters["date"]["$gte"] = start_date
+                if end_date:
+                    filters["date"]["$lte"] = end_date
+
+            count = await self.review_collection.count_documents(filters)
+
+            return count
+        except PyMongoError:
+            raise DatabaseError()

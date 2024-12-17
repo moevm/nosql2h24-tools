@@ -156,3 +156,31 @@ class MongoWorkerRepository(IWorkerRepository):
             return [WorkerPaginated(**worker) for worker in workers]
         except PyMongoError:
             raise DatabaseError()
+
+    async def count_workers(
+            self,
+            email: Optional[str] = None,
+            name: Optional[str] = None,
+            surname: Optional[str] = None,
+            phone: Optional[str] = None,
+            jobTitle: Optional[str] = None
+    ) -> int:
+        try:
+            filters = {}
+
+            if email:
+                filters['email'] = {"$regex": email, "$options": "i"}
+            if name:
+                filters['name'] = {"$regex": name, "$options": "i"}
+            if surname:
+                filters['surname'] = {"$regex": surname, "$options": "i"}
+            if phone:
+                filters['phone'] = {"$regex": phone, "$options": "i"}
+            if jobTitle:
+                filters['jobTitle'] = {"$regex": jobTitle, "$options": "i"}
+
+            count = await self.worker_collection.count_documents(filters)
+
+            return count
+        except PyMongoError:
+            raise DatabaseError()

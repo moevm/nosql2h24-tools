@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 from typing import List, Optional
 from fastapi.security import OAuth2PasswordBearer
-from src.core.entities.review.review import ReviewCreated, ReviewCreate, ReviewPaginated
+from src.core.entities.review.review import ReviewCreated, ReviewCreate, ReviewPaginated, PaginatedReviewsResponse
 from src.core.services.review_service.review_service import ReviewService
 from src.infrastructure.api.security.role_required import is_self, is_worker
 from src.infrastructure.services_instances import get_review_service
@@ -28,7 +28,7 @@ async def create_review(
 @review_router.get(
     path="/paginated",
     status_code=200,
-    response_model=List[ReviewPaginated]
+    response_model=PaginatedReviewsResponse
 )
 async def get_reviews_paginated(
         page: PositiveInt = Query(1),

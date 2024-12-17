@@ -28,3 +28,14 @@ class IReviewRepository(ABC):
             end_date: Optional[datetime] = None
     ) -> List[Review]:
         pass
+
+    @abstractmethod
+    async def count_reviews(
+            self,
+            tool_ids: Optional[List[str]] = None,
+            reviewer_ids: Optional[List[str]] = None,
+            rating: Optional[int] = None,
+            start_date: Optional[datetime] = None,
+            end_date: Optional[datetime] = None
+    ) -> int:
+        pass

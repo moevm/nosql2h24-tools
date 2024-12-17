@@ -1,4 +1,4 @@
-from src.core.entities.review.review import ReviewCreate, ReviewCreated, ReviewSummary, Review, ReviewPaginated
+from src.core.entities.review.review import ReviewCreate, ReviewCreated, ReviewSummary, Review, ReviewPaginated, PaginatedReviewsResponse
 from typing import List, Optional
 from src.core.exceptions.client_error import ResourceNotFoundError, ResourceAlreadyExistsError, PaymentStateError
 from src.core.repositories.order_repos.iorder_repository import IOrderRepository
@@ -75,7 +75,7 @@ class ReviewService:
             rating: Optional[int] = None,
             start_date: Optional[datetime] = None,
             end_date: Optional[datetime] = None
-    ) -> List[ReviewPaginated]:
+    ) -> PaginatedReviewsResponse:
         tool_ids = None
         if tool_name:
             tool_ids = await self.tool_repo.get_ids_by_name(tool_name)
@@ -97,6 +97,14 @@ class ReviewService:
             end_date=end_date
         )
 
+        total_count = await self.review_repo.count_reviews(
+            tool_ids=tool_ids,
+            reviewer_ids=reviewer_ids,
+            rating=rating,
+            start_date=start_date,
+            end_date=end_date
+        )
+
         result = []
         for review in reviews:
             tool_name = await self.tool_repo.get_name_by_id(objectId_to_str(review.toolId))
@@ -110,5 +118,8 @@ class ReviewService:
                 tool_name=tool_name
             ))
 
-        return result
+        return PaginatedReviewsResponse(
+            reviews=result,
+            totalNumber=total_count
+        )
 

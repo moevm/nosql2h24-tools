@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 from typing import Optional
 from src.core.entities.object_id_str import ObjectIdStr
-
+from typing import List
 
 class Review(BaseModel):
     toolId: ObjectIdStr = Field(
@@ -108,3 +108,12 @@ class ReviewPaginated(ReviewSummary):
         ...,
         description="Tool name"
     )
+
+class PaginatedReviewsResponse(BaseModel):
+    reviews: List[ReviewPaginated] = Field(
+        ...
+    )
+    totalNumber: int = Field(
+        ...
+    )
+
