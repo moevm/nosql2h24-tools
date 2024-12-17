@@ -1,7 +1,8 @@
+from datetime import datetime
 from sqlite3 import DatabaseError
 from typing import Optional, List
 
-from src.core.entities.order.order import Order, OrderSummary, OrderForWorker
+from src.core.entities.order.order import Order, OrderSummary, OrderForWorker, OrderInDB
 from src.core.entities.tool.tool import ToolSummary
 from src.core.entities.users.client.client import ClientForWorker
 from src.core.repositories.order_repos.iorder_repository import IOrderRepository
@@ -49,38 +50,6 @@ class MongoOrderRepository(IOrderRepository):
         except PyMongoError:
             raise DatabaseError()
 
-    async def get_orders_by_worker_id(self, worker_id: str) -> Optional[List[OrderForWorker]]:
-        try:
-            obj_id = str_to_objectId(worker_id)
-            orders_cursor = self.order_collection.find(
-                {"related_worker": obj_id},
-                {"_id": 1, "tools": 1, "start_leasing": 1, "price": 1, "end_leasing": 1, "client": 1,
-                 "delivery_type": 1, "delivery_state": 1,
-                 "payment_type": 1, "payment_state": 1, "create_order_time": 1},
-
-            )
-            orders = await orders_cursor.to_list(length=None)
-            for order in orders:
-                tool_ids = order.get("tools", [])
-                tools = await self.tool_collection.find(
-                    {"_id": {"$in": tool_ids}},
-                    {"_id": 1, "name": 1, "dailyPrice": 1, "images": 1, "features": 1, "rating": 1, "category": 1,
-                     "type": 1, "description": 1}
-                ).to_list(length=None)
-                tools_model = [ToolSummary(**tool) for tool in tools]
-                order["tools"] = tools_model
-                client_id = order["client"]
-                client = await self.client_collection.find_one(
-                    {"_id": client_id},
-                    {"_id": 1, "name": 1, "surname": 1}
-                )
-                client_model = ClientForWorker(**client)
-                order["client"] = client_model
-            if not orders:
-                return None
-            return [OrderForWorker(**order) for order in orders]
-        except PyMongoError:
-            raise DatabaseError()
 
     async def get_order_by_id(self, order_id: str) -> Optional[Order]:
         try:
@@ -129,5 +98,90 @@ class MongoOrderRepository(IOrderRepository):
         try:
             order = await self.order_collection.find_one({'_id': str_to_objectId(order_id)})
             return order is not None
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_paginated_orders(
+            self,
+            page: int,
+            page_size: int,
+            customer_ids: Optional[List[str]] = None,
+            tool_ids: Optional[List[str]] = None,
+            status: Optional[str] = None,
+            start_date: Optional[datetime] = None,
+            end_date: Optional[datetime] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> List[OrderInDB]:
+        try:
+            skip = (page - 1) * page_size
+            filters = {}
+            print(max_price)
+            if min_price is not None:
+                filters["price"] = {"$gte": min_price}
+            if max_price is not None:
+                filters.setdefault("price", {})["$lte"] = max_price
+
+
+            if start_date or end_date:
+                filters["create_order_time"] = {}
+            if start_date:
+                filters["create_order_time"]["$gte"] = start_date
+            if end_date:
+                filters["create_order_time"]["$lte"] = end_date
+
+            if status:
+                filters["delivery_state"] = {"$regex": status, "$options": "i"}
+
+            if tool_ids is not None:
+                filters["tools"] = {"$in": [str_to_objectId(tool_id) for tool_id in tool_ids]}
+
+            if customer_ids is not None:
+                filters["client"] = {"$in": [str_to_objectId(customer_id) for customer_id in customer_ids]}
+
+            cursor = self.order_collection.find(filters).skip(skip).limit(page_size)
+            orders = await cursor.to_list(length=page_size)
+            print(filters)
+
+            return [OrderInDB(**doc) for doc in orders]
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def count_orders(
+            self,
+            customer_ids: Optional[List[str]] = None,
+            tool_ids: Optional[List[str]] = None,
+            status: Optional[str] = None,
+            start_date: Optional[datetime] = None,
+            end_date: Optional[datetime] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> int:
+        try:
+            filters = {}
+
+            if min_price is not None:
+                filters["price"] = {"$gte": min_price}
+            if max_price is not None:
+                filters.setdefault("price", {})["$lte"] = max_price
+
+
+            if start_date or end_date:
+                filters["create_order_time"] = {}
+            if start_date:
+                filters["create_order_time"]["$gte"] = start_date
+            if end_date:
+                filters["create_order_time"]["$lte"] = end_date
+
+            if status:
+                filters["delivery_state"] = {"$regex": status, "$options": "i"}
+
+            if tool_ids is not None:
+                filters["tools"] = {"$in": [str_to_objectId(tool_id) for tool_id in tool_ids]}
+
+            if customer_ids is not None:
+                filters["client"] = {"$in": [str_to_objectId(customer_id) for customer_id in customer_ids]}
+
+            return await self.order_collection.count_documents(filters)
         except PyMongoError:
             raise DatabaseError()

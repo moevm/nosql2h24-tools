@@ -50,10 +50,6 @@ class Order(BaseModel):
         default_factory=lambda: datetime.now(timezone.utc),
         description="create order time"
     )
-    related_worker: ObjectIdStr = Field(
-        default=None, 
-        description="related worker id"
-    )
 
     class Config:
         json_encoders = {
@@ -83,22 +79,39 @@ class OrderCreate(BaseModel):
         description="client who ordered"
     )
     delivery_type: str = Field(
-        ...,
+        "to_door",
         description="delivery type (to door, at pickup point)"
     )
     delivery_state: str = Field(
-        ...,
+        "delivered",
         description="delivery state (accepted, on the way, delivered)"
     )
     payment_type: str = Field(
-        ...,
+        "cash",
         description="payment type (cash, card)"
     )
     payment_state: str = Field(
-        ...,
+        "paid",
         description="payment state (paid, not paid)"
     )
-    
+
+class OrderInDB(Order):
+    id: Optional[ObjectIdStr] = Field(
+        ...,
+        default_factory=ObjectIdStr,
+        alias="_id",
+        description="Unique identifier of order"
+    )
+
+    class Config:
+        json_encoders = {
+            ObjectId: str,
+            datetime: lambda v: v.isoformat()
+        }
+
+        allow_population_by_field_name = True
+
+
 
 class OrderCreated(BaseModel):
     message: str = Field(
@@ -115,6 +128,10 @@ class OrderSummary(BaseModel):
         default_factory=ObjectIdStr,
         alias="_id",
         description="Unique identifier of order"
+    )
+    price: float = Field(
+        default=None,
+        description="price of leasing"
     )
     tools: List[ToolSummary] = Field(
         ...,
@@ -146,61 +163,6 @@ class OrderSummary(BaseModel):
         ...,
         description="payment state (paid, not paid)"
     )
-
-    class Config:
-        json_encoders = {
-            ObjectId: str,
-            datetime: lambda v: v.isoformat()
-        }
-
-        allow_population_by_field_name = True
-
-
-class OrderForWorker(BaseModel):
-    id: Optional[ObjectIdStr] = Field(
-        ...,
-        default_factory=ObjectIdStr,
-        alias="_id",
-        description="Unique identifier of order"
-    )
-    tools: List[ToolSummary] = Field(
-        ...,
-        description="Order tools"
-    )
-    start_leasing: Optional[datetime] = Field(
-        ...,
-        default_factory=lambda: datetime.now(timezone.utc),
-        description="start of leasing tools"
-    )
-    price: float = Field(
-        default=None,
-        description="price of leasing"
-    )
-    end_leasing: Optional[datetime] = Field(
-        ...,
-        default_factory=lambda: datetime.now(timezone.utc),
-        description="end of leasing"
-    )
-    client: ClientForWorker = Field(
-        ...,
-        description="client who ordered"
-    )
-    delivery_type: str = Field(
-        ...,
-        description="delivery type (to door, at pickup point)"
-    )
-    delivery_state: str = Field(
-        ...,
-        description="delivery state (accepted, on the way, delivered)"
-    )
-    payment_type: str = Field(
-        ...,
-        description="payment type (cash, card)"
-    )
-    payment_state: str = Field(
-        ...,
-        description="payment state (paid, not paid)"
-    )
     create_order_time: datetime = Field(
         ...,
         description="create order time"
@@ -213,3 +175,26 @@ class OrderForWorker(BaseModel):
         }
 
         allow_population_by_field_name = True
+
+
+class OrderForWorker(OrderSummary):
+    client: ClientForWorker = Field(
+        ...,
+        description="client who ordered"
+    )
+
+class PaginatedOrdersResponseForWorker(BaseModel):
+    orders: List[OrderForWorker] = Field(
+        ...
+    )
+    totalNumber: int = Field(
+        ...
+    )
+
+class PaginatedOrdersResponseForClient(BaseModel):
+    orders: List[OrderSummary] = Field(
+        ...
+    )
+    totalNumber: int = Field(
+        ...
+    )

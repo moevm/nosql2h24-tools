@@ -168,6 +168,19 @@ class MongoToolRepository(IToolRepository):
         except PyMongoError:
             raise DatabaseError()
 
+    async def get_ids_by_names(self, names: List[str]) -> List[str]:
+        try:
+            regex_filters = [{"name": {"$regex": name, "$options": "i"}} for name in names]
+            cursor = self.tool_collection.find(
+                {"$or": regex_filters},
+                {"_id": 1}
+            )
+
+            tools = await cursor.to_list(length=None)
+            return [objectId_to_str(tool["_id"]) for tool in tools]
+        except PyMongoError:
+            raise DatabaseError()
+
     async def count_tools(
             self,
             query: str,
@@ -190,5 +203,21 @@ class MongoToolRepository(IToolRepository):
 
             return await self.tool_collection.count_documents(filters)
 
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def get_tools_summaries_by_ids(self, tool_ids: List[str]) -> List[ToolSummary]:
+        try:
+            cursor = self.tool_collection.find(
+                {"_id": {"$in": [str_to_objectId(tool_id) for tool_id in tool_ids]}},
+                {"_id": 1, "name": 1, "dailyPrice": 1, "images": 1, "rating": 1, "description": 1}
+            )
+
+            results = []
+
+            async for doc in cursor:
+                results.append(ToolSummary(**doc))
+
+            return results
         except PyMongoError:
             raise DatabaseError()

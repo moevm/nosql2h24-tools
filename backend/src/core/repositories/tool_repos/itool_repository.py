@@ -49,6 +49,10 @@ class IToolRepository(ABC):
         pass
 
     @abstractmethod
+    async def get_ids_by_names(self, names: List[str]) -> List[str]:
+        pass
+
+    @abstractmethod
     async def get_ids_by_name(self, name: str) -> List[str]:
         pass
 
@@ -61,4 +65,8 @@ class IToolRepository(ABC):
             min_price: Optional[float] = None,
             max_price: Optional[float] = None
     ) -> int:
+        pass
+
+    @abstractmethod
+    async def get_tools_summaries_by_ids(self, tool_ids: List[str]) -> List[ToolSummary]:
         pass

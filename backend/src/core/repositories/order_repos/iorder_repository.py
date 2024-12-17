@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import List
+from optparse import Option
+from typing import List, Optional
 
-from src.core.entities.order.order import Order, OrderSummary, OrderForWorker
-
+from src.core.entities.order.order import Order, OrderSummary, OrderForWorker, OrderInDB
+from datetime import datetime
 
 class IOrderRepository(ABC):
     @abstractmethod
@@ -11,10 +12,6 @@ class IOrderRepository(ABC):
 
     @abstractmethod
     async def get_orders_by_client_id(self, client_id: str) -> List[OrderSummary]:
-        pass
-
-    @abstractmethod
-    async def get_orders_by_worker_id(self, worker_id: str) -> List[OrderForWorker]:
         pass
 
     @abstractmethod
@@ -31,4 +28,32 @@ class IOrderRepository(ABC):
 
     @abstractmethod
     async def exists_by_id(self, order_id: str) -> bool:
+        pass
+
+    @abstractmethod
+    async def get_paginated_orders(
+            self,
+            page: int,
+            page_size: int,
+            customer_ids: Optional[List[str]] = None,
+            tool_ids: Optional[List[str]] = None,
+            status: Optional[str] = None,
+            start_date: Optional[datetime] = None,
+            end_date: Optional[datetime] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> List[OrderInDB]:
+        pass
+
+    @abstractmethod
+    async def count_orders(
+            self,
+            customer_ids: Optional[List[str]] = None,
+            tool_ids: Optional[List[str]] = None,
+            status: Optional[str] = None,
+            start_date: Optional[datetime] = None,
+            end_date: Optional[datetime] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None
+    ) -> int:
         pass

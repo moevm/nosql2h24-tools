@@ -75,12 +75,14 @@ def get_order_service(
     mongo_order_repo: MongoOrderRepository = Depends(get_mongo_order_repo),
     mongo_tool_repo: MongoToolRepository = Depends(get_mongo_tool_repo),
     mongo_worker_repo: MongoWorkerRepository = Depends(get_mongo_worker_repo),
+    mongo_client_repo: MongoClientRepository = Depends(get_mongo_client_repo)
 
 ) -> OrderService:
     return OrderService(
         mongo_order_repo,
         mongo_tool_repo,
-        mongo_worker_repo
+        mongo_worker_repo,
+        mongo_client_repo
     )
 
 def get_review_service(
