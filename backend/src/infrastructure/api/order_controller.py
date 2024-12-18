@@ -102,7 +102,7 @@ async def get_paginated_orders_for_worker(
 @order_router.get(
     path='/{order_id}',
     status_code=200,
-    response_model=OrderSummary
+    response_model=Optional[OrderSummary]
 )
 async def get_order(
         order_id: str,
