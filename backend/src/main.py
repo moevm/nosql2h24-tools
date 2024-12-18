@@ -7,6 +7,7 @@ from src.configs.config import config
 from src.core.exceptions.custom_error import CustomError
 from src.infrastructure.api.auth_controller import auth_router
 from src.infrastructure.api.client_controller import client_router
+from src.infrastructure.api.import_export_controller import im_ex_router
 from src.infrastructure.api.order_controller import order_router
 from src.infrastructure.api.review_controller import review_router
 from src.infrastructure.api.tool_controller import tool_router, category_router, type_router
@@ -39,7 +40,7 @@ app.include_router(worker_router, prefix="/api/workers", tags=["worker"])
 app.include_router(client_router, prefix="/api/clients", tags=["client"])
 app.include_router(order_router, prefix="/api/orders", tags=["order"])
 app.include_router(review_router, prefix="/api/reviews", tags=["reviews"])
-app.include_router(review_router, prefix="/api/data", tags=["reviews"])
+app.include_router(im_ex_router, prefix="/api/data", tags=["im_ex"])
 
 
 app.add_middleware(

@@ -34,24 +34,23 @@ class MongoImExRepository(IImExRepository):
 
     async def export_data(self) -> DBModel:
         try:
-            # workers = [Worker(**worker) for worker in (await self.worker_collection.find().to_list(None))]
-            # clients = [Client(**client) for client in (await self.client_collection.find().to_list(None))]
-            # tools = [Tool(**tool) for tool in (await self.tool_collection.find().to_list(None))]
-            # orders = [Order(**order) for order in (await self.order_collection.find().to_list(None))]
-            # categories = [Category(**category) for category in (await self.category_collection.find().to_list(None))]
-            # types = [Type(**type) for type in (await self.type_collection.find().to_list(None))]
-            # reviews = [Review(**review)for review in (await self.review_collection.find().to_list(None))]
+            workers = [Worker(**worker) for worker in (await self.worker_collection.find().to_list(None))]
+            clients = [Client(**client) for client in (await self.client_collection.find().to_list(None))]
+            tools = [Tool(**tool) for tool in (await self.tool_collection.find().to_list(None))]
+            orders = [Order(**order) for order in (await self.order_collection.find().to_list(None))]
+            categories = [Category(**category) for category in (await self.category_collection.find().to_list(None))]
+            types = [Type(**type) for type in (await self.type_collection.find().to_list(None))]
+            reviews = [Review(**review)for review in (await self.review_collection.find().to_list(None))]
 
             result = DBModel(
-                # workers=workers,
-                # clients=clients,
-                # tools=tools,
-                # orders=orders,
-                # categories=categories,
-                # types=types,
-                # reviews=reviews
+                workers=workers,
+                clients=clients,
+                tools=tools,
+                orders=orders,
+                categories=categories,
+                types=types,
+                reviews=reviews
             )
-            print(result)
             return result
         except PyMongoError:
             raise DatabaseError()

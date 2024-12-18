@@ -15,8 +15,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 @im_ex_router.get(path="/export", status_code=201, response_model=DBModel)
 async def export(
         im_ex_service: ImExService = Depends(get_im_ex_service),
-
+        token: str = Depends(oauth2_scheme),
 ):
+    is_worker(token)
     return await im_ex_service.export()
 
 
