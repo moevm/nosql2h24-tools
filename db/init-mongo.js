@@ -31,7 +31,7 @@ db.getCollection(process.env.WORKER_COLLECTION).insertOne(
         "phone": "+71234567890",
         "jobTitle": "Главный работник",
         "date": ISODate("2024-11-28T15:39:13.05Z"),
-        "image": "http://0.0.0.0:8080/api/resources/images/workers/c0999ff2f2c730678f0356603e424516b674ccb0d599b87dedb7a9a1bc89646f/1.png",
+        "image": "http://localhost:8000/api/resources/images/workers/c0999ff2f2c730678f0356603e424516b674ccb0d599b87dedb7a9a1bc89646f/1.png",
         "created_at": ISODate("2024-11-28T15:39:13.05Z"),
         "updated_at": ISODate("2024-11-28T15:39:13.05Z")
     }
@@ -48,7 +48,7 @@ db.getCollection(process.env.CLIENT_COLLECTION).insertMany([
 		"name": "Иван",
 		"surname": "Петров",
 		"phone": "+79161234567",
-		"image": "http://0.0.0.0:8080/api/resources/images/clients/d89b750bd5a875c166119bf523fa5dabd5b3e2d263ea63b68aa26cd0411af1f3/1.png"
+		"image": "http://localhost:8000/api/resources/images/clients/d89b750bd5a875c166119bf523fa5dabd5b3e2d263ea63b68aa26cd0411af1f3/1.png"
 	},
 	{
 		"_id": ObjectId("6762d6d9f6292fe72b752b5f"),
@@ -60,7 +60,7 @@ db.getCollection(process.env.CLIENT_COLLECTION).insertMany([
 		"name": "Ольга",
 		"surname": "Смирнова",
 		"phone": "+79991234567",
-		"image": "http://0.0.0.0:8080/api/resources/images/clients/4d1732f83c592083c1d3c77ec3b45ec1c950f7c974c938fc1affaed81cf6f084/1.png"
+		"image": "http://localhost:8000/api/resources/images/clients/4d1732f83c592083c1d3c77ec3b45ec1c950f7c974c938fc1affaed81cf6f084/1.png"
 	},
 	{
 		"_id": ObjectId("6762d6ebf6292fe72b752b60"),
@@ -72,7 +72,7 @@ db.getCollection(process.env.CLIENT_COLLECTION).insertMany([
 		"name": "Алексей",
 		"surname": "Васильев",
 		"phone": "+79271234567",
-		"image": "http://0.0.0.0:8080/api/resources/images/clients/263dc3e1633465f5cc6cfc17daec3627764a43cdbba3ebcbe9eca18aa2acb105/1.png"
+		"image": "http://localhost:8000/api/resources/images/clients/263dc3e1633465f5cc6cfc17daec3627764a43cdbba3ebcbe9eca18aa2acb105/1.png"
 	}
 ]);
 
@@ -295,8 +295,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"dailyPrice": 40.0,
 		"totalPrice": 850.0,
 		"images": [
-			"http://0.0.0.0:8080/api/resources/images/tools/5d25e3d8154a07b5edc4ed1c9c09930494980b1942f1d979b867c4391baf1e2f/1.png",
-			"http://0.0.0.0:8080/api/resources/images/tools/5d25e3d8154a07b5edc4ed1c9c09930494980b1942f1d979b867c4391baf1e2f/2.png"
+			"http://localhost:8000/api/resources/images/tools/5d25e3d8154a07b5edc4ed1c9c09930494980b1942f1d979b867c4391baf1e2f/1.png",
+			"http://localhost:8000/api/resources/images/tools/5d25e3d8154a07b5edc4ed1c9c09930494980b1942f1d979b867c4391baf1e2f/2.png"
 		],
 		"features": {
 			"Вес": "500 г",
@@ -529,8 +529,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"dailyPrice": 400.0,
 		"totalPrice": 9500.0,
 		"images": [
-			"http://0.0.0.0:8080/api/resources/images/tools/d56b0d31b3a81077bb50df1f37a30f94fe23ebdbef02d6c6e5d4ef3385279c5c/1.png",
-			"http://0.0.0.0:8080/api/resources/images/tools/d56b0d31b3a81077bb50df1f37a30f94fe23ebdbef02d6c6e5d4ef3385279c5c/2.png"
+			"http://localhost:8000/api/resources/images/tools/d56b0d31b3a81077bb50df1f37a30f94fe23ebdbef02d6c6e5d4ef3385279c5c/1.png",
+			"http://localhost:8000/api/resources/images/tools/d56b0d31b3a81077bb50df1f37a30f94fe23ebdbef02d6c6e5d4ef3385279c5c/2.png"
 		],
 		"features": {
 			"Аккумулятор": "10.8 В",
@@ -700,8 +700,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"dailyPrice": 200.0,
 		"totalPrice": 8000.0,
 		"images": [
-			"http://0.0.0.0:8080/api/resources/images/tools/5ce2f7f4ec7ee5709c101dc011b25001041196e54cab1a44c3911bec2fcc5444/1.png",
-			"http://0.0.0.0:8080/api/resources/images/tools/5ce2f7f4ec7ee5709c101dc011b25001041196e54cab1a44c3911bec2fcc5444/2.png"
+			"http://localhost:8000/api/resources/images/tools/5ce2f7f4ec7ee5709c101dc011b25001041196e54cab1a44c3911bec2fcc5444/1.png",
+			"http://localhost:8000/api/resources/images/tools/5ce2f7f4ec7ee5709c101dc011b25001041196e54cab1a44c3911bec2fcc5444/2.png"
 		],
 		"features": {
 			"Дальность": "50 м",
@@ -871,8 +871,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"dailyPrice": 30.0,
 		"totalPrice": 600.0,
 		"images": [
-			"http://0.0.0.0:8080/api/resources/images/tools/1049c30b152de23ffe9667fba626782eb566c9ef5476b0fb08a714051475f500/1.png",
-			"http://0.0.0.0:8080/api/resources/images/tools/1049c30b152de23ffe9667fba626782eb566c9ef5476b0fb08a714051475f500/2.png"
+			"http://localhost:8000/api/resources/images/tools/1049c30b152de23ffe9667fba626782eb566c9ef5476b0fb08a714051475f500/1.png",
+			"http://localhost:8000/api/resources/images/tools/1049c30b152de23ffe9667fba626782eb566c9ef5476b0fb08a714051475f500/2.png"
 		],
 		"features": {
 			"Материал": "Полипропилен",
