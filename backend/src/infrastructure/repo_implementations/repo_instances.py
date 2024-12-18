@@ -1,4 +1,6 @@
 from fastapi.params import Depends
+
+from src.infrastructure.repo_implementations.im_ex_repo.im_ex_repo import MongoImExRepository
 from src.infrastructure.repo_implementations.order_repos.mongo_order_repository import MongoOrderRepository
 from src.configs.config import config
 from src.infrastructure.db.mongo import MongoDB, get_db
@@ -39,5 +41,19 @@ def get_mongo_order_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
     return MongoOrderRepository(db, collections_config.order_collection, collections_config.tool_collection,
                                 collections_config.client_collection)
 
+
 def get_mongo_review_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
     return MongoReviewRepository(db, collections_config.review_collection)
+
+
+def get_mongo_im_ex_repo(db: AsyncIOMotorDatabase = Depends(get_db)):
+    return MongoImExRepository(
+        db,
+        collections_config.order_collection,
+        collections_config.tool_collection,
+        collections_config.client_collection,
+        collections_config.worker_collection,
+        collections_config.review_collection,
+        collections_config.category_collection,
+        collections_config.type_collection,
+    )
