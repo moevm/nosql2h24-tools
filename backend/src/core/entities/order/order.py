@@ -111,7 +111,22 @@ class OrderInDB(Order):
 
         allow_population_by_field_name = True
 
+class OrderCreateDB(Order):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the order in the db",
+        alias="_id",
+    )
 
+    client: str = Field(
+        ...,
+        description="Unique identifier of the client in the db"
+    )
+
+    tools: List[str] = Field(
+        ...,
+        description="list of tools"
+    )
 
 class OrderCreated(BaseModel):
     message: str = Field(

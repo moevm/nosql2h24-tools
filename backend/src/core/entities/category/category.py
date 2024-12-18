@@ -35,6 +35,25 @@ class CategoryInDB(Category):
         description="Unique identifier of the category in the db"
     )
 
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
+
+class CategoryCreateDB(Category):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the order in the db",
+        alias="_id",
+    )
+
+    types: List[str] = Field(
+        ...,
+        description="Unique identifier of the order in the db"
+    )
+
 class CategoryCreated(BaseModel):
     message: str = Field(
         default="Category created successfully"
