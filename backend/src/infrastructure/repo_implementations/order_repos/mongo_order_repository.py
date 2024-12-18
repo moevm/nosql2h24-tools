@@ -9,7 +9,7 @@ from src.core.repositories.order_repos.iorder_repository import IOrderRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pymongo.errors import PyMongoError
 
-from src.infrastructure.repo_implementations.helpers.id_mapper import str_to_objectId
+from src.infrastructure.repo_implementations.helpers.id_mapper import str_to_objectId, objectId_to_str
 
 
 class MongoOrderRepository(IOrderRepository):
@@ -64,8 +64,19 @@ class MongoOrderRepository(IOrderRepository):
                  "type": 1, "description": 1}
             ).to_list(length=None)
             tools_model = [ToolSummary(**tool) for tool in tools]
-            order["tools"] = tools_model
-            return OrderSummary(**order)
+            print(order)
+            return OrderSummary(
+                id=objectId_to_str(order["_id"]),
+                price=order["price"],
+                tools=tools,
+                start_leasing=order["start_leasing"],
+                end_leasing=order["end_leasing"],
+                delivery_type=order["delivery_type"],
+                delivery_state=order["delivery_state"],
+                payment_type=order["payment_type"],
+                payment_state=order["payment_state"],
+                create_order_time=order["create_order_time"]
+            )
         except PyMongoError:
             raise DatabaseError()
 

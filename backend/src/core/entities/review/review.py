@@ -128,15 +128,14 @@ class ReviewSummary(BaseModel):
         min_length=4,
         max_length=300
     )
-
-class ReviewPaginated(ReviewSummary):
     tool_name: str = Field(
         ...,
         description="Tool name"
     )
 
+
 class PaginatedReviewsResponse(BaseModel):
-    reviews: List[ReviewPaginated] = Field(
+    reviews: List[ReviewSummary] = Field(
         ...
     )
     totalNumber: int = Field(

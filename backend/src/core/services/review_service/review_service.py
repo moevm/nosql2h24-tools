@@ -1,4 +1,4 @@
-from src.core.entities.review.review import ReviewCreate, ReviewCreated, ReviewSummary, Review, ReviewPaginated, PaginatedReviewsResponse
+from src.core.entities.review.review import ReviewCreate, ReviewCreated, ReviewSummary, Review, PaginatedReviewsResponse
 from typing import List, Optional
 from src.core.exceptions.client_error import ResourceNotFoundError, ResourceAlreadyExistsError, PaymentStateError
 from src.core.repositories.order_repos.iorder_repository import IOrderRepository
@@ -54,13 +54,15 @@ class ReviewService:
 
         for review in reviews:
             client_full_name = await self.client_repo.get_full_name(objectId_to_str(review.reviewerId))
+            tool_name = await self.tool_repo.get_name_by_id(objectId_to_str(review.toolId))
 
             review_summary = ReviewSummary(
                 reviewer_name=client_full_name.name,
                 reviewer_surname=client_full_name.surname,
                 rating=review.rating,
                 date=review.date,
-                text=review.text
+                text=review.text,
+                tool_name=tool_name
             )
             review_summaries.append(review_summary)
 
@@ -110,7 +112,7 @@ class ReviewService:
         for review in reviews:
             tool_name = await self.tool_repo.get_name_by_id(objectId_to_str(review.toolId))
             full_name = await self.client_repo.get_full_name(objectId_to_str(review.reviewerId))
-            result.append(ReviewPaginated(
+            result.append(ReviewSummary(
                 reviewer_name=full_name.name,
                 reviewer_surname=full_name.surname,
                 rating=review.rating,

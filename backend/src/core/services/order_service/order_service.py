@@ -86,7 +86,7 @@ class OrderService:
                 [objectId_to_str(tool) for tool in order.tools])
 
             orders.append(OrderSummary(
-                id=order.id,
+                id=str(order.id),
                 price=order.price,
                 tools=tool_summaries,
                 start_leasing=order.start_leasing,
@@ -153,7 +153,7 @@ class OrderService:
             client_summary = await self.client_repo.get_private_summary_by_id(objectId_to_str(order.client))
 
             orders.append(OrderForWorker(
-                id=order.id,
+                id=str(order.id),
                 price=order.price,
                 tools=tool_summaries,
                 start_leasing=order.start_leasing,
