@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.core.entities.db_model.db_model import DBModel
+from src.core.entities.db_model.db_model import DBModel, DBModelCreate
 
 
 class IImExRepository(ABC):
@@ -9,5 +9,5 @@ class IImExRepository(ABC):
         pass
 
     @abstractmethod
-    async def import_data(self, data: DBModel) -> None:
+    async def import_data(self, data: DBModelCreate) -> None:
         pass

@@ -75,6 +75,20 @@ class ToolInDB(Tool):
         description="Unique identifier of the tool in the db"
     )
 
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
+
+class ToolCreateDB(Tool):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the tool in the db",
+        alias="_id",
+    )
+
 class ToolSummary(BaseModel):
     id: Optional[ObjectIdStr] = Field(
         ...,

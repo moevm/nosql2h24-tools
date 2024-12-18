@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer
 
-from src.core.entities.db_model.db_model import DBModel
+from src.core.entities.db_model.db_model import DBModel, DBModelCreate
 from src.core.services.im_ex_service.im_ex_service import ImExService
 from src.infrastructure.api.client_controller import oauth2_scheme
 from src.infrastructure.api.security.role_required import is_worker
@@ -23,7 +23,9 @@ async def export(
 
 @im_ex_router.post(path="/import", status_code=201, response_model=None)
 async def import_data(
-        data: DBModel,
+        data: DBModelCreate,
         im_ex_service: ImExService = Depends(get_im_ex_service),
+        token: str = Depends(oauth2_scheme),
 ):
+    is_worker(token)
     return await im_ex_service.import_data(data)

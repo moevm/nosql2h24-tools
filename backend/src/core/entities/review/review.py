@@ -1,4 +1,6 @@
 from datetime import datetime, timezone
+
+from bson import ObjectId
 from pydantic import BaseModel, Field
 from typing import Optional
 from src.core.entities.object_id_str import ObjectIdStr
@@ -36,6 +38,30 @@ class ReviewInDB(Review):
         default_factory=ObjectIdStr,
         alias="_id",
         description="Unique identifier of the review in the db"
+    )
+
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
+
+class ReviewCreateDB(Review):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the order in the db",
+        alias="_id",
+    )
+
+    toolId: str = Field(
+        ...,
+        description="Reviewed tool id"
+    )
+
+    reviewerId: str = Field(
+        ...,
+        description="Reviewer tool id"
     )
 
 class ReviewCreate(Review):

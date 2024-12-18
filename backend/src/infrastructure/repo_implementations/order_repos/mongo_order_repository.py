@@ -65,7 +65,6 @@ class MongoOrderRepository(IOrderRepository):
             ).to_list(length=None)
             tools_model = [ToolSummary(**tool) for tool in tools]
             order["tools"] = tools_model
-            print(order)
             return OrderSummary(**order)
         except PyMongoError:
             raise DatabaseError()
