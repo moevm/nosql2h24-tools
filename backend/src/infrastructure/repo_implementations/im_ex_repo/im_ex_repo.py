@@ -1,7 +1,14 @@
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pymongo.errors import PyMongoError
 
+from src.core.entities.category.category import Category
 from src.core.entities.db_model.db_model import DBModel
+from src.core.entities.order.order import Order
+from src.core.entities.review.review import Review
+from src.core.entities.tool.tool import Tool
+from src.core.entities.type.type import Type
+from src.core.entities.users.client.client import Client
+from src.core.entities.users.worker.worker import Worker
 from src.core.exceptions.server_error import DatabaseError
 from src.core.repositories.im_ex_repo.iim_ex_repo import IImExRepository
 
@@ -27,23 +34,25 @@ class MongoImExRepository(IImExRepository):
 
     async def export_data(self) -> DBModel:
         try:
-            workers = await self.worker_collection.find().to_list(None)
-            clients = await self.client_collection.find().to_list(None)
-            tools = await self.tool_collection.find().to_list(None)
-            orders = await self.order_collection.find().to_list(None)
-            categories = await self.category_collection.find().to_list(None)
-            types = await self.type_collection.find().to_list(None)
-            reviews = await self.review_collection.find().to_list(None)
+            # workers = [Worker(**worker) for worker in (await self.worker_collection.find().to_list(None))]
+            # clients = [Client(**client) for client in (await self.client_collection.find().to_list(None))]
+            # tools = [Tool(**tool) for tool in (await self.tool_collection.find().to_list(None))]
+            # orders = [Order(**order) for order in (await self.order_collection.find().to_list(None))]
+            # categories = [Category(**category) for category in (await self.category_collection.find().to_list(None))]
+            # types = [Type(**type) for type in (await self.type_collection.find().to_list(None))]
+            # reviews = [Review(**review)for review in (await self.review_collection.find().to_list(None))]
 
-            return DBModel(
-                workers=workers,
-                clients=clients,
-                tools=tools,
-                orders=orders,
-                categories=categories,
-                types=types,
-                reviews=reviews
+            result = DBModel(
+                # workers=workers,
+                # clients=clients,
+                # tools=tools,
+                # orders=orders,
+                # categories=categories,
+                # types=types,
+                # reviews=reviews
             )
+            print(result)
+            return result
         except PyMongoError:
             raise DatabaseError()
 
@@ -79,4 +88,3 @@ class MongoImExRepository(IImExRepository):
 
         except PyMongoError:
             raise DatabaseError()
-

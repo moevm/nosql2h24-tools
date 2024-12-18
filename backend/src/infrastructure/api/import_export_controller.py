@@ -19,10 +19,10 @@ async def export(
 ):
     return await im_ex_service.export()
 
-@im_ex_router.post(path="/import", status_code=201, response_model=DBModel)
+
+@im_ex_router.post(path="/import", status_code=201, response_model=None)
 async def import_data(
         data: DBModel,
         im_ex_service: ImExService = Depends(get_im_ex_service),
 ):
-
     return await im_ex_service.import_data(data)

@@ -39,6 +39,7 @@ app.include_router(worker_router, prefix="/api/workers", tags=["worker"])
 app.include_router(client_router, prefix="/api/clients", tags=["client"])
 app.include_router(order_router, prefix="/api/orders", tags=["order"])
 app.include_router(review_router, prefix="/api/reviews", tags=["reviews"])
+app.include_router(review_router, prefix="/api/data", tags=["reviews"])
 
 
 app.add_middleware(
