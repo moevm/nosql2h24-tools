@@ -106,7 +106,6 @@ async def get_paginated_orders_for_worker(
 )
 async def get_order(
         order_id: str,
-        order_service: OrderService = Depends(get_order_service),
-        token: str = Depends(oauth2_scheme)
+        order_service: OrderService = Depends(get_order_service)
 ):
     return await order_service.get_order_by_id(order_id)

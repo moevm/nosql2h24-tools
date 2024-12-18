@@ -68,7 +68,6 @@ async def test_create_tool_success(tool_repo, tool):
     assert saved_tool["totalPrice"] == tool.totalPrice
     assert saved_tool["images"] == tool.images
     assert saved_tool["features"] == tool.features
-    assert saved_tool["reviews"] == tool.reviews
     assert saved_tool["rating"] == tool.rating
     assert saved_tool["ordersNumber"] == tool.ordersNumber
     assert saved_tool["category"] == tool.category

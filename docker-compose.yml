@@ -1,42 +1,40 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:7.0
+  db:
     container_name: mongodb
     hostname: mongodb
-#    ports:
-#      - "127.0.0.1:27017:27017" # для просмотра коллекций в mongoDB compass
+    build:
+      context: db
+      dockerfile: Dockerfile
+    image: mongodb_app:0.8
     env_file:
-      - ../../backend/env/dev/.env.dev.db
-      - ../../backend/env/.env.collections
+      - backend/env/dev/.env.dev.db
+      - backend/env/.env.collections
     volumes:
-      - ../init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
       - mongo_data:/data/db
     networks:
       - app_network
 
   backend:
     build:
-      context: ../../backend
+      context: backend
       dockerfile: Dockerfile
     container_name: backend
-    image: backend_app:1.0
+    image: backend_app:0.8
     ports:
      - "127.0.0.1:8000:8000"
     depends_on:
-      - mongodb
-    volumes:
-      - resources_data:/app/resources
+      - db
     networks:
       - app_network
 
   frontend:
     build:
-      context: ../../frontend
+      context: frontend
       dockerfile: Dockerfile
     container_name: frontend
-    image: frontend_app:1.0
+    image: frontend_app:0.8
     ports:
       - "127.0.0.1:5173:5173"
     depends_on:
@@ -46,7 +44,6 @@ services:
 
 volumes:
   mongo_data:
-  resources_data:
 
 networks:
   app_network:

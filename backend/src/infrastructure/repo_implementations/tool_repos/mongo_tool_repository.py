@@ -112,7 +112,7 @@ class MongoToolRepository(IToolRepository):
             pipeline = [
                 match_stage,
                 {"$addFields": {"score": {"$meta": "textScore"}}},
-                {"$sort": {"score": -1}},
+                {"$sort": {"score": -1, "_id": 1}},
                 {"$skip": skip},
                 {"$limit": page_size},
                 {"$project": {
@@ -219,5 +219,19 @@ class MongoToolRepository(IToolRepository):
                 results.append(ToolSummary(**doc))
 
             return results
+        except PyMongoError:
+            raise DatabaseError()
+
+    async def update_rating(self, tool_id: str, new_rating: float) -> None:
+        try:
+            tool_data = await self.tool_collection.find_one({"_id": str_to_objectId(tool_id)}, {"rating": 1, "reviews_count": 1})
+
+            updated_reviews_count = tool_data["reviews_count"] + 1
+            updated_rating = (tool_data["rating"] * tool_data["reviews_count"] + new_rating) / updated_reviews_count
+
+            await self.tool_collection.update_one(
+                {"_id": str_to_objectId(tool_id)},
+                {"$set": {"rating": updated_rating, "reviews_count": updated_reviews_count}}
+            )
         except PyMongoError:
             raise DatabaseError()

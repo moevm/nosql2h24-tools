@@ -26,13 +26,12 @@ class Tool(BaseModel):
         default=None,
         description="Tool features dictionary"
     )
-    reviews: List[ObjectIdStr] = Field(
-        default=None,
-        description="List of review identifiers for this tool from the review collection"
-    )
     rating: float = Field(
         default=0.0,
         description="Average tool rating"
+    )
+    reviews_count: int = Field(
+        default=0
     )
     ordersNumber: int = Field(
         default=0,

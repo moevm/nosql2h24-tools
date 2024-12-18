@@ -25,6 +25,7 @@ class OrderService:
             if not await self.tool_repo.exists(tool.name):
                 raise ResourceNotFoundError("Provided tool doesn't exist", details={"tool name": tool.name})
         tools = [await self.tool_repo.get_tool_by_id(tool_id) for tool_id in order.tools]
+
         new_order = Order(
             tools=list(map(str_to_objectId, order.tools)),
             start_leasing=order.start_leasing,

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  test_db:
+    container_name: test_mongodb
+    hostname: test_mongodb
+    build:
+      context: ../db
+      dockerfile: Dockerfile
+    image: test_mongodb_app:0.8
+    env_file:
+      - env/test/.env.test.db
+      - env/.env.collections
+    networks:
+      - test_network
+
+  test_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: test_backend
+    image: test_backend_app:0.8
+    depends_on:
+      - test_db
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    driver: bridge

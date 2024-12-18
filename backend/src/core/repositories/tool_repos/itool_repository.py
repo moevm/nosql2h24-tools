@@ -70,3 +70,7 @@ class IToolRepository(ABC):
     @abstractmethod
     async def get_tools_summaries_by_ids(self, tool_ids: List[str]) -> List[ToolSummary]:
         pass
+
+    @abstractmethod
+    async def update_rating(self, tool_id: str, new_rating: float) -> None:
+        pass

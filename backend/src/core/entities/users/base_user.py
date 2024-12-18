@@ -60,7 +60,7 @@ class BaseUserPrivateSummary(BaseModel):
         ...,
         description="User's last name",
     )
-    phone: str = Field(
+    phone: Optional[str] = Field(
         ...,
         description="User's phone number",
     )

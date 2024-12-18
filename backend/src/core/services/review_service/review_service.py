@@ -39,6 +39,7 @@ class ReviewService:
             )
         )
 
+        await self.tool_repo.update_rating(tool_id=review.toolId, new_rating=review.rating)
 
         return ReviewCreated(
             review_id=review_id
