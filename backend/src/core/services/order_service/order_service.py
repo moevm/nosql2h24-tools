@@ -175,5 +175,5 @@ class OrderService:
         )
 
 
-    async def get_order_by_id(self, order_id: str) -> Order:
+    async def get_order_by_id(self, order_id: str) -> Optional[OrderSummary]:
         return await self.order_repo.get_order_by_id(order_id)

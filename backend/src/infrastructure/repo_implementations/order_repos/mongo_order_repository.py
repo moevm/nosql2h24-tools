@@ -51,14 +51,22 @@ class MongoOrderRepository(IOrderRepository):
             raise DatabaseError()
 
 
-    async def get_order_by_id(self, order_id: str) -> Optional[Order]:
+    async def get_order_by_id(self, order_id: str) -> Optional[OrderSummary]:
         try:
             obj_id = str_to_objectId(order_id)
             order = await self.order_collection.find_one({"_id": obj_id})
             if not order:
                 return None
+            tools_id = order.get("tools", [])
+            tools = await self.tool_collection.find(
+                {"_id": {"$in": tools_id}},
+                {"_id": 1, "name": 1, "dailyPrice": 1, "images": 1, "features": 1, "rating": 1, "category": 1,
+                 "type": 1, "description": 1}
+            ).to_list(length=None)
+            tools_model = [ToolSummary(**tool) for tool in tools]
+            order["tools"] = tools_model
             print(order)
-            return Order(**order)
+            return OrderSummary(**order)
         except PyMongoError:
             raise DatabaseError()
 

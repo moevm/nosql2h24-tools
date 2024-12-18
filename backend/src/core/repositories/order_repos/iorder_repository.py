@@ -15,7 +15,7 @@ class IOrderRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_order_by_id(self, order_id: str) -> Order:
+    async def get_order_by_id(self, order_id: str) -> Optional[OrderSummary]:
         pass
 
     @abstractmethod
