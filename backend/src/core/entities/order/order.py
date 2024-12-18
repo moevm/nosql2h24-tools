@@ -123,11 +123,8 @@ class OrderCreated(BaseModel):
     )
 
 class OrderSummary(BaseModel):
-    id: Optional[ObjectIdStr] = Field(
-        ...,
-        default_factory=ObjectIdStr,
-        alias="_id",
-        description="Unique identifier of order"
+    id: str = Field(
+        ...
     )
     price: float = Field(
         default=None,

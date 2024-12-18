@@ -86,7 +86,7 @@ class OrderService:
                 [objectId_to_str(tool) for tool in order.tools])
 
             orders.append(OrderSummary(
-                id=order.id,
+                id=str(order.id),
                 price=order.price,
                 tools=tool_summaries,
                 start_leasing=order.start_leasing,
