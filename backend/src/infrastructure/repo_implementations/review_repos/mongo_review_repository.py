@@ -1,6 +1,6 @@
 from unittest import skipIf
 
-from src.core.entities.review.review import ReviewCreate, Review, ReviewPaginated
+from src.core.entities.review.review import ReviewCreate, Review
 from src.core.repositories.review_repos.ireview_repository import IReviewRepository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from src.core.exceptions.server_error import DatabaseError
