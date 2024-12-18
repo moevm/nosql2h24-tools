@@ -42,10 +42,13 @@ http://localhost:8000/docs
 - **email**: `worker@example.com`
 - **password**:  `worker_123`
 
-### Client
-- **email**: `client@example.com`
-- **password**:  `client_123`
-
+### Clients
+1. - **email**: `client_1@example.com`
+   - **password**:  `client_1`
+2. - **email**: `client_2@example.com`
+   - **password**:  `client_2`
+3. - **email**: `client_3@example.com`
+   - **password**:  `client_3`
 
 
 ## Run backend tests using docker

@@ -30,31 +30,21 @@ db.getCollection(process.env.WORKER_COLLECTION).insertOne(
         "surname": "Иванов",
         "phone": "+71234567890",
         "jobTitle": "Главный работник",
-        "date": {
-            "$date": "2024-11-28T15:39:13.05Z"
-        },
+        "date": ISODate("2024-11-28T15:39:13.05Z"),
         "image": "http://localhost:8080/api/resources/images/workers/c0999ff2f2c730678f0356603e424516b674ccb0d599b87dedb7a9a1bc89646f/1.png",
-        "created_at": {
-            "$date": "2024-11-28T15:39:13.05Z"
-        },
-        "updated_at": {
-            "$date": "2024-11-28T15:39:13.05Z"
-        }
+        "created_at": ISODate("2024-11-28T15:39:13.05Z"),
+        "updated_at": ISODate("2024-11-28T15:39:13.05Z")
     }
 );
 
-db.getCollection(process.env.WORKER_COLLECTION).insertMany([
+db.getCollection(process.env.CLIENT_COLLECTION).insertMany([
 	{
 		"_id": ObjectId("6762d6a2f6292fe72b752b5e"),
 
 		"email": "client_1@example.com",
 		"password": "$2b$12$.RzxPWac/e4RISJEnw69YuqMw8PLmBACZdGWZPeLAIw6M.IiWT4rq",
-		"created_at": {
-			"$date": "2024-12-18T14:05:22.519Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:10:29.924Z"
-		},
+		"created_at": ISODate("2024-12-18T14:05:22.519Z"),
+		"updated_at": ISODate("2024-12-18T14:10:29.924Z"),
 		"name": "Иван",
 		"surname": "Петров",
 		"phone": "+79161234567",
@@ -65,12 +55,8 @@ db.getCollection(process.env.WORKER_COLLECTION).insertMany([
 
 		"email": "client_2@example.com",
 		"password": "$2b$12$pWggz5PL/5gtaRrS56nNPupZfyKB/DCcNznf/.au4KCoEhZLpGLnm",
-		"created_at": {
-			"$date": "2024-12-18T14:06:17.859Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:10:53.606Z"
-		},
+		"created_at": ISODate("2024-12-18T14:06:17.859Z"),
+		"updated_at": ISODate("2024-12-18T14:10:53.606Z"),
 		"name": "Ольга",
 		"surname": "Смирнова",
 		"phone": "+79991234567",
@@ -81,12 +67,8 @@ db.getCollection(process.env.WORKER_COLLECTION).insertMany([
 
 		"email": "client_3@example.com",
 		"password": "$2b$12$Ujrol9/uLzk8tV6rn5S.w.mAJJFhjO1OtO.IwpT5WRk1g/XZt41s.",
-		"created_at": {
-			"$date": "2024-12-18T14:06:35.724Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:11:20.467Z"
-		},
+		"created_at": ISODate("2024-12-18T14:06:35.724Z"),
+		"updated_at": ISODate("2024-12-18T14:11:20.467Z"),
 		"name": "Алексей",
 		"surname": "Васильев",
 		"phone": "+79271234567",
@@ -157,11 +139,6 @@ db.getCollection(process.env.TYPE_COLLECTION).insertMany([
 		"name": "Молоток",
 		"category_name": "Ручной инструмент",
 		"tools": [
-			ObjectId("6762db09d5595612f0a21204"),
-
-			ObjectId("6762db74d5595612f0a21205"),
-
-			ObjectId("6762db80d5595612f0a21206"),
 
 			ObjectId("6762db8ad5595612f0a21207"),
 
@@ -339,12 +316,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Молоток",
 		"description": "Многофункциональный молоток с гвоздодером. Подходит для легких строительных работ и ремонта.",
-		"created_at": {
-			"$date": "2024-12-18T14:26:18.458Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:26:18.458Z"
-		},
+		"created_at": ISODate("2024-12-18T14:26:18.458Z"),
+		"updated_at": ISODate("2024-12-18T14:26:18.458Z"),
 		"reviews_count": 2
 	},
 	{
@@ -364,12 +337,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Молоток",
 		"description": "Тяжелый молоток для выполнения слесарных работ. Удобная двухкомпонентная ручка снижает вибрацию при работе.",
-		"created_at": {
-			"$date": "2024-12-18T14:27:51.127Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:27:51.127Z"
-		},
+		"created_at": ISODate("2024-12-18T14:27:51.127Z"),
+		"updated_at": ISODate("2024-12-18T14:27:51.127Z"),
 		"reviews_count": 2
 	},
 	{
@@ -389,12 +358,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Молоток",
 		"description": "Легкий молоток, идеально подходящий для столярных и плотницких работ. Деревянная ручка обеспечивает комфортный захват.",
-		"created_at": {
-			"$date": "2024-12-18T14:27:59.391Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:27:59.391Z"
-		},
+		"created_at": ISODate("2024-12-18T14:27:59.391Z"),
+		"updated_at": ISODate("2024-12-18T14:27:59.391Z"),
 		"reviews_count": 1
 	},
 	{
@@ -414,12 +379,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Отвертка",
 		"description": "Качественная крестовая отвертка для сборки мебели и ремонта. Удобная ручка обеспечивает надежный хват.",
-		"created_at": {
-			"$date": "2024-12-18T14:28:24.878Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:28:24.878Z"
-		},
+		"created_at": ISODate("2024-12-18T14:28:24.878Z"),
+		"updated_at": ISODate("2024-12-18T14:28:24.878Z"),
 		"reviews_count": 0
 	},
 	{
@@ -439,12 +400,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Отвертка",
 		"description": "Прочная плоская отвертка для мелких бытовых и профессиональных работ. Подходит для любых стандартных крепежей.",
-		"created_at": {
-			"$date": "2024-12-18T14:28:37.612Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:28:37.612Z"
-		},
+		"created_at": ISODate("2024-12-18T14:28:37.612Z"),
+		"updated_at": ISODate("2024-12-18T14:28:37.612Z"),
 		"reviews_count": 1
 	},
 	{
@@ -464,12 +421,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Отвертка",
 		"description": "Отвертка с комплектом сменных бит, идеальна для универсального использования. Надежный инструмент для дома и работы.",
-		"created_at": {
-			"$date": "2024-12-18T14:28:55.614Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:28:55.614Z"
-		},
+		"created_at": ISODate("2024-12-18T14:28:55.614Z"),
+		"updated_at": ISODate("2024-12-18T14:28:55.614Z"),
 		"reviews_count": 1
 	},
 	{
@@ -489,12 +442,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Рожковый ключ",
 		"description": "Универсальный рожковый ключ для работы с крепежами среднего размера. Прочный и удобный в использовании.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:08.978Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:08.978Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:08.978Z"),
+		"updated_at": ISODate("2024-12-18T14:29:08.978Z"),
 		"reviews_count": 1
 	},
 	{
@@ -514,12 +463,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Рожковый ключ",
 		"description": "Комбинированный ключ с двумя рабочими поверхностями. Подходит для профессионального использования.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:14.567Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:14.567Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:14.567Z"),
+		"updated_at": ISODate("2024-12-18T14:29:14.567Z"),
 		"reviews_count": 0
 	},
 	{
@@ -539,12 +484,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Ручной инструмент",
 		"type": "Рожковый ключ",
 		"description": "Прочный и надежный рожковый ключ для работы с крупногабаритными крепежами. Подходит для автосервиса и строительства.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:20.463Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:20.463Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:20.463Z"),
+		"updated_at": ISODate("2024-12-18T14:29:20.463Z"),
 		"reviews_count": 0
 	},
 	{
@@ -564,12 +505,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Дрель",
 		"description": "Компактная ударная дрель от Bosch для работы с бетоном, деревом и металлом. Эргономичная ручка для комфортной работы.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:29.832Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:29.832Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:29.832Z"),
+		"updated_at": ISODate("2024-12-18T14:29:29.832Z"),
 		"reviews_count": 0
 	},
 	{
@@ -589,12 +526,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Дрель",
 		"description": "Мощная дрель от DeWalt с высокой производительностью. Подходит для интенсивного использования на стройке.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:34.365Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:34.365Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:34.365Z"),
+		"updated_at": ISODate("2024-12-18T14:29:34.365Z"),
 		"reviews_count": 0
 	},
 	{
@@ -617,12 +550,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Дрель",
 		"description": "Аккумуляторная дрель-шуруповерт от Makita. Идеальный инструмент для сборки мебели и мелких работ.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:40.82Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:40.82Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:40.82Z"),
+		"updated_at": ISODate("2024-12-18T14:29:40.82Z"),
 		"reviews_count": 0
 	},
 	{
@@ -642,12 +571,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Болгарка",
 		"description": "Компактная болгарка для точной резки и шлифовки металла и камня. Эргономичный дизайн обеспечивает комфортную работу.",
-		"created_at": {
-			"$date": "2024-12-18T14:29:59.731Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:29:59.731Z"
-		},
+		"created_at": ISODate("2024-12-18T14:29:59.731Z"),
+		"updated_at": ISODate("2024-12-18T14:29:59.731Z"),
 		"reviews_count": 1
 	},
 	{
@@ -667,12 +592,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Болгарка",
 		"description": "Удобная и мощная углошлифовальная машина, предназначенная для различных строительных и ремонтных работ.",
-		"created_at": {
-			"$date": "2024-12-18T14:30:07.428Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:30:07.428Z"
-		},
+		"created_at": ISODate("2024-12-18T14:30:07.428Z"),
+		"updated_at": ISODate("2024-12-18T14:30:07.428Z"),
 		"reviews_count": 0
 	},
 	{
@@ -692,12 +613,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Болгарка",
 		"description": "Мощная болгарка с компактными размерами, идеальная для профессиональных работ с металлом и бетоном.",
-		"created_at": {
-			"$date": "2024-12-18T14:30:27.499Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:30:27.499Z"
-		},
+		"created_at": ISODate("2024-12-18T14:30:27.499Z"),
+		"updated_at": ISODate("2024-12-18T14:30:27.499Z"),
 		"reviews_count": 0
 	},
 	{
@@ -717,12 +634,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Перфоратор",
 		"description": "Перфоратор для тяжелых строительных работ. Обеспечивает мощное долбление и высокую производительность.",
-		"created_at": {
-			"$date": "2024-12-18T14:30:48.504Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:30:48.504Z"
-		},
+		"created_at": ISODate("2024-12-18T14:30:48.504Z"),
+		"updated_at": ISODate("2024-12-18T14:30:48.504Z"),
 		"reviews_count": 0
 	},
 	{
@@ -742,12 +655,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Перфоратор",
 		"description": "Универсальный перфоратор от Makita для работы с бетоном, кирпичом и металлом. Надежный инструмент для строительных задач.",
-		"created_at": {
-			"$date": "2024-12-18T14:30:57.622Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:30:57.622Z"
-		},
+		"created_at": ISODate("2024-12-18T14:30:57.622Z"),
+		"updated_at": ISODate("2024-12-18T14:30:57.622Z"),
 		"reviews_count": 1
 	},
 	{
@@ -767,12 +676,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Электроинструмент",
 		"type": "Перфоратор",
 		"description": "Мощный перфоратор DeWalt для интенсивного использования. Обеспечивает высокую производительность и комфорт в работе.",
-		"created_at": {
-			"$date": "2024-12-18T14:31:01.918Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:31:01.918Z"
-		},
+		"created_at": ISODate("2024-12-18T14:31:01.918Z"),
+		"updated_at": ISODate("2024-12-18T14:31:01.918Z"),
 		"reviews_count": 0
 	},
 	{
@@ -792,12 +697,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Измерительные инструменты",
 		"type": "Рулетка",
 		"description": "Классическая рулетка с прочной лентой для строительных и бытовых нужд. Обеспечивает точные измерения.",
-		"created_at": {
-			"$date": "2024-12-18T14:31:07.66Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:31:07.66Z"
-		},
+		"created_at": ISODate("2024-12-18T14:31:07.66Z"),
+		"updated_at": ISODate("2024-12-18T14:31:07.66Z"),
 		"reviews_count": 0
 	},
 	{
@@ -820,12 +721,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Измерительные инструменты",
 		"type": "Рулетка",
 		"description": "Лазерная рулетка для измерения больших расстояний с высокой точностью. Подходит для профессионалов и любителей.",
-		"created_at": {
-			"$date": "2024-12-18T14:31:17.525Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:31:17.525Z"
-		},
+		"created_at": ISODate("2024-12-18T14:31:17.525Z"),
+		"updated_at": ISODate("2024-12-18T14:31:17.525Z"),
 		"reviews_count": 0
 	},
 	{
@@ -845,12 +742,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Измерительные инструменты",
 		"type": "Рулетка",
 		"description": "Рулетка с увеличенной длиной для профессионального использования. Эргономичный корпус для удобства.",
-		"created_at": {
-			"$date": "2024-12-18T14:31:52.889Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:31:52.889Z"
-		},
+		"created_at": ISODate("2024-12-18T14:31:52.889Z"),
+		"updated_at": ISODate("2024-12-18T14:31:52.889Z"),
 		"reviews_count": 0
 	},
 	{
@@ -870,12 +763,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Измерительные инструменты",
 		"type": "Уровень",
 		"description": "Компактный строительный уровень для точных измерений. Подходит для использования дома и на стройке.",
-		"created_at": {
-			"$date": "2024-12-18T14:32:28.599Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:32:28.599Z"
-		},
+		"created_at": ISODate("2024-12-18T14:32:28.599Z"),
+		"updated_at": ISODate("2024-12-18T14:32:28.599Z"),
 		"reviews_count": 0
 	},
 	{
@@ -895,12 +784,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Измерительные инструменты",
 		"type": "Уровень",
 		"description": "Магнитный уровень с прочным корпусом, идеально подходит для работы с металлическими конструкциями.",
-		"created_at": {
-			"$date": "2024-12-18T14:32:34.536Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:32:34.536Z"
-		},
+		"created_at": ISODate("2024-12-18T14:32:34.536Z"),
+		"updated_at": ISODate("2024-12-18T14:32:34.536Z"),
 		"reviews_count": 0
 	},
 	{
@@ -920,12 +805,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Измерительные инструменты",
 		"type": "Уровень",
 		"description": "Лазерный уровень для точного выравнивания линий на строительных площадках. Компактный и удобный в использовании.",
-		"created_at": {
-			"$date": "2024-12-18T14:32:44.504Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:32:44.504Z"
-		},
+		"created_at": ISODate("2024-12-18T14:32:44.504Z"),
+		"updated_at": ISODate("2024-12-18T14:32:44.504Z"),
 		"reviews_count": 0
 	},
 	{
@@ -945,12 +826,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Очки защитные",
 		"description": "Прочные защитные очки для работы с электроинструментами. Защищают глаза от пыли и осколков.",
-		"created_at": {
-			"$date": "2024-12-18T14:33:40.545Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:33:40.545Z"
-		},
+		"created_at": ISODate("2024-12-18T14:33:40.545Z"),
+		"updated_at": ISODate("2024-12-18T14:33:40.545Z"),
 		"reviews_count": 0
 	},
 	{
@@ -970,12 +847,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Очки защитные",
 		"description": "Легкие очки с УФ-защитой для использования в разных условиях. Регулируемые дужки обеспечивают комфортную посадку.",
-		"created_at": {
-			"$date": "2024-12-18T14:33:48.3Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:33:48.3Z"
-		},
+		"created_at": ISODate("2024-12-18T14:33:48.3Z"),
+		"updated_at": ISODate("2024-12-18T14:33:48.3Z"),
 		"reviews_count": 0
 	},
 	{
@@ -995,12 +868,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Очки защитные",
 		"description": "Закрытые очки с вентиляцией для защиты от пыли и мелких частиц. Подходят для строительных и ремонтных работ.",
-		"created_at": {
-			"$date": "2024-12-18T14:33:54.824Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:33:54.824Z"
-		},
+		"created_at": ISODate("2024-12-18T14:33:54.824Z"),
+		"updated_at": ISODate("2024-12-18T14:33:54.824Z"),
 		"reviews_count": 0
 	},
 	{
@@ -1023,12 +892,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Каска",
 		"description": "Прочная строительная каска с регулируемым размером. Надежная защита головы на стройплощадке.",
-		"created_at": {
-			"$date": "2024-12-18T14:34:03.882Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:34:03.882Z"
-		},
+		"created_at": ISODate("2024-12-18T14:34:03.882Z"),
+		"updated_at": ISODate("2024-12-18T14:34:03.882Z"),
 		"reviews_count": 0
 	},
 	{
@@ -1048,12 +913,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Каска",
 		"description": "Ударопрочная каска с вентиляцией для работы на высоте. Обеспечивает комфорт и надежную защиту.",
-		"created_at": {
-			"$date": "2024-12-18T14:34:11.83Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:34:11.83Z"
-		},
+		"created_at": ISODate("2024-12-18T14:34:11.83Z"),
+		"updated_at": ISODate("2024-12-18T14:34:11.83Z"),
 		"reviews_count": 0
 	},
 	{
@@ -1073,12 +934,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Каска",
 		"description": "Каска с козырьком для работы на открытых площадках. Защищает от солнца и ударов.",
-		"created_at": {
-			"$date": "2024-12-18T14:34:16.941Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:34:16.941Z"
-		},
+		"created_at": ISODate("2024-12-18T14:34:16.941Z"),
+		"updated_at": ISODate("2024-12-18T14:34:16.941Z"),
 		"reviews_count": 0
 	},
 	{
@@ -1098,12 +955,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Перчатки рабочие",
 		"description": "Прочные нитриловые перчатки, подходящие для работы с химикатами. Отлично защищают руки и обеспечивают комфорт.",
-		"created_at": {
-			"$date": "2024-12-18T14:34:22.213Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:34:22.213Z"
-		},
+		"created_at": ISODate("2024-12-18T14:34:22.213Z"),
+		"updated_at": ISODate("2024-12-18T14:34:22.213Z"),
 		"reviews_count": 0
 	},
 	{
@@ -1123,12 +976,8 @@ db.getCollection(process.env.TOOL_COLLECTION).insertMany([
 		"category": "Защитное оборудование",
 		"type": "Перчатки рабочие",
 		"description": "Кожаные перчатки, обеспечивающие надежную защиту при сварочных работах. Выдерживают высокие температуры.",
-		"created_at": {
-			"$date": "2024-12-18T14:34:49.124Z"
-		},
-		"updated_at": {
-			"$date": "2024-12-18T14:34:49.124Z"
-		},
+		"created_at": ISODate("2024-12-18T14:34:49.124Z"),
+		"updated_at": ISODate("2024-12-18T14:34:49.124Z"),
 		"reviews_count": 0
 	}
 ]);
@@ -1144,12 +993,8 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 			ObjectId("6762dbe7d5595612f0a21208")
 
 		],
-		"start_leasing": {
-			"$date": "2024-12-12T15:00:35.437Z"
-		},
-		"end_leasing": {
-			"$date": "2024-12-30T15:00:35.437Z"
-		},
+		"start_leasing": ISODate("2024-12-12T15:00:35.437Z"),
+		"end_leasing": ISODate("2024-12-30T15:00:35.437Z"),
 		"price": 1620.0,
 		"client": ObjectId("6762d6a2f6292fe72b752b5e"),
 
@@ -1157,9 +1002,7 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 		"delivery_state": "delivered",
 		"payment_type": "cash",
 		"payment_state": "paid",
-		"create_order_time": {
-			"$date": "2024-12-12T15:00:35.437Z"
-		}
+		"create_order_time": ISODate("2024-12-12T15:00:35.437Z")
 	},
 	{
 		"_id": ObjectId("6762e517561db75d683b6941"),
@@ -1174,12 +1017,8 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 			ObjectId("6762dc34d5595612f0a2120d")
 
 		],
-		"start_leasing": {
-			"$date": "2024-12-12T15:00:35.437Z"
-		},
-		"end_leasing": {
-			"$date": "2025-01-30T15:00:35.437Z"
-		},
+		"start_leasing": ISODate("2024-12-12T15:00:35.437Z"),
+		"end_leasing": ISODate("2025-01-30T15:00:35.437Z"),
 		"price": 7105.0,
 		"client": ObjectId("6762d6d9f6292fe72b752b5f"),
 
@@ -1187,9 +1026,7 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 		"delivery_state": "delivered",
 		"payment_type": "cash",
 		"payment_state": "paid",
-		"create_order_time": {
-			"$date": "2024-12-12T15:00:35.437Z"
-		}
+		"create_order_time": ISODate("2024-12-12T15:00:35.437Z")
 	},
 	{
 		"_id": ObjectId("6762f80747f9d95025a19268"),
@@ -1200,12 +1037,8 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 			ObjectId("6762dc34d5595612f0a2120d")
 
 		],
-		"start_leasing": {
-			"$date": "2024-12-18T10:00:00Z"
-		},
-		"end_leasing": {
-			"$date": "2024-12-25T10:00:00Z"
-		},
+		"start_leasing": ISODate("2024-12-18T10:00:00Z"),
+		"end_leasing": ISODate("2024-12-25T10:00:00Z"),
 		"price": 275.0,
 		"client": ObjectId("6762d6a2f6292fe72b752b5e"),
 
@@ -1213,9 +1046,7 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 		"delivery_state": "delivered",
 		"payment_type": "cash",
 		"payment_state": "paid",
-		"create_order_time": {
-			"$date": "2024-12-18T10:00:00Z"
-		}
+		"create_order_time": ISODate("2024-12-18T10:00:00Z")
 	},
 	{
 		"_id": ObjectId("6762f94047f9d95025a1926b"),
@@ -1226,12 +1057,8 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 			ObjectId("6762dc27d5595612f0a2120c")
 
 		],
-		"start_leasing": {
-			"$date": "2024-12-18T15:00:00Z"
-		},
-		"end_leasing": {
-			"$date": "2024-12-20T15:00:00Z"
-		},
+		"start_leasing": ISODate("2024-12-18T15:00:00Z"),
+		"end_leasing": ISODate("2024-12-20T15:00:00Z"),
 		"price": 130.0,
 		"client": ObjectId("6762d6d9f6292fe72b752b5f"),
 
@@ -1239,9 +1066,7 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 		"delivery_state": "delivered",
 		"payment_type": "cash",
 		"payment_state": "paid",
-		"create_order_time": {
-			"$date": "2024-12-18T15:00:00Z"
-		}
+		"create_order_time": ISODate("2024-12-18T15:00:00Z")
 	},
 	{
 		"_id": ObjectId("6762f98747f9d95025a1926e"),
@@ -1252,12 +1077,8 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 			ObjectId("6762dca1d5595612f0a21217")
 
 		],
-		"start_leasing": {
-			"$date": "2024-12-18T16:34:15.069Z"
-		},
-		"end_leasing": {
-			"$date": "2025-01-01T15:00:00Z"
-		},
+		"start_leasing": ISODate("2024-12-18T16:34:15.069Z"),
+		"end_leasing": ISODate("2025-01-01T15:00:00Z"),
 		"price": 11050.0,
 		"client": ObjectId("6762d6d9f6292fe72b752b5f"),
 
@@ -1265,9 +1086,7 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 		"delivery_state": "delivered",
 		"payment_type": "cash",
 		"payment_state": "paid",
-		"create_order_time": {
-			"$date": "2024-12-18T16:34:15.069Z"
-		}
+		"create_order_time": ISODate("2024-12-18T16:34:15.069Z")
 	},
 	{
 		"_id": ObjectId("6762fda347f9d95025a1926f"),
@@ -1278,12 +1097,8 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 			ObjectId("6762dca1d5595612f0a21217")
 
 		],
-		"start_leasing": {
-			"$date": "2024-12-18T16:51:47.919Z"
-		},
-		"end_leasing": {
-			"$date": "2025-01-01T15:00:00Z"
-		},
+		"start_leasing": ISODate("2024-12-18T16:51:47.919Z"),
+		"end_leasing": ISODate("2025-01-01T15:00:00Z"),
 		"price": 11050.0,
 		"client": ObjectId("6762d6d9f6292fe72b752b5f"),
 
@@ -1291,9 +1106,7 @@ db.getCollection(process.env.ORDER_COLLECTION).insertMany([
 		"delivery_state": "delivered",
 		"payment_type": "cash",
 		"payment_state": "paid",
-		"create_order_time": {
-			"$date": "2024-12-18T19:51:47.922Z"
-		}
+		"create_order_time": ISODate("2024-12-18T19:51:47.922Z")
 	}
 ]);
 
@@ -1307,9 +1120,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6a2f6292fe72b752b5e"),
 
 		"rating": 4,
-		"date": {
-			"$date": "2024-12-19T15:22:28.835Z"
-		},
+		"date": ISODate("2024-12-19T15:22:28.835Z"),
 		"text": "Очень удобный молоток-гвоздодер! Ручка не скользит, а вес идеально подходит для работы. Однако металл на гвоздодере немного мягче, чем ожидалось, и чуть согнулся после работы с твердыми гвоздями."
 	},
 	{
@@ -1320,9 +1131,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6d9f6292fe72b752b5f"),
 
 		"rating": 2,
-		"date": {
-			"$date": "2024-12-18T15:22:28.835Z"
-		},
+		"date": ISODate("2024-12-18T15:22:28.835Z"),
 		"text": "Молоток оказался неудобным в использовании. Ручка хоть и прорезиненная, но скользит в руках при длительной работе. Гвоздодер согнулся после первой же попытки вытащить плотный гвоздь. За такую цену ожидал большего качества."
 	},
 	{
@@ -1333,9 +1142,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6a2f6292fe72b752b5e"),
 
 		"rating": 5,
-		"date": {
-			"$date": "2024-12-19T15:22:28.835Z"
-		},
+		"date": ISODate("2024-12-19T15:22:28.835Z"),
 		"text": "Отличный молоток! Прочный, тяжелый и идеально подходит для слесарных работ. Двухкомпонентная ручка действительно снижает вибрацию, работать с ним комфортно даже длительное время. Полностью доволен покупкой."
 	},
 	{
@@ -1346,9 +1153,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6d9f6292fe72b752b5f"),
 
 		"rating": 4,
-		"date": {
-			"$date": "2024-12-18T15:22:28.835Z"
-		},
+		"date": ISODate("2024-12-18T15:22:28.835Z"),
 		"text": "Хороший молоток, тяжёлый и качественный. Ручка удобная, но покрытие немного стирается после долгого использования. В остальном инструмент оправдал ожидания."
 	},
 	{
@@ -1359,9 +1164,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6a2f6292fe72b752b5e"),
 
 		"rating": 4,
-		"date": {
-			"$date": "2024-12-26T10:00:00Z"
-		},
+		"date": ISODate("2024-12-26T10:00:00Z"),
 		"text": "Отличный столярный молоток, но немного легковат для крупных задач."
 	},
 	{
@@ -1372,9 +1175,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6a2f6292fe72b752b5e"),
 
 		"rating": 5,
-		"date": {
-			"$date": "2024-12-26T10:00:00Z"
-		},
+		"date": ISODate("2024-12-26T10:00:00Z"),
 		"text": "Ключ удобный, антикоррозийное покрытие работает отлично. Рекомендую!"
 	},
 	{
@@ -1385,9 +1186,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6d9f6292fe72b752b5f"),
 
 		"rating": 4,
-		"date": {
-			"$date": "2024-12-22T10:00:00Z"
-		},
+		"date": ISODate("2024-12-22T10:00:00Z"),
 		"text": "Отвертка плоская оказалась надежной, но ручка чуть скользила."
 	},
 	{
@@ -1398,9 +1197,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6d9f6292fe72b752b5f"),
 
 		"rating": 5,
-		"date": {
-			"$date": "2024-12-22T10:00:00Z"
-		},
+		"date": ISODate("2024-12-22T10:00:00Z"),
 		"text": "Набор бит Kraftool спас много раз. Отличный инструмент!"
 	},
 	{
@@ -1411,9 +1208,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6d9f6292fe72b752b5f"),
 
 		"rating": 5,
-		"date": {
-			"$date": "2025-01-02T15:00:00Z"
-		},
+		"date": ISODate("2025-01-02T15:00:00Z"),
 		"text": "Шлифмашина Bosch показала себя идеально! Рекомендую."
 	},
 	{
@@ -1424,9 +1219,7 @@ db.getCollection(process.env.REVIEW_COLLECTION).insertMany([
 		"reviewerId": ObjectId("6762d6d9f6292fe72b752b5f"),
 
 		"rating": 4,
-		"date": {
-			"$date": "2025-01-02T15:00:00Z"
-		},
+		"date": ISODate("2025-01-02T15:00:00Z"),
 		"text": "Перфоратор мощный, но немного тяжеловат для долгой работы."
 	}
 ]);
