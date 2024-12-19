@@ -15,6 +15,9 @@
                     style="display: block; margin-bottom: 15px;"
                 />
             </div>
+            <button @click="handleImport" class="export-button">
+                Import
+            </button>
 
             <button @click="handleExport" class="export-button">
                 Export
@@ -61,7 +64,7 @@
 </template>
 
 <script>
-import {exportData} from "@/services/importExport.js";
+import {exportData, importData} from "@/services/importExport.js";
 
 export default {
     name: 'AdminSideBar',
@@ -87,14 +90,19 @@ export default {
             reader.onload = (e) => {
                 try {
                     const jsonData = JSON.parse(e.target.result);
-                    console.log('Прочитанные данные JSON:', jsonData);
                     this.uploadedJsonData = jsonData;
-                    // Здесь вы можете добавить отправку данных на сервер, если потребуется
                 } catch (err) {
                     console.error('Некорректный JSON файл', err);
                 }
             };
             reader.readAsText(file);
+        },
+        handleImport() {
+            if(!this.uploadedJsonData){
+                this.toast.error("Загрузите JSON файл!")
+                return
+            }
+            importData(this.uploadedJsonData)
         },
         async handleExport() {
             try {
