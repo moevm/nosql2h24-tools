@@ -12,6 +12,7 @@ from src.core.entities.users.worker.worker import Worker, WorkerInDB
 from src.core.exceptions.server_error import DatabaseError
 from src.core.repositories.im_ex_repo.iim_ex_repo import IImExRepository
 from src.infrastructure.repo_implementations.helpers.id_mapper import str_to_objectId
+from test.integration.repositories.test_mongo_worker_repo import worker
 
 
 class MongoImExRepository(IImExRepository):
@@ -59,20 +60,30 @@ class MongoImExRepository(IImExRepository):
         try:
             if data.workers:
                 await self.worker_collection.delete_many({})
-                await self.worker_collection.insert_many([worker.model_dump() for worker in data.workers])
+                workers = [worker.model_dump() for worker in data.workers]
+                for worker in workers:
+                    worker["_id"] = str_to_objectId(worker.pop("id"))
+                await self.worker_collection.insert_many(workers)
 
             if data.clients:
                 await self.client_collection.delete_many({})
-                await self.client_collection.insert_many([client.model_dump() for client in data.clients])
+                clients = [client.model_dump() for client in data.clients]
+                for client in clients:
+                    client["_id"] = str_to_objectId(client.pop("id"))
+                await self.client_collection.insert_many(clients)
 
             if data.tools:
                 await self.tool_collection.delete_many({})
-                await self.tool_collection.insert_many([tool.model_dump() for tool in data.tools])
+                tools = [tool.model_dump() for tool in data.tools]
+                for tool in tools:
+                    tool["_id"] = str_to_objectId(tool.pop("id"))
+                await self.tool_collection.insert_many(tools)
 
             if data.orders:
                 await self.order_collection.delete_many({})
                 orders = [order.model_dump() for order in data.orders]
                 for order in orders:
+                    order["_id"] = str_to_objectId(order.pop("id"))
                     order["client"] = str_to_objectId(order.get("client"))
                     order["tools"] = [str_to_objectId(tool) for tool in order["tools"]]
                 await self.order_collection.insert_many(orders)
@@ -81,6 +92,7 @@ class MongoImExRepository(IImExRepository):
                 await self.category_collection.delete_many({})
                 categories = [category.model_dump() for category in data.categories]
                 for category in categories:
+                    category["_id"] = str_to_objectId(category.pop("id"))
                     category["types"] = [str_to_objectId(type) for type in category["types"]]
                 await self.category_collection.insert_many(categories)
 
@@ -88,6 +100,7 @@ class MongoImExRepository(IImExRepository):
                 await self.type_collection.delete_many({})
                 types = [typee.model_dump() for typee in data.types]
                 for typee in types:
+                    typee["_id"] = str_to_objectId(typee.pop("id"))
                     typee["tools"] = [str_to_objectId(tool) for tool in typee["tools"]]
                 await self.type_collection.insert_many(types)
 
@@ -95,6 +108,7 @@ class MongoImExRepository(IImExRepository):
                 await self.review_collection.delete_many({})
                 reviews = [review.model_dump() for review in data.reviews]
                 for review in reviews:
+                    review["_id"] = str_to_objectId(review.pop("id"))
                     review["toolId"] = str_to_objectId(review["toolId"])
                     review["reviewerId"] = str_to_objectId(review["reviewerId"])
                 await self.review_collection.insert_many(reviews)

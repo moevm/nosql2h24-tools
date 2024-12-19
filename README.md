@@ -19,9 +19,6 @@
 
 ## Run dev using docker
 ```
-cd deployment/dev/
-```
-```
 docker-compose up -d
 ```
 **Frontend**
@@ -53,7 +50,7 @@ http://localhost:8000/docs
 
 ## Run backend tests using docker
 ```sh
-cd deployment/test/
+cd ./backend
 ```
 ```
 docker-compose up -d
