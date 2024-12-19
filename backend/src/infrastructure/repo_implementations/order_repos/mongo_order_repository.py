@@ -64,7 +64,6 @@ class MongoOrderRepository(IOrderRepository):
                  "type": 1, "description": 1}
             ).to_list(length=None)
             tools_model = [ToolSummary(**tool) for tool in tools]
-
             print(order)
             return OrderSummary(
                 id=objectId_to_str(order["_id"]),

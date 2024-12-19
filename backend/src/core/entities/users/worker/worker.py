@@ -1,10 +1,9 @@
-
+from bson import ObjectId
 from pydantic import Field, BaseModel, EmailStr
 from datetime import datetime
 from typing import List, Optional
 
 from src.core.entities.object_id_str import ObjectIdStr
-from src.core.entities.order.order import Order
 from src.core.entities.users.base_user import BaseUser, BaseUserPrivateSummary
 
 
@@ -42,6 +41,21 @@ class WorkerInDB(Worker):
         alias="_id",
         description="Unique identifier of the client in the db"
     )
+
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
+
+class WorkerCreateDB(Worker):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the client in the db",
+        alias="_id",
+    )
+
 
 class WorkerPrivateSummary(BaseUserPrivateSummary):
     jobTitle: str = Field(

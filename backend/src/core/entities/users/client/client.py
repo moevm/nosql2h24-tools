@@ -33,6 +33,20 @@ class ClientInDB(Client):
         description="Unique identifier of the client in the db"
     )
 
+    class Config:
+        json_encoders = {
+            ObjectId: str
+        }
+
+        allow_population_by_field_name = True
+
+class ClientCreateDB(Client):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the client in the db",
+        alias="_id",
+    )
+
 class ClientForWorker(BaseModel):
     id: Optional[ObjectIdStr] = Field(
         ...,

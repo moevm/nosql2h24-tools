@@ -38,6 +38,18 @@ class TypeInDB(Type):
 
         allow_population_by_field_name = True
 
+class TypeCreateDB(Type):
+    id: str = Field(
+        ...,
+        description="Unique identifier of the order in the db",
+        alias="_id",
+    )
+
+    tools: List[str] = Field(
+        ...,
+        description="List of tools ids associated with this type"
+    )
+
 class TypeCreated(BaseModel):
     message: str = Field(
         default="Type created successfully"
