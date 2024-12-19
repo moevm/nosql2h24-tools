@@ -76,6 +76,7 @@ export const logoutUser = () => {
   localStorage.removeItem('isAdmin');
   localStorage.removeItem('isAuthenticated');
   localStorage.removeItem('id')
+  localStorage.removeItem('cart')
   store.dispatch('logout').then(() => {
     window.location.href = '/'
   })
