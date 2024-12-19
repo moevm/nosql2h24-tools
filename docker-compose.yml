@@ -4,6 +4,8 @@ services:
   db:
     container_name: mongodb
     hostname: mongodb
+    ports:
+      - "127.0.0.1:27017:27017" # для просмотра коллекций в mongoDB compass
     build:
       context: db
       dockerfile: Dockerfile

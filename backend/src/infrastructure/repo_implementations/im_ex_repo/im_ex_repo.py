@@ -71,19 +71,33 @@ class MongoImExRepository(IImExRepository):
 
             if data.orders:
                 await self.order_collection.delete_many({})
-                await self.order_collection.insert_many([order.model_dump() for order in data.orders])
+                orders = [order.model_dump() for order in data.orders]
+                for order in orders:
+                    order["client"] = str_to_objectId(order.get("client"))
+                    order["tools"] = [str_to_objectId(tool) for tool in order["tools"]]
+                await self.order_collection.insert_many(orders)
 
             if data.categories:
                 await self.category_collection.delete_many({})
-                await self.category_collection.insert_many([category.model_dump() for category in data.categories])
+                categories = [category.model_dump() for category in data.categories]
+                for category in categories:
+                    category["types"] = [str_to_objectId(type) for type in category["types"]]
+                await self.category_collection.insert_many(categories)
 
             if data.types:
                 await self.type_collection.delete_many({})
-                await self.type_collection.insert_many([typee.model_dump() for typee in data.types])
+                types = [typee.model_dump() for typee in data.types]
+                for typee in types:
+                    typee["tools"] = [str_to_objectId(tool) for tool in typee["tools"]]
+                await self.type_collection.insert_many(types)
 
             if data.reviews:
                 await self.review_collection.delete_many({})
-                await self.review_collection.insert_many([review.model_dump() for review in data.reviews])
+                reviews = [review.model_dump() for review in data.reviews]
+                for review in reviews:
+                    review["toolId"] = str_to_objectId(review["toolId"])
+                    review["reviewerId"] = str_to_objectId(review["reviewerId"])
+                await self.review_collection.insert_many(reviews)
 
         except PyMongoError:
             raise DatabaseError()
