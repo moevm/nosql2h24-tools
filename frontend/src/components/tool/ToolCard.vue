@@ -32,6 +32,9 @@ export default {
         range(num) {
             return Array.from({ length: num }, (v, k) => k)
         },
+        handleClick() {
+            this.$router.push({name: 'tool-view', params: { id: this.id}})
+        }
     }
 }
 </script>
@@ -57,7 +60,7 @@ export default {
             </template>
         </div>
         <span class="price">{{dailyPrice}}₽</span>
-        <button class="rent">Арендовать</button>
+        <button class="rent" @click="handleClick">Арендовать</button>
     </div>
 </template>
 

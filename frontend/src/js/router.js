@@ -13,6 +13,10 @@ import ProfileView from "@/views/profile/ProfileView.vue";
 import MyRents from "@/views/profile/MyRents.vue";
 import EditProfile from "@/views/profile/EditProfile.vue";
 import ChangePassword from "@/views/profile/ChangePassword.vue";
+import ToolsSearch from "@/views/ToolsSearch.vue";
+import ToolView from "@/views/ToolView.vue";
+import CheckoutView from "@/views/CheckoutView.vue";
+import OrderView from "@/views/OrderView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -114,6 +118,32 @@ const router = createRouter({
         requiresLogin: true
       }
     },
+    {
+      path: '/tools/search/:search',
+      name: 'tools-search',
+      props: true,
+      component: ToolsSearch,
+    },
+    {
+      path: '/tool/:id',
+      name: 'tool-view',
+      props: true,
+      component: ToolView
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      meta: {
+        requiresLogin: true
+      },
+      component: CheckoutView
+    },
+    {
+      path: '/order/:id',
+      name: 'order-details',
+      props: true,
+      component: OrderView
+    }
   ],
 })
 

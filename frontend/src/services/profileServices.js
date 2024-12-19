@@ -6,9 +6,16 @@ const toast = useToast()
 const API_URL = 'http://localhost:8000/api/clients';
 
 
-export const getProfileData = async (userData) => {
+export const getProfileData = async (id=0) => {
   try{
-    const response = await axios.get(`${API_URL}/${localStorage.getItem('id')}/private`);
+    let url = ''
+    if(id){
+      url = `${API_URL}/${id}/private`
+    }
+    else {
+      url = `${API_URL}/${localStorage.getItem('id')}/private`
+    }
+    const response = await axios.get(url);
     return response.data
   } catch (error) {
     const errorMessage = error.response

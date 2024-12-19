@@ -4,8 +4,23 @@
             <img src="../assets/svg/sidebar/right.svg" alt="no" class="sidebar-button" :class="isOpen ? 'close-sidebar' : 'open-sidebar'"/>
         </button>
 
-
         <div class="sidebar" :style="{ transform: isOpen ? 'translateX(0)' : 'translateX(-100%)'}">
+            <div class="import-section">
+                <label for="jsonImport" class="import-label">Import</label>
+                <input
+                    type="file"
+                    id="jsonImport"
+                    @change="handleFileUpload"
+                    accept="application/json"
+                    style="display: block; margin-bottom: 15px;"
+                />
+            </div>
+
+            <button @click="handleExport" class="export-button">
+                Export
+            </button>
+
+            <!-- Навигационные ссылки -->
             <div class="link" :class="{ active: isActive('/admin/dashboard') }">
                 <router-link to="/admin/dashboard">
                     <p>Информационная<br>панель</p>
@@ -46,12 +61,16 @@
 </template>
 
 <script>
+import {exportData} from "@/services/importExport.js";
+
 export default {
     name: 'AdminSideBar',
     data() {
         return {
             isOpen: false,
             isCatalogue: false,
+            uploadedJsonData: null,
+            downloadedJsonData: null,
         };
     },
     methods: {
@@ -61,7 +80,46 @@ export default {
         isActive(route) {
             return this.$route.path === route;
         },
+        handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const jsonData = JSON.parse(e.target.result);
+                    console.log('Прочитанные данные JSON:', jsonData);
+                    this.uploadedJsonData = jsonData;
+                    // Здесь вы можете добавить отправку данных на сервер, если потребуется
+                } catch (err) {
+                    console.error('Некорректный JSON файл', err);
+                }
+            };
+            reader.readAsText(file);
+        },
+        async handleExport() {
+            try {
+                exportData().then((data) => {
+                    this.downloadedJsonData = data
+                    this.downloadJsonFile(this.downloadedJsonData, 'exported_data.json');
+                })
+            } catch (error) {
+                this.toast.error('Ошибка при экспорте данных:', error);
+            }
+        },
+        downloadJsonFile(data, filename) {
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
 
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        },
     }
 };
 </script>
@@ -75,7 +133,7 @@ export default {
     height: 100vh;
     width: 250px; /* Ширина боковой панели */
     background-color: #FFFFFF;
-    color: white;
+    color: black; /* Изменил цвет текста на черный для лучшей читаемости */
     padding: 10px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     transition: transform 0.5s;
@@ -114,6 +172,7 @@ export default {
 .link {
     border-left: 3px solid rgba(0, 0, 0, 0.2);
     padding: 8px 16px;
+    margin-top: 10px;
 }
 
 .link p {
@@ -124,4 +183,30 @@ export default {
     border-left: 3px solid #6A983C;
 }
 
+.import-section {
+    margin-bottom: 20px;
+}
+
+.import-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.export-button {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+    background-color: #6A983C;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.export-button:hover {
+    background-color: #5a7f2c;
+}
 </style>

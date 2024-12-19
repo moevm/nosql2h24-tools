@@ -1,11 +1,44 @@
+<template>
+    <div class="header">
+        <div class="content">
+            <router-link to="/">
+                <img src="../assets/svg/logo.svg" alt="logo"/>
+            </router-link>
+            <div class="search">
+                <form @submit.prevent="handleSubmit" novalidate>
+                    <input type="search" v-model="searchForm.text" placeholder="Поиск инструмента..."/>
+                    <button type="submit"><img src="../assets/svg/search.svg" alt="search"/></button>
+                </form>
+            </div>
+            <div class="profile-basket">
+                <button v-if="!isAuthenticated">
+                    <img src="../assets/svg/profile.svg" alt="profile" @click="openLogin"/>
+                </button>
+                <router-link v-if="isAuthenticated" :to="{ name: 'profile-dashboard', params: {role: (isAdmin ? 'admin' : 'client')}}">
+                    <img src="../assets/svg/profile.svg" alt="profile"/>
+                </router-link>
+                <button @click="openCheckout">
+                    <img src="../assets/svg/basket.svg" alt="basket"/>
+                </button>
+            </div>
+        </div>
+    </div>
+    <LoginModal :isVisible="showLoginModal" @update:isVisible="showLoginModal = $event"></LoginModal>
+</template>
+
 <script>
 import LoginModal from "@/components/modals/LoginModal.vue";
 import store from "@/js/store.js";
 import {mapGetters} from "vuex";
 import {logoutUser} from "@/services/authService.js";
+import {useToast} from "vue-toastification";
 
 export default {
     components: {LoginModal},
+    setup() {
+        const toast = useToast();
+        return {toast}
+    },
     data() {
         return {
             showLoginModal: false,
@@ -27,39 +60,35 @@ export default {
             logoutUser()
         },
         handleSubmit() {
-
-        }
+            if(this.searchForm.text.length < 3){
+                this.toast.error("Минимальная длина поисковой строки 3!")
+                return
+            }
+            this.$router.push({name: 'tools-search', params: { search: this.searchForm.text}})
+        },
+        openCheckout() {
+            if(!this.isAuthenticated){
+                this.toast.error("Войдите в аккаунт, пожалуйста!")
+                return
+            }
+            const cart = this.getCart()
+            if(cart.length === 0){
+                this.toast.error("Ваша корзина пуста!")
+                return;
+            }
+            this.$router.push('/checkout')
+        },
+        getCart() {
+            const cart = localStorage.getItem('cart')
+            if(cart){
+                return JSON.parse(cart)
+            } else {
+                return []
+            }
+        },
     }
 }
 </script>
-
-<template>
-    <div class="header">
-        <div class="content">
-            <router-link to="/">
-                <img src="../assets/svg/logo.svg" alt="logo"/>
-            </router-link>
-            <div class="search">
-                <form @submit.prevent="handleSubmit" novalidate>
-                    <input type="search" v-model="searchForm.text" placeholder="Поиск инструмента..."/>
-                    <button><img src="../assets/svg/search.svg" alt="search"/></button>
-                </form>
-            </div>
-            <div class="profile-basket">
-                <button v-if="!isAuthenticated">
-                    <img src="../assets/svg/profile.svg" alt="profile" @click="openLogin"/>
-                </button>
-                <router-link v-if="isAuthenticated" :to="{ name: 'profile-dashboard', params: {role: (isAdmin ? 'admin' : 'client')}}">
-                    <img src="../assets/svg/profile.svg" alt="profile"/>
-                </router-link>
-                <button>
-                    <img src="../assets/svg/basket.svg" alt="basket"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <LoginModal :isVisible="showLoginModal" @update:isVisible="showLoginModal = $event"></LoginModal>
-</template>
 
 <style scoped>
 .header {
