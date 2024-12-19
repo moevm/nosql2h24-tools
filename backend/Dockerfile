@@ -4,9 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN python -m venv /.venv
-
-RUN /.venv/bin/pip install --no-cache-dir -r requirements.txt
+RUN python -m venv /.venv && /.venv/bin/pip install --no-cache-dir -r requirements.txt
 
 ENV PATH="/.venv/bin:$PATH"
 ENV ENV="dev"
