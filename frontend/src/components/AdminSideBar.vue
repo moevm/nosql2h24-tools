@@ -6,14 +6,16 @@
 
         <div class="sidebar" :style="{ transform: isOpen ? 'translateX(0)' : 'translateX(-100%)'}">
             <div class="import-section">
-                <label for="jsonImport" class="import-label">Import</label>
+                <label for="jsonImport" class="import-label">Загрузить файл</label>
                 <input
                     type="file"
                     id="jsonImport"
                     @change="handleFileUpload"
                     accept="application/json"
-                    style="display: block; margin-bottom: 15px;"
+                    class="import-input"
                 />
+                <p v-if="!uploadedJsonData" class="import-text">Выберите JSON файл для импорта</p>
+                <p v-else class="import-text">Файл успешно загружен</p>
             </div>
             <button @click="handleImport" class="export-button">
                 Import
@@ -195,10 +197,38 @@ export default {
     margin-bottom: 20px;
 }
 
+.import-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+    padding: 0;
+    margin: -1px;
+}
+
 .import-label {
-    display: block;
-    margin-bottom: 5px;
+    display: inline-block;
+    background-color: #6A983C;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
     font-weight: bold;
+    transition: background-color 0.3s;
+    margin-bottom: 5px;
+}
+
+.import-label:hover {
+    background-color: #5a7f2c;
+}
+
+.import-text {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
 }
 
 .export-button {
@@ -208,13 +238,18 @@ export default {
     margin-bottom: 20px;
     background-color: #6A983C;
     color: white;
-    border: none;
+    font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    border: 2px solid #46760A;
 }
 
 .export-button:hover {
-    background-color: #5a7f2c;
+    background-color: #46760A;
+}
+
+input[type="file"]{
+    width: 300px;
 }
 </style>
